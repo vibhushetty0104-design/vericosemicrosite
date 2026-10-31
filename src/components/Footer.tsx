@@ -1,9 +1,7 @@
 import React from 'react';
-import { Phone } from 'lucide-react';
 import { AppView } from '../types';
 import { GUIDE_LABELS } from '../content/guideLabels';
 import { hrefForView } from '../content/siteNav';
-import { EMERGENCY_NUMBERS } from '../data/emergencyContacts';
 
 interface FooterProps {
   onNavigateView: (view: AppView) => void;
@@ -112,25 +110,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateView, onOpenAssistant,
           ))}
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 rounded-xl border border-mv-sage/40 p-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[15px] leading-relaxed text-mv-ivory">
-            <strong className="font-semibold text-white">Possible blood clot or emergency?</strong> Call emergency services
-            now. Outside India, use your local emergency number.
-          </p>
-          <div className="flex shrink-0 flex-wrap gap-2">
-            {EMERGENCY_NUMBERS.map((n) => (
-              <a
-                key={n.number}
-                href={`tel:${n.number}`}
-                aria-label={`Call ${n.number}, ${n.label}`}
-                className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-mv-ivory px-4 text-[15px] font-semibold text-mv-forest hover:bg-mv-pale"
-              >
-                <Phone className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
-                <span>Call {n.number}</span>
-              </a>
-            ))}
-          </div>
-        </div>
 
         {/* Medical disclaimer and governance */}
         <div className="mt-8 max-w-[68ch] space-y-3 text-[14px] leading-relaxed text-mv-sage">

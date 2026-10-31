@@ -4,7 +4,7 @@ import { getLearnTopic, LearnTopicSlug } from '../../content/siteNav';
 import { CLINICAL_PHOTOS } from '../../content/photos';
 import { LearnTopicLayout } from './LearnTopicLayout';
 import { DvtAndMisconceptions } from '../DvtAndMisconceptions';
-import { AlertTriangle, PhoneCall, Camera } from 'lucide-react';
+import { AlertTriangle, Camera } from 'lucide-react';
 
 interface TopicPageProps {
   onNavigateView: (view: AppView) => void;
@@ -30,7 +30,7 @@ export const DvtWarningSignsPage: React.FC<TopicPageProps> = ({
       onNavigateTopic={onNavigateTopic}
       onAskMeridbot={onAskMeridbot}
       chips={[
-        { label: 'Emergency warning signs (Dial 112 / 108)', href: '#dvt-safety' },
+        { label: 'Emergency warning signs', href: '#dvt-safety' },
         { label: 'DVT vs varicose veins', href: '#dvt-safety' },
         { label: 'Vein myths debunked', href: '#dvt-safety' },
       ]}
@@ -62,15 +62,9 @@ export const DvtWarningSignsPage: React.FC<TopicPageProps> = ({
                   Emergency Hospital Triage for DVT &amp; Pulmonary Embolism
                 </h3>
                 <p className="mt-2.5 text-[14px] sm:text-[15px] leading-relaxed text-red-950/85">
-                  Deep vein thrombosis (DVT) and pulmonary embolism (PE) are acute medical emergencies. If you experience sudden, unilateral severe calf or thigh swelling, skin that feels hot to the touch, sudden unexplained shortness of breath, or sharp chest pain that worsens on inspiration, do not wait for an outpatient clinic. Go directly to a tertiary hospital emergency casualty or call national emergency numbers.
+                  Deep vein thrombosis (DVT) and pulmonary embolism (PE) are acute medical emergencies. If you experience sudden, unilateral severe calf or thigh swelling, skin that feels hot to the touch, sudden unexplained shortness of breath, or sharp chest pain that worsens on inspiration, do not wait for an outpatient clinic. Go directly to a tertiary hospital emergency casualty immediately.
                 </p>
-                <div className="mt-4 pt-4 border-t border-red-200/80 flex flex-wrap items-center gap-4 text-[13px] font-mono">
-                  <span className="flex items-center gap-2 bg-red-600 text-white px-3.5 py-1.5 rounded-xl font-bold">
-                    <PhoneCall className="w-4 h-4" />
-                    <span>Dial 112 / 108 in India</span>
-                  </span>
-                  <span className="text-red-900 text-xs">Available 24/7 nationwide</span>
-                </div>
+
               </div>
               <div className="mt-6 pt-3 border-t border-red-200/60 text-[12px] text-red-900/70">
                 {CLINICAL_PHOTOS.dvtEmergencyHospital.caption}

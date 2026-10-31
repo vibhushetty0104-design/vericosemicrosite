@@ -884,15 +884,9 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
                 <p>
                   Active skin breakdown or venous ulcers require timely vascular wound care and venous decompression. Please arrange an in-person clinical exam promptly.
                 </p>
-                <div className="pt-1 flex flex-wrap items-center gap-2 text-[11px]">
-                  <span>Emergency signs (sudden severe swelling, breathlessness)?</span>
-                  <a href="tel:112" className="px-2.5 py-1 rounded-full bg-rose-700 text-white font-mono font-bold hover:bg-rose-800 transition">
-                    Call 112
-                  </a>
-                  <a href="tel:108" className="px-2.5 py-1 rounded-full bg-rose-700 text-white font-mono font-bold hover:bg-rose-800 transition">
-                    Ambulance 108
-                  </a>
-                </div>
+                <p className="text-[11px] text-rose-900/80 pt-1">
+                  If accompanied by acute one-sided swelling, severe pain, or breathlessness, seek immediate hospital emergency care.
+                </p>
               </div>
             )}
           </div>

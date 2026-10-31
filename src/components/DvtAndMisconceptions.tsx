@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   AlertCircle,
   AlertTriangle,
-  PhoneCall,
   ShieldAlert,
   CheckCircle2,
   XCircle,
@@ -131,7 +130,7 @@ export const DvtAndMisconceptions: React.FC<DvtAndMisconceptionsProps> = ({
               <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
                 <div className="flex items-start gap-4">
                   <div className="p-3 rounded-full bg-red-100 text-red-700 shrink-0 mt-0.5">
-                    <PhoneCall className="w-5 h-5" />
+                    <AlertTriangle className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-red-800 block">
@@ -141,23 +140,12 @@ export const DvtAndMisconceptions: React.FC<DvtAndMisconceptionsProps> = ({
                       When to Seek Immediate Emergency Hospital Care
                     </h3>
                     <p className="mt-2 text-[14px] text-red-900/90 leading-relaxed max-w-2xl">
-                      A blood clot in the deep veins (Deep Vein Thrombosis) can dislodge and travel to the lungs, causing a potentially fatal <strong>Pulmonary Embolism (PE)</strong>. If you experience sudden unilateral leg swelling accompanied by sudden shortness of breath, sharp chest pain when inhaling, or coughing blood, call emergency services (112 / 108 in India) immediately.
+                      A blood clot in the deep veins (Deep Vein Thrombosis) can dislodge and travel to the lungs, causing a potentially fatal <strong>Pulmonary Embolism (PE)</strong>. If you experience sudden unilateral leg swelling accompanied by sudden shortness of breath, sharp chest pain when inhaling, or coughing blood, seek immediate hospital emergency medical evaluation.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2 shrink-0 self-stretch sm:self-auto">
-                  <a
-                    href="tel:112"
-                    className="min-h-[44px] inline-flex items-center justify-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-[13.5px] font-bold text-white shadow-xs hover:bg-red-700 transition-colors"
-                  >
-                    <PhoneCall className="w-4 h-4" />
-                    <span>Call 112 / 108 (India)</span>
-                  </a>
-                  <span className="text-[11px] font-mono text-center text-red-700">
-                    National Emergency Helpline
-                  </span>
-                </div>
+
               </div>
             </div>
 
