@@ -1,0 +1,577 @@
+{
+ "capturedAt": "2026-10-21T14:59:36.578Z",
+ "passed": 114,
+ "failed": 0,
+ "results": [
+  {
+   "name": "Skip link is the first Tab stop and becomes visible",
+   "pass": true,
+   "detail": "{\"tag\":\"A\",\"id\":\"\",\"text\":\"Skip to main content\",\"inDialog\":false,\"label\":null}"
+  },
+  {
+   "name": "Skip link moves focus to main content",
+   "pass": true,
+   "detail": "{\"tag\":\"MAIN\",\"id\":\"main\",\"text\":\"Better clarity. Better-informed care.Und\",\"inDialog\":false,\"label\":null}"
+  },
+  {
+   "name": "Menu button is at least 44x44 and has a visible \"Menu\" label",
+   "pass": true,
+   "detail": "{\"x\":272.109375,\"y\":5.5,\"width\":101.890625,\"height\":44}"
+  },
+  {
+   "name": "Menu button starts collapsed",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Menu opens as a labelled modal dialog",
+   "pass": true,
+   "detail": "{\"role\":\"dialog\",\"modal\":\"true\",\"labelledBy\":\"site-menu-title\",\"title\":\"Menu\",\"bodyOverflow\":\"hidden\"}"
+  },
+  {
+   "name": "Menu button reports aria-expanded=\"true\" while open",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Page behind the menu does not scroll while open",
+   "pass": true,
+   "detail": "hidden"
+  },
+  {
+   "name": "Focus moves into the menu on open",
+   "pass": true,
+   "detail": "{\"tag\":\"BUTTON\",\"id\":\"\",\"text\":\"Close\",\"inDialog\":true,\"label\":null}"
+  },
+  {
+   "name": "Tab and Shift+Tab stay inside the menu (15 stops, cycled both ways)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Every menu control is at least 44x44",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "name": "Urgent line with tel: 112 and 108 is first in the menu",
+   "pass": true,
+   "detail": "tel:112,tel:108"
+  },
+  {
+   "name": "Escape closes the menu",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Focus returns to the Menu button",
+   "pass": true,
+   "detail": "{\"tag\":\"BUTTON\",\"id\":\"\",\"text\":\"Menu\",\"inDialog\":false,\"label\":null}"
+  },
+  {
+   "name": "Menu button reports aria-expanded=\"false\" after closing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Page scrolling is restored after closing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Close button closes the menu and returns focus to Menu",
+   "pass": true,
+   "detail": "{\"tag\":\"BUTTON\",\"id\":\"\",\"text\":\"Menu\",\"inDialog\":false,\"label\":null}"
+  },
+  {
+   "name": "Choosing \"Learn\" in the menu opens #learn and moves focus to main",
+   "pass": true,
+   "detail": "Learn about leg veins {\"tag\":\"MAIN\",\"id\":\"main\",\"text\":\"LearnLearn about leg veinsHow leg veins \",\"inDialog\":false,\"label\":null} http://localhost:5179/#learn"
+  },
+  {
+   "name": "Menu marks the current view with aria-current=\"page\"",
+   "pass": true,
+   "detail": "Learn"
+  },
+  {
+   "name": "Menu closes when the window widens past 1280px",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "1280px: five header links, no Menu button, guide + demo request shown, nothing wraps or overflows",
+   "pass": true,
+   "detail": "{\"links\":[\"Learn\",\"Symptom check\",\"Doppler guide\",\"Treatments\",\"Find care\"],\"current\":[\"Doppler guide\"],\"menuVisible\":false,\"small\":[],\"wrapped\":[],\"request\":true,\"guide\":true,\"headerH\":64,\"right\":1248}"
+  },
+  {
+   "name": "1280px: current view marked with aria-current",
+   "pass": true,
+   "detail": "Doppler guide"
+  },
+  {
+   "name": "1440px: five header links, no Menu button, guide + demo request shown, nothing wraps or overflows",
+   "pass": true,
+   "detail": "{\"links\":[\"Learn\",\"Symptom check\",\"Doppler guide\",\"Treatments\",\"Find care\"],\"current\":[\"Doppler guide\"],\"menuVisible\":false,\"small\":[],\"wrapped\":[],\"request\":true,\"guide\":true,\"headerH\":64,\"right\":1328}"
+  },
+  {
+   "name": "1440px: current view marked with aria-current",
+   "pass": true,
+   "detail": "Doppler guide"
+  },
+  {
+   "name": "1920px: five header links, no Menu button, guide + demo request shown, nothing wraps or overflows",
+   "pass": true,
+   "detail": "{\"links\":[\"Learn\",\"Symptom check\",\"Doppler guide\",\"Treatments\",\"Find care\"],\"current\":[\"Doppler guide\"],\"menuVisible\":false,\"small\":[],\"wrapped\":[],\"request\":true,\"guide\":true,\"headerH\":64,\"right\":1568}"
+  },
+  {
+   "name": "1920px: current view marked with aria-current",
+   "pass": true,
+   "detail": "Doppler guide"
+  },
+  {
+   "name": "1279px: Menu button shown instead of the desktop links",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "#(home) has exactly one h1",
+   "pass": true,
+   "detail": "Understand leg vein symptoms, Doppler reports and your care options — Meridian Vascular — Indian Vascular Education, Doppler Ultrasound & Care Navigation"
+  },
+  {
+   "name": "#learn has exactly one h1",
+   "pass": true,
+   "detail": "Learn about leg veins — Learn about leg veins | Meridian Vascular"
+  },
+  {
+   "name": "#journey has exactly one h1",
+   "pass": true,
+   "detail": "The 6-Stage Vascular Care Pathway — Care pathway | Meridian Vascular"
+  },
+  {
+   "name": "#assessment has exactly one h1",
+   "pass": true,
+   "detail": "Vein Symptom Screener — Symptom check | Meridian Vascular"
+  },
+  {
+   "name": "#doppler has exactly one h1",
+   "pass": true,
+   "detail": "Venous Doppler Report Decoder — Doppler report guide | Meridian Vascular"
+  },
+  {
+   "name": "#treatments has exactly one h1",
+   "pass": true,
+   "detail": "Evidence-Based Treatment Comparison — Compare vein treatments | Meridian Vascular"
+  },
+  {
+   "name": "#specialists has exactly one h1",
+   "pass": true,
+   "detail": "Explore Indian Vascular Specialists (Demonstration Directory) — Find care (demo profiles) | Meridian Vascular"
+  },
+  {
+   "name": "#dashboard has exactly one h1",
+   "pass": true,
+   "detail": "Vascular Care Portal — Patient portal (demo) | Meridian Vascular"
+  },
+  {
+   "name": "Each view sets a distinct document.title",
+   "pass": true,
+   "detail": "Meridian Vascular — Indian Vascular Education, Doppler Ultrasound & Care Navigation | Learn about leg veins | Meridian Vascular | Care pathway | Meridian Vascular | Symptom check | Meridian Vascular | Doppler report guide | Meridian Vascular | Compare vein treatments | Meridian Vascular | Find care (demo profiles) | Meridian Vascular | Patient portal (demo) | Meridian Vascular"
+  },
+  {
+   "name": "Footer link \"How leg circulation works\" (#circulation-education) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"hash\":\"#circulation-education\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":425}"
+  },
+  {
+   "name": "Footer link \"Why varicose veins develop\" (#causes) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"hash\":\"#causes\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":2062}"
+  },
+  {
+   "name": "Footer link \"Symptoms\" (#symptoms) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"hash\":\"#symptoms\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":3265}"
+  },
+  {
+   "name": "Footer link \"Blood clot (DVT) warning signs\" (#dvt-safety) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"hash\":\"#dvt-safety\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":4778}"
+  },
+  {
+   "name": "Footer link \"Vein pain or another cause?\" (#leg-pain-differential) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"hash\":\"#leg-pain-differential\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":6413}"
+  },
+  {
+   "name": "Footer link \"CEAP stages\" (#progression) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"hash\":\"#progression\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":7560}"
+  },
+  {
+   "name": "Footer link \"Symptom check\" (#assessment) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Vein Symptom Screener\",\"hash\":\"#assessment\",\"found\":false,\"top\":null,\"header\":64,\"scrollY\":0}"
+  },
+  {
+   "name": "Footer link \"Doppler report guide\" (#doppler) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Venous Doppler Report Decoder\",\"hash\":\"#doppler\",\"found\":false,\"top\":null,\"header\":64,\"scrollY\":0}"
+  },
+  {
+   "name": "Footer link \"How a duplex scan works\" (#duplex-scan) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Venous Doppler Report Decoder\",\"hash\":\"#duplex-scan\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":3219}"
+  },
+  {
+   "name": "Footer link \"Compare treatments\" (#treatments) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Evidence-Based Treatment Comparison\",\"hash\":\"#treatments\",\"found\":false,\"top\":null,\"header\":64,\"scrollY\":0}"
+  },
+  {
+   "name": "Footer link \"Treatment types\" (#treatment) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Evidence-Based Treatment Comparison\",\"hash\":\"#treatment\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":1738}"
+  },
+  {
+   "name": "Footer link \"Find care (demo profiles)\" (#specialists) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Explore Indian Vascular Specialists (Demonstration Directory)\",\"hash\":\"#specialists\",\"found\":true,\"top\":64,\"header\":64,\"scrollY\":0}"
+  },
+  {
+   "name": "Footer link \"Doctor visit checklist\" (#doctor-visit) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Explore Indian Vascular Specialists (Demonstration Directory)\",\"hash\":\"#doctor-visit\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":2708}"
+  },
+  {
+   "name": "Footer link \"Care pathway\" (#journey) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"The 6-Stage Vascular Care Pathway\",\"hash\":\"#journey\",\"found\":false,\"top\":null,\"header\":64,\"scrollY\":0}"
+  },
+  {
+   "name": "Footer link \"Patient portal (demo)\" (#dashboard) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Vascular Care Portal\",\"hash\":\"#dashboard\",\"found\":false,\"top\":null,\"header\":64,\"scrollY\":0}"
+  },
+  {
+   "name": "Footer link \"Questions people ask\" (#faq) reaches its target below the header",
+   "pass": true,
+   "detail": "{\"h1\":\"Understand leg vein symptoms, Doppler reports and your care options\",\"hash\":\"#faq\",\"found\":true,\"top\":72,\"header\":64,\"scrollY\":4444}"
+  },
+  {
+   "name": "Learn contents link #circulation-education scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #causes scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #symptoms scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #dvt-safety scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #leg-pain-differential scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #progression scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #did-you-know scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #campaign scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Learn contents link #topic-explorer scrolls to its section",
+   "pass": true,
+   "detail": "72"
+  },
+  {
+   "name": "Deep link #causes opens the right view and section",
+   "pass": true,
+   "detail": "72 Learn about leg veins"
+  },
+  {
+   "name": "Deep link #what-are opens the right view and section",
+   "pass": true,
+   "detail": "72 Learn about leg veins"
+  },
+  {
+   "name": "Deep link #leg-pain opens the right view and section",
+   "pass": true,
+   "detail": "72 Learn about leg veins"
+  },
+  {
+   "name": "Deep link #duplex-scan opens the right view and section",
+   "pass": true,
+   "detail": "72 Venous Doppler Report Decoder"
+  },
+  {
+   "name": "Deep link #doppler-education opens the right view and section",
+   "pass": true,
+   "detail": "72 Venous Doppler Report Decoder"
+  },
+  {
+   "name": "Deep link #treatment opens the right view and section",
+   "pass": true,
+   "detail": "72 Evidence-Based Treatment Comparison"
+  },
+  {
+   "name": "Deep link #doctor-visit opens the right view and section",
+   "pass": true,
+   "detail": "72 Explore Indian Vascular Specialists (Demonstration Directory)"
+  },
+  {
+   "name": "Home link #assessment leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Vein Symptom Screener\",\"el\":false}"
+  },
+  {
+   "name": "Home link #doppler leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Venous Doppler Report Decoder\",\"el\":false}"
+  },
+  {
+   "name": "Home link #dvt-safety leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"el\":true}"
+  },
+  {
+   "name": "Home link #treatments leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Evidence-Based Treatment Comparison\",\"el\":false}"
+  },
+  {
+   "name": "Home link #specialists leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Explore Indian Vascular Specialists (Demonstration Directory)\",\"el\":true}"
+  },
+  {
+   "name": "Home link #learn leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"el\":false}"
+  },
+  {
+   "name": "Home link #symptoms leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"el\":true}"
+  },
+  {
+   "name": "Home link #leg-pain-differential leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"el\":true}"
+  },
+  {
+   "name": "Home link #progression leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"Learn about leg veins\",\"el\":true}"
+  },
+  {
+   "name": "Home link #journey leads somewhere real",
+   "pass": true,
+   "detail": "{\"h1\":\"The 6-Stage Vascular Care Pathway\",\"el\":false}"
+  },
+  {
+   "name": "Back then Forward around footer link #causes returns home, then to the section",
+   "pass": true,
+   "detail": "{\"home\":true,\"hash\":\"\"} {\"top\":72,\"hash\":\"#causes\"}"
+  },
+  {
+   "name": "Back then Forward around footer link #dvt-safety returns home, then to the section",
+   "pass": true,
+   "detail": "{\"home\":true,\"hash\":\"\"} {\"top\":72,\"hash\":\"#dvt-safety\"}"
+  },
+  {
+   "name": "Back then Forward around footer link #duplex-scan returns home, then to the section",
+   "pass": true,
+   "detail": "{\"home\":true,\"hash\":\"\"} {\"top\":72,\"hash\":\"#duplex-scan\"}"
+  },
+  {
+   "name": "Back then Forward around footer link #doctor-visit returns home, then to the section",
+   "pass": true,
+   "detail": "{\"home\":true,\"hash\":\"\"} {\"top\":72,\"hash\":\"#doctor-visit\"}"
+  },
+  {
+   "name": "Back then Forward around footer link #treatment returns home, then to the section",
+   "pass": true,
+   "detail": "{\"home\":true,\"hash\":\"\"} {\"top\":72,\"hash\":\"#treatment\"}"
+  },
+  {
+   "name": "Symptom check \"#media-upload\" link scrolls to the upload section",
+   "pass": true,
+   "detail": "152"
+  },
+  {
+   "name": "Browser Back and Forward move between views",
+   "pass": true,
+   "detail": "Venous Doppler Report Decoder / Evidence-Based Treatment Comparison"
+  },
+  {
+   "name": "Home has tap-to-call links for 112 and 108, each at least 44px tall",
+   "pass": true,
+   "detail": "[{\"href\":\"tel:112\",\"w\":107,\"h\":44,\"inMain\":true,\"inFooter\":false},{\"href\":\"tel:108\",\"w\":167,\"h\":44,\"inMain\":true,\"inFooter\":false},{\"href\":\"tel:112\",\"w\":109,\"h\":44,\"inMain\":true,\"inFooter\":false},{\"href\":\"tel:108\",\"w\":114,\"h\":44,\"inMain\":true,\"inFooter\":false},{\"href\":\"tel:112\",\"w\":107,\"h\":44,\"inMain\":false,\"inFooter\":true},{\"href\":\"tel:108\",\"w\":112,\"h\":44,\"inMain\":false,\"inFooter\":true}]"
+  },
+  {
+   "name": "Urgent strip call buttons carry the number and service in their accessible text",
+   "pass": true,
+   "detail": "Call 112: call 112, National emergency number | Ambulance 108: call 108, Emergency ambulance (most states)"
+  },
+  {
+   "name": "360x640: urgent strip starts inside the first screen",
+   "pass": true,
+   "detail": "433"
+  },
+  {
+   "name": "360x640: \"Check your symptoms\" ends at or above 340px",
+   "pass": true,
+   "detail": "337"
+  },
+  {
+   "name": "360x640: both emergency call buttons are on the first screen",
+   "pass": true,
+   "detail": "563"
+  },
+  {
+   "name": "640x360 landscape: \"Check your symptoms\" is visible without scrolling",
+   "pass": true,
+   "detail": "254"
+  },
+  {
+   "name": "844x390 landscape: \"Check your symptoms\" is visible without scrolling",
+   "pass": true,
+   "detail": "262"
+  },
+  {
+   "name": "No floating, fixed or sticky element other than the site header overlaps the urgent strip at any half-screen scroll stop",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Anchor to the urgent strip lands below the header",
+   "pass": true,
+   "detail": "{\"top\":64,\"header\":56}"
+  },
+  {
+   "name": "\"Check your symptoms\" stays on one line (48px tall) from 360 to 1920px",
+   "pass": true,
+   "detail": "360:48 768:48 1024:48 1920:48"
+  },
+  {
+   "name": "#(home): no infinite animations in the M2 surfaces",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "#learn: no infinite animations in the M2 surfaces",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Reduced motion #(home): no running animations and no smooth scrolling",
+   "pass": true,
+   "detail": " scroll-behavior=auto"
+  },
+  {
+   "name": "Reduced motion #learn: no running animations and no smooth scrolling",
+   "pass": true,
+   "detail": " scroll-behavior=auto"
+  },
+  {
+   "name": "Reduced motion #doppler: no running animations and no smooth scrolling",
+   "pass": true,
+   "detail": " scroll-behavior=auto"
+  },
+  {
+   "name": "Reduced motion: the menu sheet opens without animation",
+   "pass": true,
+   "detail": "0"
+  },
+  {
+   "name": "320px #(home): no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px #learn: no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px #journey: no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px #assessment: no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px #doppler: no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px #treatments: no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px #specialists: no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px #dashboard: no horizontal scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"iw\":320}"
+  },
+  {
+   "name": "320px: menu sheet content fits without sideways scrolling",
+   "pass": true,
+   "detail": "{\"sw\":320,\"cw\":320}"
+  },
+  {
+   "name": "Header \"Ask the guide\" opens the educational guide",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Using the guide makes no external network request",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Header \"Request an appointment (demo)\" opens the demo request",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Home: at most one primary button in view at each half-screen scroll stop (1280x800)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "No console errors during the run",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}

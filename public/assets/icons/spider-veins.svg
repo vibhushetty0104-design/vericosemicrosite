@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Medial & Lateral Muscular Bellies Contracting -->
+  <path d="M4.5 7c3 2 4.5 4 4.5 5s-1.5 3-4.5 5" stroke-width="1.75" />
+  <path d="M19.5 7c-3 2-4.5 4-4.5 5s1.5 3 4.5 5" stroke-width="1.75" />
+  <!-- Compressed Central Deep Vein Lumen -->
+  <line x1="12" y1="3" x2="12" y2="21" />
+  <!-- Upward Ejection Flow Arrow -->
+  <path d="M12 9l-2 2m2-2l2 2" stroke="#CE5B40" />
+  <!-- Compression Force Inward Vectors -->
+  <path d="M7 12h2m6 0h2" stroke="#CE5B40" />
+</svg>

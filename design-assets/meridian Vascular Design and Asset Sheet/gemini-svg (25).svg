@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="100%" height="100%" fill="none" style="background:transparent;">
+  <defs>
+    <!-- Smooth dimensional gradients -->
+    <linearGradient id="leg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F2EDE4" />
+      <stop offset="60%" stop-color="#E8E2D5" />
+      <stop offset="100%" stop-color="#DCD6C7" />
+    </linearGradient>
+    <linearGradient id="shadow-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B4036" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#0B4036" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="artery-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E0523C" />
+      <stop offset="50%" stop-color="#CE5B40" />
+      <stop offset="100%" stop-color="#A9472F" />
+    </linearGradient>
+    <linearGradient id="vein-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#145D4F" />
+      <stop offset="50%" stop-color="#0B4036" />
+      <stop offset="100%" stop-color="#05251F" />
+    </linearGradient>
+  </defs>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="180" cy="470" rx="90" ry="15" fill="url(#shadow-grad)" />
+
+  <!-- Natural-Toned Leg Silhouette -->
+  <path d="M120,40 C140,40 180,45 220,55 C235,90 242,120 248,150 C258,185 273,230 268,260 C264,285 248,310 250,340 C252,365 242,390 248,410 C254,425 248,445 220,455 C185,465 140,465 110,450 C95,440 90,425 102,400 C110,380 120,350 122,320 C124,280 115,220 110,180 C104,140 110,95 120,40 Z" fill="url(#leg-grad)" stroke="#8DAA9D" stroke-width="1.5" stroke-opacity="0.5" />
+
+  <!-- Arterial System (Oxygenated Downward Flow) -->
+  <g id="arterial-system" opacity="0.9">
+    <path d="M152,40 C155,75 160,110 162,145 C164,185 168,220 178,255 C182,270 192,295 190,320 C188,345 178,380 168,410 C162,425 158,440 166,448" fill="none" stroke="url(#artery-grad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M162,145 C155,170 148,195 142,215" fill="none" stroke="url(#artery-grad)" stroke-width="3" stroke-linecap="round" />
+    <path d="M178,255 C168,285 155,320 152,345 C148,370 140,400 135,420" fill="none" stroke="url(#artery-grad)" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M168,410 L188,435" fill="none" stroke="url(#artery-grad)" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Venous System & Perforators (Deoxygenated Upward Flow) -->
+  <g id="venous-system">
+    <!-- Deep Veins -->
+    <path d="M136,40 C140,80 144,115 146,150 C148,190 152,225 162,260 C166,275 176,300 174,325 C172,350 162,385 152,415 C146,430 142,445 150,453" fill="none" stroke="url(#vein-grad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Superficial GSV Pathway -->
+    <path d="M125,40 C130,105 132,150 128,195 C124,240 120,285 125,330 C130,375 126,410 115,442" fill="none" stroke="#8DAA9D" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Perforators -->
+    <g stroke="#CE5B40" stroke-width="1.75" stroke-linecap="round" opacity="0.85">
+      <line x1="145" y1="110" x2="131" y2="106" />
+      <line x1="149" y1="200" x2="127" y2="194" />
+      <line x1="164" y1="270" x2="122" y2="260" />
+      <line x1="174" y1="320" x2="126" y2="310" />
+      <line x1="158" y1="395" x2="120" y2="384" />
+    </g>
+    <!-- Arrows -->
+    <path d="M141,80 L140,70 M140,70 L137,74 M140,70 L144,74" stroke="#CE5B40" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M129,145 L128,135 M128,135 L125,139 M128,135 L132,139" stroke="#E4ECE6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M152,245 L151,235 M151,235 L148,239 M151,235 L155,239" stroke="#CE5B40" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M123,260 L122,250 M122,250 L119,254 M122,250 L126,254" stroke="#E4ECE6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M173,310 L172,300 M172,300 L169,304 M172,300 L176,304" stroke="#CE5B40" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- Grounded, non-intrusive 2.5D visual legend (Placed safely outside core pathways) -->
+  <g id="visual-legend" transform="translate(30, 205)">
+    <rect width="130" height="95" rx="8" fill="#FDFCF9" stroke="#D5E0D8" stroke-width="1" />
+    <circle cx="15" cy="18" r="4" fill="#8DAA9D" />
+    <text x="26" y="21" font-family="-apple-system, sans-serif" font-size="8.5" font-weight="700" fill="#4A635D">SUPERFICIAL VEIN</text>
+    <circle cx="15" cy="35" r="4" fill="#0B4036" />
+    <text x="26" y="38" font-family="-apple-system, sans-serif" font-size="8.5" font-weight="700" fill="#4A635D">DEEP VEIN</text>
+    <circle cx="15" cy="52" r="4" fill="#CE5B40" stroke="#F7F5EF" stroke-width="1" />
+    <text x="26" y="55" font-family="-apple-system, sans-serif" font-size="8.5" font-weight="700" fill="#4A635D">PERFORATOR VEIN</text>
+    <circle cx="15" cy="69" r="4" fill="#E0523C" />
+    <text x="26" y="72" font-family="-apple-system, sans-serif" font-size="8.5" font-weight="700" fill="#4A635D">ARTERY</text>
+    <path d="M10,85 L18,85 M16,82 L19,85 M16,88 L19,85" stroke="#CE5B40" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="26" y="88" font-family="-apple-system, sans-serif" font-size="8.5" font-weight="700" fill="#4A635D">BLOOD FLOW</text>
+  </g>
+</svg>

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="100%" height="100%" fill="none" style="background:transparent;">
+  <defs>
+    <linearGradient id="stock-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B4036" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#0B4036" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="bulk-leg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EAE3D6" />
+      <stop offset="100%" stop-color="#CCBFA9" />
+    </linearGradient>
+    <linearGradient id="elastic-fabric" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A2B4AC" />
+      <stop offset="60%" stop-color="#79988A" />
+      <stop offset="100%" stop-color="#4C685C" />
+    </linearGradient>
+    <linearGradient id="force-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#CE5B40" />
+      <stop offset="100%" stop-color="#A9472F" />
+    </linearGradient>
+  </defs>
+
+  <!-- Anchoring Ground Shadow -->
+  <ellipse cx="205" cy="465" rx="85" ry="12" fill="url(#stock-shadow)" />
+
+  <!-- Normal human limb skeleton bounds to fit the stocking garment -->
+  <path d="M140,40 C155,40 188,42 220,52 C230,85 236,115 241,142 C248,178 262,220 258,248 C254,272 240,295 242,322 C244,346 234,368 239,388 C244,402 239,418 214,428 C182,438 142,438 114,424 C100,414 96,400 106,377 C113,358 122,330 124,302 C126,265 117,210 113,172 C107,135 113,92 122,40 Z" fill="url(#bulk-leg)" stroke="#8DAA9D" stroke-width="1.25" stroke-opacity="0.3" />
+
+  <!-- Graduated snug compression stocking (From calf back to the metatarsal edge) -->
+  <g id="stocking-garment" opacity="0.95">
+    <path d="M141,52 C154,52 182,54 220,62 C230,95 234,120 239,145 C246,180 259,218 255,245 C251,268 238,288 239,315 C241,335 231,355 233,375 C235,392 236,410 216,424 L196,418 C172,408 142,405 114,394 L106,372 C113,354 122,328 124,302 C126,265 117,210 113,172 C107,135 113,100 122,52 Z" fill="url(#elastic-fabric)" stroke="#0B4036" stroke-width="2.5" stroke-linejoin="round" />
+    <!-- Metatarsal / Open Toe limit line -->
+    <path d="M196,418 C185,413 162,405 114,394" stroke="#0B4036" stroke-width="2.5" fill="#CCBFA9" />
+    
+    <!-- Graduated Top Cuff and Stitching Ribbons -->
+    <path d="M141,52 C168,58 194,58 220,62" fill="none" stroke="#CE5B40" stroke-width="5" />
+    <path d="M138,62 C165,68 191,68 217,72" fill="none" stroke="#0B4036" stroke-width="2.5" opacity="0.3" />
+
+    <!-- 2.5D Surface ribbed details (Ankle to calf graduated tightness cues) -->
+    <g stroke="#E4ECE6" stroke-dasharray="0.5 4" stroke-linecap="round" opacity="0.45">
+      <path d="M131,98 C158,104 185,104 211,108" stroke-width="2" />
+      <path d="M127,135 C154,141 182,141 208,145" stroke-width="2.5" />
+      <path d="M122,178 C148,184 175,184 201,188" stroke-dasharray="0.5 5" stroke-width="3" />
+      <path d="M119,215 C146,221 173,221 199,225" stroke-width="2.5" />
+      <path d="M123,250 C150,256 177,256 203,260" stroke-width="2.5" />
+      <path d="M125,285 C152,291 178,291 205,295" stroke-width="2" />
+      <path d="M127,318 C152,323 178,323 203,326" stroke-dasharray="0.5 3" stroke-width="2" />
+    </g>
+    <!-- structural visual seams -->
+    <path d="M174,61 C172,130 162,210 165,280 C167,330 162,370 152,398" fill="none" stroke="#4C685C" stroke-width="2" opacity="0.5" />
+  </g>
+
+  <!-- Graduated Force Arrow Indicators (Strictly visual / non-labeled support) -->
+  <g id="graduated-pressure-force">
+    <!-- Higher/heavier arrows pointing inwards/upwards at bottom -->
+    <path d="M72,342 L72,282" fill="none" stroke="url(#force-gradient)" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M72,282 L66,290 M72,282 L78,290" fill="none" stroke="url(#force-gradient)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M294,345 L294,285" fill="none" stroke="url(#force-gradient)" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M294,285 L288,293 M294,285 L300,293" fill="none" stroke="url(#force-gradient)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Modest/Middle Intensity intermediate force arrows mid-calf -->
+    <path d="M80,210 L80,165" fill="none" stroke="#8DAA9D" stroke-width="3" stroke-linecap="round" />
+    <path d="M80,165 L76,171 M80,165 L84,171" fill="none" stroke="#8DAA9D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M285,212 L285,167" fill="none" stroke="#8DAA9D" stroke-width="3" stroke-linecap="round" />
+    <path d="M285,167 L281,173 M285,167 L289,173" fill="none" stroke="#8DAA9D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Tiny/Light Topward Support arrows -->
+    <path d="M92,105 L92,75" fill="none" stroke="#E4ECE6" stroke-width="2" stroke-linecap="round" />
+    <path d="M92,75 L89,79 M92,75 L95,79" fill="none" stroke="#E4ECE6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M272,106 L272,76" fill="none" stroke="#E4ECE6" stroke-width="2" stroke-linecap="round" />
+    <path d="M272,76 L269,80 M272,76 L275,80" fill="none" stroke="#E4ECE6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <line x1="12" y1="3" x2="12" y2="21" stroke-dasharray="2 2" stroke="#8DAA9D" />
+  <!-- Left Modality Column -->
+  <rect x="4" y="6" width="5.5" height="12" rx="2" />
+  <circle cx="6.75" cy="12" r="1.25" fill="#0B4036" />
+  <!-- Right Modality Column -->
+  <rect x="14.5" y="6" width="5.5" height="12" rx="2" stroke="#CE5B40" />
+  <circle cx="17.25" cy="12" r="1.25" fill="#CE5B40" />
+</svg>

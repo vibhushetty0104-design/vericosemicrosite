@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Open Medical Journal / Codex -->
+  <path d="M3.5 6.5C5.5 5 8 5 12 6.5v13c-4-1.5-6.5-1.5-8.5 0V6.5z" />
+  <path d="M20.5 6.5C18.5 5 16 5 12 6.5v13c4-1.5 6.5-1.5 8.5 0V6.5z" />
+  <!-- Evidence Seal Bookmark -->
+  <path d="M12 3v5" stroke="#CE5B40" />
+</svg>

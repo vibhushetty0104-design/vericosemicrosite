@@ -1,0 +1,232 @@
+{
+ "capturedAt": "2026-10-21T18:31:40.103Z",
+ "passed": 44,
+ "failed": 0,
+ "frameSample": {
+  "median": 6.9,
+  "within33": 100,
+  "frames": 709
+ },
+ "results": [
+  {
+   "name": "Visual is labelled as an educational illustration",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Badge sits on the close-up visual itself",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "No measurement-like values (ms, s, mm, cm, MHz, kHz, mmHg, %)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "No diagnostic or validation wording",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "States that wording has not been clinically reviewed",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Concept sheet is explained, not displayed",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Starts paused: no running animations on load",
+   "pass": true,
+   "detail": "0"
+  },
+  {
+   "name": "Play starts the flow animation",
+   "pass": true,
+   "detail": "3"
+  },
+  {
+   "name": "Pause stops all animation",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Closed valve: nothing flows past it even while playing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Leaky valve: backward flow animates while playing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Off-screen: animation stops while the close-up is scrolled away",
+   "pass": true,
+   "detail": "closeup bottom -558px, running 0"
+  },
+  {
+   "name": "Back on screen: animation resumes",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Hidden tab: animation stops",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Visible tab again: animation resumes",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Frame timing at 4x CPU while animating: median <= 18ms and >= 95% of frames <= 33ms",
+   "pass": true,
+   "detail": "median 6.9ms, 100.0% <= 33ms over 709 frames"
+  },
+  {
+   "name": "Closed: both flaps are untransformed and their tips meet at the centre line",
+   "pass": true,
+   "detail": "{\"closed\":{\"angle\":0,\"dx\":0},\"tips\":[[120,150],[120,150]]}"
+  },
+  {
+   "name": "Open: flaps rotate back toward their walls",
+   "pass": true,
+   "detail": "[{\"angle\":-28,\"dx\":0},{\"angle\":28,\"dx\":0}]"
+  },
+  {
+   "name": "Leaky: walls and flaps move apart so the tips cannot meet",
+   "pass": true,
+   "detail": "[{\"angle\":-6,\"dx\":-12},{\"angle\":6,\"dx\":12}]"
+  },
+  {
+   "name": "Live caption and SVG title follow the selected state",
+   "pass": true,
+   "detail": "[\"Valve open: blood moves up through the valve, toward the heart.\",\"Valve closed: the two flaps meet in the middle and stop blood falling back.\",\"Leaky valve: the flaps do not meet, so blood leaks back down through the gap.\"]"
+  },
+  {
+   "name": "Live caption is a polite live region",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "State selector is reachable by keyboard",
+   "pass": true,
+   "detail": "{\"type\":\"radio\",\"value\":\"open\"}"
+  },
+  {
+   "name": "Focused state option shows a visible 2px outline",
+   "pass": true,
+   "detail": "solid 2px / first stop: none"
+  },
+  {
+   "name": "Arrow keys change the state",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Tab moves from the state selector to Play",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Play/Pause works from the keyboard",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Play button shows a visible focus outline",
+   "pass": true,
+   "detail": "solid 2px"
+  },
+  {
+   "name": "Layer toggles are keyboard operable and report aria-pressed",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "320px: no horizontal overflow",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "320px: every control at least 44x44",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "320px: no text under 12px; explanation text 16px",
+   "pass": true,
+   "detail": " body=16,16"
+  },
+  {
+   "name": "390px: no horizontal overflow",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "390px: every control at least 44x44",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "390px: no text under 12px; explanation text 16px",
+   "pass": true,
+   "detail": " body=16,16"
+  },
+  {
+   "name": "768px: no horizontal overflow",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "768px: every control at least 44x44",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "768px: no text under 12px; explanation text 16px",
+   "pass": true,
+   "detail": " body=16,16"
+  },
+  {
+   "name": "1280px: no horizontal overflow",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "1280px: every control at least 44x44",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "1280px: no text under 12px; explanation text 16px",
+   "pass": true,
+   "detail": " body=16,16"
+  },
+  {
+   "name": "Reduced motion: no Play button; a note explains still arrows",
+   "pass": true,
+   "detail": "{\"play\":false,\"note\":\"Motion is reduced on this device, so the flow is shown as still arrows.\",\"leafletTransition\":\"1e-05s\"}"
+  },
+  {
+   "name": "Reduced motion: flaps change state effectively instantly (transition <= 0.01ms) and nothing runs",
+   "pass": true,
+   "detail": "1e-05s"
+  },
+  {
+   "name": "No console errors",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "No external requests other than Google Fonts",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}

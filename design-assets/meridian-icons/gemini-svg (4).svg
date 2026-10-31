@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Straight Parallel Venous Walls -->
+  <path d="M6 3v18M18 3v18" />
+  <!-- Competent Coapting Leaflets -->
+  <path d="M6 12c3 0 5.5-2 6-4" />
+  <path d="M18 12c-3 0-5.5-2-6-4" />
+  <!-- Unidirectional Laminar Flow -->
+  <path d="M12 18V9m0-3l-2 2m2-2l2 2" stroke="#0B4036" />
+</svg>

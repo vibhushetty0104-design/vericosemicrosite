@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Main Axial Trunk Bifurcation -->
+  <path d="M12 21V12" />
+  <path d="M12 12C12 8.5 7.5 7 7 3" />
+  <path d="M12 12C12 8.5 16.5 7 17 3" />
+  <!-- Perforator Anastomosis Bridge -->
+  <line x1="8" y1="9" x2="11.5" y2="10.5" stroke="#CE5B40" stroke-dasharray="1 2" />
+  <circle cx="12" cy="12" r="1.5" fill="#0B4036" />
+</svg>

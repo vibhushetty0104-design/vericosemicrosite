@@ -1,0 +1,14 @@
+[36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 1903 modules transformed.
+rendering chunks...
+computing gzip size...
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/3a2a050a-c996-410e-a97c-06b1f534685a/scratchpad/build-m1/index.html                              8.58 kB │ gzip:   3.00 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/3a2a050a-c996-410e-a97c-06b1f534685a/scratchpad/build-m1/assets/index-BDRz0SQE.css              89.10 kB │ gzip:  16.26 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/3a2a050a-c996-410e-a97c-06b1f534685a/scratchpad/build-m1/assets/purify.es-BZxk_wWO.js           29.02 kB │ gzip:  11.45 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/3a2a050a-c996-410e-a97c-06b1f534685a/scratchpad/build-m1/assets/index.es-DZci-5uv.js           151.43 kB │ gzip:  48.91 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/3a2a050a-c996-410e-a97c-06b1f534685a/scratchpad/build-m1/assets/html2canvas-XBnbyLDx.js        199.45 kB │ gzip:  46.76 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/3a2a050a-c996-410e-a97c-06b1f534685a/scratchpad/build-m1/assets/generatePdfReport-Cpix3Kms.js  402.93 kB │ gzip: 131.12 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/3a2a050a-c996-410e-a97c-06b1f534685a/scratchpad/build-m1/assets/index-D8trCCDM.js              634.13 kB │ gzip: 172.62 kB
+
+[32m✓ built in 615ms[39m

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Protective Shield -->
+  <path d="M12 3L4.5 6.5v6c0 5 3.5 8 7.5 9 4-1 7.5-4 7.5-9v-6L12 3z" />
+  <!-- Centered Verification Check -->
+  <path d="M9.5 12.5l2 2 3.5-4" stroke="#CE5B40" />
+</svg>

@@ -1,0 +1,312 @@
+{
+ "capturedAt": "2026-10-21T15:12:24.363Z",
+ "conditions": "390x844, CPU 4x slowdown, 150ms RTT, 1.6Mbps/750kbps, cache disabled, production build via vite preview",
+ "views": {
+  "home": {
+   "median": {
+    "fcp": 1592,
+    "lcp": 1592,
+    "cls": 0.035,
+    "tbt": 0,
+    "longestTask": 63,
+    "load": 1307,
+    "jsKB": 169,
+    "totalKB": 189,
+    "domNodes": 536,
+    "heapMB": 6.9,
+    "pageHeight": 10517
+   },
+   "runs": [
+    {
+     "fcp": 2108,
+     "lcp": 2108,
+     "cls": 0.035,
+     "tbt": 0,
+     "longestTask": 224,
+     "load": 1525,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 536,
+     "heapMB": 4.8,
+     "pageHeight": 10517
+    },
+    {
+     "fcp": 1592,
+     "lcp": 1592,
+     "cls": 0.035,
+     "tbt": 13,
+     "longestTask": 63,
+     "load": 1307,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 536,
+     "heapMB": 6.9,
+     "pageHeight": 10517
+    },
+    {
+     "fcp": 1380,
+     "lcp": 1380,
+     "cls": 0.035,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1275,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 536,
+     "heapMB": 8.8,
+     "pageHeight": 10517
+    }
+   ]
+  },
+  "learn": {
+   "median": {
+    "fcp": 1504,
+    "lcp": 1504,
+    "cls": 0.001,
+    "tbt": 0,
+    "longestTask": 0,
+    "load": 1295,
+    "jsKB": 169,
+    "totalKB": 189,
+    "domNodes": 1091,
+    "heapMB": 6,
+    "pageHeight": 23337
+   },
+   "runs": [
+    {
+     "fcp": 1904,
+     "lcp": 1904,
+     "cls": 0.001,
+     "tbt": 0,
+     "longestTask": 142,
+     "load": 1295,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 1091,
+     "heapMB": 10.9,
+     "pageHeight": 23337
+    },
+    {
+     "fcp": 1504,
+     "lcp": 1504,
+     "cls": 0.001,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1274,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 1091,
+     "heapMB": 6,
+     "pageHeight": 23337
+    },
+    {
+     "fcp": 1500,
+     "lcp": 1500,
+     "cls": 0.001,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1295,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 1091,
+     "heapMB": 4.2,
+     "pageHeight": 23337
+    }
+   ]
+  },
+  "doppler": {
+   "median": {
+    "fcp": 1508,
+    "lcp": 1508,
+    "cls": 0.05,
+    "tbt": 0,
+    "longestTask": 0,
+    "load": 1279,
+    "jsKB": 169,
+    "totalKB": 189,
+    "domNodes": 555,
+    "heapMB": 4,
+    "pageHeight": 10894
+   },
+   "runs": [
+    {
+     "fcp": 1772,
+     "lcp": 1772,
+     "cls": 0.05,
+     "tbt": 0,
+     "longestTask": 71,
+     "load": 1279,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 555,
+     "heapMB": 4.1,
+     "pageHeight": 10894
+    },
+    {
+     "fcp": 1508,
+     "lcp": 1508,
+     "cls": 0.05,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1276,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 555,
+     "heapMB": 4,
+     "pageHeight": 10894
+    },
+    {
+     "fcp": 1404,
+     "lcp": 1404,
+     "cls": 0.05,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1301,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 555,
+     "heapMB": 4,
+     "pageHeight": 10894
+    }
+   ]
+  },
+  "treatments": {
+   "median": {
+    "fcp": 1396,
+    "lcp": 1396,
+    "cls": 0.026,
+    "tbt": 0,
+    "longestTask": 0,
+    "load": 1304,
+    "jsKB": 169,
+    "totalKB": 189,
+    "domNodes": 384,
+    "heapMB": 3.9,
+    "pageHeight": 8051
+   },
+   "runs": [
+    {
+     "fcp": 1532,
+     "lcp": 1532,
+     "cls": 0.026,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1304,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 384,
+     "heapMB": 4,
+     "pageHeight": 8051
+    },
+    {
+     "fcp": 1396,
+     "lcp": 1396,
+     "cls": 0.026,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1322,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 384,
+     "heapMB": 3.9,
+     "pageHeight": 8051
+    },
+    {
+     "fcp": 1376,
+     "lcp": 1376,
+     "cls": 0.026,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1282,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 384,
+     "heapMB": 3.9,
+     "pageHeight": 8051
+    }
+   ]
+  },
+  "specialists": {
+   "median": {
+    "fcp": 1452,
+    "lcp": 1452,
+    "cls": 0.02,
+    "tbt": 0,
+    "longestTask": 0,
+    "load": 1291,
+    "jsKB": 169,
+    "totalKB": 189,
+    "domNodes": 699,
+    "heapMB": 4.2,
+    "pageHeight": 11218
+   },
+   "runs": [
+    {
+     "fcp": 1540,
+     "lcp": 1540,
+     "cls": 0.02,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1313,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 699,
+     "heapMB": 4.1,
+     "pageHeight": 11218
+    },
+    {
+     "fcp": 1452,
+     "lcp": 1452,
+     "cls": 0.02,
+     "tbt": 0,
+     "longestTask": 56,
+     "load": 1291,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 699,
+     "heapMB": 4.2,
+     "pageHeight": 11218
+    },
+    {
+     "fcp": 1420,
+     "lcp": 1420,
+     "cls": 0.02,
+     "tbt": 0,
+     "longestTask": 0,
+     "load": 1266,
+     "jsKB": 169,
+     "totalKB": 189,
+     "domNodes": 699,
+     "heapMB": 4.2,
+     "pageHeight": 11218
+    }
+   ]
+  }
+ },
+ "interactionsMs": {
+  "menuOpen": {
+   "median": 24,
+   "runs": [
+    48,
+    24,
+    24
+   ]
+  },
+  "menuClose": {
+   "median": 16,
+   "runs": [
+    16,
+    16,
+    24
+   ]
+  },
+  "homeToLearn": {
+   "median": 208,
+   "runs": [
+    288,
+    192,
+    208
+   ]
+  }
+ }
+}

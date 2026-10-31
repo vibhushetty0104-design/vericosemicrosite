@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Deep Vein Column -->
+  <rect x="6" y="3" width="12" height="18" rx="3" />
+  <!-- Occlusive Thrombus Mass -->
+  <ellipse cx="12" cy="12" rx="3.5" ry="4.5" fill="#CE5B40" stroke="#CE5B40" />
+  <!-- Restricted Collateral Flow Jet -->
+  <path d="M8 8.5c.5 2 1.5 2.5 1.5 5.5" stroke="#8DAA9D" />
+</svg>

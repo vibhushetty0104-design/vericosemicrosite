@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="100%" fill="none" style="background:transparent;">
+  <defs>
+    <linearGradient id="vein-ablation-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0E483D" />
+      <stop offset="35%" stop-color="#0B4036" />
+      <stop offset="85%" stop-color="#072F27" />
+      <stop offset="100%" stop-color="#041E19" />
+    </linearGradient>
+    <linearGradient id="laser-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E0523C" />
+      <stop offset="50%" stop-color="#CE5B40" />
+      <stop offset="100%" stop-color="#F2EDE4" stop-opacity="0" />
+    </linearGradient>
+    <radialGradient id="laser-flash" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FDFCF9" />
+      <stop offset="20%" stop-color="#FDF08A" />
+      <stop offset="60%" stop-color="#CE5B40" />
+      <stop offset="100%" stop-color="#A9472F" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Large diagonal diseased vein structure -->
+  <path d="M25,280 C60,282 125,272 175,250 C245,218 315,190 385,160 C425,142 455,134 475,130" fill="none" stroke="#E4ECE6" stroke-width="96" stroke-linecap="round" opacity="0.3" />
+  <path d="M25,280 C60,282 125,272 175,250 C245,218 315,190 385,160 C425,142 455,134 475,130" fill="none" stroke="url(#vein-ablation-grad)" stroke-width="72" stroke-linecap="round" />
+
+  <!-- Treated / Contracted shrinking Vein section (Visual shrinkage highlight) -->
+  <path d="M305,192 C332,180 358,168 382,156 L385,165" fill="none" stroke="#CE5B40" stroke-width="72" stroke-linecap="round" opacity="0.12" />
+
+  <!-- Valve markers in untrapped safe distal region -->
+  <g stroke="#8DAA9D" stroke-width="3" stroke-linecap="round" opacity="0.6">
+    <path d="M72,252 C70,265 80,270 95,275" />
+    <path d="M72,298 C70,285 80,280 95,275" />
+  </g>
+
+  <!-- Catheter Insertion & Optic Laser fiber -->
+  <g id="treatment-sheath" transform="translate(-10, 8)">
+    <!-- Introducer outer sheath -->
+    <path d="M40,285 C85,281 142,263 192,243 C238,225 285,206 315,194" fill="none" stroke="#889892" stroke-width="8" stroke-linecap="round" />
+    <path d="M40,285 C85,281 142,263 192,243 C238,225 285,206 315,194" fill="none" stroke="#BACAC2" stroke-width="3" stroke-linecap="round" opacity="0.8" stroke-dasharray="1 3" />
+    
+    <!-- Catheter fiber (Black core) -->
+    <path d="M192,243 C238,225 285,206 325,190" fill="none" stroke="#4A635D" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M322,191 L345,182" fill="none" stroke="#CE5B40" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- Volumetric Laser emitter Tip -->
+    <g transform="translate(345, 182)">
+      <!-- Radiating Heat glow -->
+      <path d="M-12,-15 C10,-20 40,-10 65,0 C90,10 98,15 90,30 C82,45 60,35 40,30 C15,25 -5,10 -12,-15 Z" fill="url(#laser-glow)" />
+      <!-- Radial energy sparkles -->
+      <circle cx="0" cy="0" r="28" fill="url(#laser-flash)" />
+      <g stroke="#FDF08A" stroke-dasharray="1 3" stroke-linecap="round">
+        <line x1="0" y1="0" x2="-22" y2="-22" stroke-width="2" />
+        <line x1="0" y1="0" x2="22" y2="22" stroke-width="2" />
+        <line x1="0" y1="0" x2="28" y2="-8" stroke-width="2.5" />
+        <line x1="0" y1="0" x2="-28" y2="8" stroke-dasharray="0" stroke-width="2.5" />
+      </g>
+      <circle cx="0" cy="0" r="5" fill="#FDFCF9" />
+    </g>
+  </g>
+
+  <!-- Contracted Wall shrinkage cues -->
+  <g id="laser-reaction" stroke="#A9472F" stroke-width="2.5" stroke-linecap="round">
+    <path d="M392,118 C398,126 398,144 394,152" />
+    <path d="M394,188 C398,196 398,214 394,222" />
+    <path d="M410,135 C420,138 425,148 418,155" opacity="0.7" />
+    <path d="M410,172 C420,175 425,185 418,192" opacity="0.7" />
+  </g>
+</svg>

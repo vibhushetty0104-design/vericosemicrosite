@@ -1,0 +1,909 @@
+@import "tailwindcss";
+
+/*
+ * Meridian Vascular design tokens (DESIGN.md v4). Use these by name (bg-mv-forest,
+ * text-mv-ink-muted, ...) in new code; the --cp-* palette below is legacy and is
+ * retired view by view in later milestones.
+ */
+@theme {
+  --color-mv-forest: #0B4036;
+  --color-mv-forest-press: #072E27;
+  --color-mv-terracotta: #CE5B40;
+  --color-mv-cta: #A9472F;
+  --color-mv-cta-press: #8E3A26;
+  --color-mv-sage: #8DAA9D;
+  --color-mv-ivory: #F7F5EF;
+  --color-mv-surface: #FFFFFF;
+  --color-mv-pale: #E4ECE6;
+  --color-mv-ink: #17241F;
+  --color-mv-ink-muted: #4A5952;
+  --color-mv-outline: #D6DDD8;
+  --color-mv-outline-strong: #6F8279;
+  --color-mv-danger: #7B2434;
+  --color-mv-danger-surface: #FBEFEF;
+  --color-mv-warning: #7A4E0E;
+  --color-mv-warning-surface: #FBF3E2;
+
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', Menlo, Monaco, Consolas, monospace;
+
+  --ease-mv-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-mv-exit: cubic-bezier(0.3, 0, 1, 1);
+}
+
+:root {
+  /* ClearPix Original Healthcare Palette */
+  --cp-forest: #0A3B32;          /* Authoritative Institutional Pine */
+  --cp-forest-deep: #04231E;     /* Dark Canvas / High Contrast Surface */
+  --cp-forest-light: #164E44;    /* Intermediate Pine */
+  --cp-teal: #1D6356;            /* Secondary Botanical Teal */
+  --cp-ivory: #FAF7F2;           /* Tranquil Warm Ivory Paper Canvas */
+  --cp-ivory-warm: #F4EFE6;      /* Sand/Stone Secondary Surface */
+  --cp-surface: #FFFFFF;         /* Crisp White Clinical Surface */
+  --cp-clay: #C85A3F;            /* Warm Terracotta / Clay Human Accent */
+  --cp-clay-deep: #A7452D;       /* Clay Deep / Active State */
+  --cp-wine: #7B2434;            /* Vascular Red Flag / DVT Alert */
+  --cp-wine-soft: #FBF0F2;       /* Soft Red Flag Background */
+  --cp-sage: #E5EDE8;            /* Soft Sage / Badge Background */
+  --cp-sage-border: #D1DFD6;     /* Sage Structural Border */
+  --cp-gold: #B88A2E;            /* Diagnostic Guideline Accent */
+  --cp-gold-soft: #F9F5EA;       /* Gold Guideline Background */
+  
+  /* Legibility Ink Tokens */
+  --cp-ink: #1A2421;             /* Primary Ink Typography */
+  --cp-ink-muted: #54635D;       /* Explanatory Clinical Prose */
+  --cp-ink-subtle: #7A8A84;      /* Metadata, Captions, Citations */
+
+  /* Structural Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 9999px;
+
+  /* Atmospheric Elevation */
+  --shadow-subtle: 0 2px 10px rgba(10, 59, 50, 0.03);
+  --shadow-card: 0 6px 24px rgba(10, 59, 50, 0.05);
+  --shadow-float: 0 16px 40px rgba(10, 59, 50, 0.10);
+
+  /* Typography stacks: Source Serif 4 for display and headings (sans and mono live in @theme) */
+  --font-editorial: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-display: 'Source Serif 4', Georgia, serif;
+
+  /* Height of the sticky site header; anchors and skip-link targets clear it */
+  --mv-header-h: 56px;
+
+  /* Backward Compatibility Aliases */
+  --forest: var(--cp-forest);
+  --forest-dark: var(--cp-forest-deep);
+  --paper: var(--cp-ivory);
+  --paper-soft: var(--cp-ivory-warm);
+  --white-soft: var(--cp-surface);
+  --coral: var(--cp-clay);
+  --coral-deep: var(--cp-clay-deep);
+  --ink: var(--cp-ink);
+  --ink-soft: var(--cp-ink-muted);
+  --ink-muted: var(--cp-ink-subtle);
+  --wine: var(--cp-wine);
+  --teal: var(--cp-teal);
+  --teal-soft: var(--cp-sage);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --mv-header-h: 64px;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--mv-header-h) + 8px);
+  font-size: 16px;
+  background-color: var(--cp-ivory);
+  color: var(--cp-ink);
+}
+
+body {
+  margin: 0;
+  background-color: var(--cp-ivory);
+  color: var(--cp-ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Utility Classes */
+.editorial-serif {
+  font-family: var(--font-editorial);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.heading-serif-section {
+  font-family: var(--font-editorial);
+  font-size: clamp(2.1rem, 3.8vw, 2.85rem);
+  line-height: 1.18;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.display-serif {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.container-page {
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+/* ClearPix Signature Component Tokens */
+.cp-card {
+  background-color: var(--cp-surface);
+  border: 1px solid rgba(10, 59, 50, 0.10);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cp-card:hover {
+  border-color: rgba(10, 59, 50, 0.25);
+  box-shadow: var(--shadow-float);
+}
+
+.cp-badge-sage {
+  background-color: var(--cp-sage);
+  color: var(--cp-forest);
+  border: 1px solid var(--cp-sage-border);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+}
+
+.cp-btn-primary {
+  background-color: var(--cp-forest);
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(10, 59, 50, 0.15);
+}
+
+.cp-btn-primary:hover {
+  background-color: var(--cp-forest-light);
+  box-shadow: 0 6px 20px rgba(10, 59, 50, 0.25);
+}
+
+.cp-btn-secondary {
+  background-color: var(--cp-surface);
+  color: var(--cp-forest);
+  border: 1px solid rgba(10, 59, 50, 0.18);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cp-btn-secondary:hover {
+  background-color: var(--cp-ivory-warm);
+  border-color: rgba(10, 59, 50, 0.35);
+}
+
+.cp-btn-tertiary {
+  background-color: transparent;
+  color: var(--cp-forest);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 8px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cp-btn-tertiary:hover {
+  background-color: rgba(10, 59, 50, 0.06);
+}
+
+.cp-btn-terracotta {
+  background-color: var(--cp-clay);
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(200, 90, 63, 0.28);
+}
+
+.cp-btn-terracotta:hover {
+  background-color: var(--cp-clay-deep);
+  box-shadow: 0 6px 20px rgba(200, 90, 63, 0.38);
+}
+
+/* Meridian Vascular base: visible focus everywhere, Ivory focus on dark bands */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-mv-forest);
+    outline-offset: 2px;
+  }
+  .mv-on-dark :focus-visible {
+    outline-color: var(--color-mv-ivory);
+  }
+  #main:focus {
+    outline: none;
+  }
+}
+
+/* Meridian Vascular components (DESIGN.md "Components"). One .mv-btn-primary per screen. */
+@layer components {
+  .mv-skip-link {
+    position: absolute;
+    left: 16px;
+    top: -200px;
+    z-index: 100;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: var(--color-mv-forest);
+    color: var(--color-mv-ivory);
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .mv-skip-link:focus {
+    top: 8px;
+    outline: 2px solid var(--color-mv-ivory);
+    outline-offset: -4px;
+  }
+
+  .mv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 24px;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 150ms var(--ease-mv-standard), color 150ms var(--ease-mv-standard),
+      border-color 150ms var(--ease-mv-standard);
+  }
+  .mv-btn-primary {
+    background-color: var(--color-mv-cta);
+    color: #FFFFFF;
+  }
+  .mv-btn-primary:hover,
+  .mv-btn-primary:active {
+    background-color: var(--color-mv-cta-press);
+  }
+  .mv-on-dark .mv-btn-primary {
+    border-color: var(--color-mv-ivory);
+  }
+  .mv-btn-secondary {
+    background-color: var(--color-mv-forest);
+    color: #FFFFFF;
+  }
+  .mv-btn-secondary:hover,
+  .mv-btn-secondary:active {
+    background-color: var(--color-mv-forest-press);
+  }
+  /* Secondary action placed on the Forest band: inverted so it still reads as a button */
+  .mv-btn-inverse {
+    background-color: var(--color-mv-ivory);
+    color: var(--color-mv-forest);
+  }
+  .mv-btn-inverse:hover,
+  .mv-btn-inverse:active {
+    background-color: var(--color-mv-pale);
+  }
+  .mv-btn-quiet {
+    min-height: 44px;
+    padding: 0 16px;
+    background-color: transparent;
+    color: var(--color-mv-forest);
+  }
+  .mv-btn-quiet:hover,
+  .mv-btn-quiet:active {
+    background-color: var(--color-mv-pale);
+  }
+
+  .mv-link {
+    color: var(--color-mv-forest);
+    font-weight: 600;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .mv-link:hover {
+    text-decoration-thickness: 2px;
+  }
+  .mv-on-dark .mv-link {
+    color: var(--color-mv-ivory);
+  }
+
+  .mv-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .mv-sheet-enter {
+    animation: mvSheetIn 250ms var(--ease-mv-standard) both;
+  }
+}
+
+/*
+ * Home hero on short screens. Phones (<640px) and phones in landscape (height <= 500px) get the
+ * one-line lede and a tighter hero so "Check your symptoms" is visible without scrolling. These
+ * rules are unlayered on purpose so they win over the hero's Tailwind utilities.
+ */
+.mv-hero-short {
+  display: none;
+}
+@media (max-width: 639px) {
+  .mv-hero-short {
+    display: inline;
+  }
+  .mv-hero-long {
+    display: none;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .mv-hero-short {
+    display: inline;
+  }
+  .mv-hero-long {
+    display: none;
+  }
+  .mv-hero-inner {
+    padding-top: 12px;
+    padding-bottom: 16px;
+  }
+  .mv-hero-tagline {
+    font-size: 17px;
+  }
+  .mv-hero-title {
+    font-size: 30px;
+    line-height: 1.08;
+  }
+  .mv-hero-lede {
+    margin-top: 8px;
+    font-size: 16px;
+  }
+  .mv-hero-actions {
+    margin-top: 12px;
+  }
+}
+
+@keyframes mvSheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Editorial word-by-word reveal & staggered fade */
+@keyframes editorialWordIn {
+  0% {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes editorialFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.editorial-word-reveal {
+  animation: editorialWordIn 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.editorial-fade-in {
+  animation: editorialFadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editorial-word-reveal,
+  .editorial-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cp-ivory-warm);
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Micro-Interactions & Motion Utilities */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-cursor-blink {
+  animation: cursorBlink 0.85s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes vascularPulse {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.02) translateY(-3px);
+    opacity: 0.75;
+  }
+}
+
+/* Retired in M2 (DESIGN.md: nothing loops indefinitely); kept as a single gentle settle */
+.animate-vascular-pulse {
+  animation: vascularPulse 400ms var(--ease-mv-standard) 1 both;
+}
+
+/* Brand characters settle once (400ms) on entry instead of floating in a loop */
+@keyframes characterFloat1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(1.2deg);
+  }
+}
+
+@keyframes characterFloat2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-1.5deg);
+  }
+}
+
+@keyframes characterFloat3 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.9deg);
+  }
+}
+
+.animate-float-valvy {
+  animation: characterFloat1 400ms var(--ease-mv-standard) 1;
+}
+
+.animate-float-hemo {
+  animation: characterFloat2 400ms var(--ease-mv-standard) 1;
+}
+
+.animate-float-flux {
+  animation: characterFloat3 400ms var(--ease-mv-standard) 1;
+}
+
+.tap-tactile {
+  transition: transform 0.12s ease-out, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.tap-tactile:active {
+  transform: scale(0.975);
+}
+
+.focus-cp:focus-visible {
+  outline: 2px solid var(--cp-clay);
+  outline-offset: 2px;
+}
+
+/* Safe area padding for mobile docks */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Meridbot Calm Breathing Rhythm */
+@keyframes meridbotBreathe {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-meridbot-breathe {
+  animation: meridbotBreathe 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Living Meridian Background Breathing & Node Pulses */
+@keyframes meridianBreatheTrunk {
+  0%, 100% {
+    opacity: 0.14;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    opacity: 0.24;
+    stroke-dashoffset: -20;
+  }
+}
+
+@keyframes meridianBreatheTributary {
+  0%, 100% {
+    opacity: 0.10;
+  }
+  50% {
+    opacity: 0.20;
+  }
+}
+
+@keyframes meridianNodeGlowPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.15);
+  }
+}
+
+.meridian-trunk-main {
+  animation: meridianBreatheTrunk 8s ease-in-out infinite;
+  animation-play-state: var(--meridian-play-state, running);
+}
+
+.meridian-tributary,
+.meridian-perforator,
+.meridian-branch-left,
+.meridian-branch-right {
+  animation: meridianBreatheTributary 8s ease-in-out infinite;
+  animation-play-state: var(--meridian-play-state, running);
+}
+
+.meridian-node-glow {
+  transform-origin: center;
+  animation: meridianNodeGlowPulse 6s ease-in-out infinite;
+  animation-play-state: var(--meridian-play-state, running);
+}
+
+.meridian-node-glow-alt {
+  transform-origin: center;
+  animation: meridianNodeGlowPulse 6s ease-in-out 3s infinite;
+  animation-play-state: var(--meridian-play-state, running);
+}
+
+/* ==========================================================================
+   Signature Floating Icon Animations (Phase 2)
+   ========================================================================== */
+
+/* 1. Recognize Symptoms — Varicose Veins */
+@keyframes veinFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(0.4deg);
+  }
+}
+
+@keyframes veinGleam {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.85);
+  }
+  35% {
+    opacity: 0.75;
+    transform: translateY(0px) scale(1.05);
+  }
+  65% {
+    opacity: 0.85;
+    transform: translateY(-16px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-36px) scale(0.9);
+  }
+}
+
+.anim-vein-float {
+  animation: veinFloat 5.6s ease-in-out infinite;
+}
+
+.anim-vein-gleam {
+  animation: veinGleam 4.2s ease-in-out infinite;
+}
+
+/* 2. Decode Doppler — Ultrasound Report */
+@keyframes dopplerFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-0.5deg);
+  }
+}
+
+@keyframes dopplerScanSweep {
+  0% {
+    transform: translateX(-130%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateX(130%);
+    opacity: 0.85;
+  }
+  75% {
+    opacity: 0;
+    transform: translateX(150%);
+  }
+  100% {
+    transform: translateX(-130%);
+    opacity: 0;
+  }
+}
+
+.anim-doppler-float {
+  animation: dopplerFloat 6.2s ease-in-out 1.2s infinite;
+}
+
+.anim-doppler-scan {
+  animation: dopplerScanSweep 3.6s ease-in-out infinite;
+}
+
+/* 3. Compare Treatments — Treatment Options */
+@keyframes treatmentFloat {
+  0%, 100% {
+    transform: translateY(0px) perspective(600px) rotateX(0deg);
+  }
+  50% {
+    transform: translateY(-8px) perspective(600px) rotateX(3deg);
+  }
+}
+
+@keyframes treatmentGlowPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.14);
+  }
+}
+
+.anim-treatment-float {
+  animation: treatmentFloat 5.4s ease-in-out 2.2s infinite;
+}
+
+.anim-treatment-glow {
+  animation: treatmentGlowPulse 4.4s ease-in-out infinite;
+}
+
+/* 4. Specialist Care — Consultation */
+@keyframes specialistWelcomeFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.025);
+  }
+}
+
+.anim-specialist-float {
+  animation: specialistWelcomeFloat 6.0s ease-in-out 0.6s infinite;
+}
+
+/* 5. Your Care Pathway — Patient Journey */
+@keyframes pathwayFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6.5px) rotate(0.3deg);
+  }
+}
+
+@keyframes pathwayMilestoneStep {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  33% {
+    opacity: 0.95;
+    transform: scale(1.25);
+  }
+}
+
+.anim-pathway-float {
+  animation: pathwayFloat 6.8s ease-in-out 1.8s infinite;
+}
+
+.anim-pathway-node-1 {
+  animation: pathwayMilestoneStep 3.2s ease-in-out infinite;
+}
+
+.anim-pathway-node-2 {
+  animation: pathwayMilestoneStep 3.2s ease-in-out 1.05s infinite;
+}
+
+.anim-pathway-node-3 {
+  animation: pathwayMilestoneStep 3.2s ease-in-out 2.1s infinite;
+}
+
+/* 6. Ask Meridbot — Mascot */
+@keyframes meridbotIconBob {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5.5px) rotate(-0.5deg);
+  }
+}
+
+@keyframes meridbotAntennaRing {
+  0%, 100% {
+    transform: scale(0.85);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.85;
+  }
+}
+
+.anim-meridbot-icon-float {
+  animation: meridbotIconBob 5.0s ease-in-out 0.9s infinite;
+}
+
+.anim-meridbot-beacon {
+  animation: meridbotAntennaRing 3.4s ease-in-out infinite;
+}
+
+/* Reduced Motion Accessibility Overrides */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-cursor-blink,
+  .animate-vascular-pulse,
+  .animate-float-valvy,
+  .animate-float-hemo,
+  .animate-float-flux,
+  .animate-meridbot-breathe,
+  .meridian-trunk-main,
+  .meridian-tributary,
+  .meridian-perforator,
+  .meridian-branch-left,
+  .meridian-branch-right,
+  .meridian-node-glow,
+  .meridian-node-glow-alt,
+  .anim-vein-float,
+  .anim-vein-gleam,
+  .anim-doppler-float,
+  .anim-doppler-scan,
+  .anim-treatment-float,
+  .anim-treatment-glow,
+  .anim-specialist-float,
+  .anim-pathway-float,
+  .anim-pathway-node-1,
+  .anim-pathway-node-2,
+  .anim-pathway-node-3,
+  .anim-meridbot-icon-float,
+  .anim-meridbot-beacon {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .meridian-luminous-pulses {
+    display: none !important;
+  }
+}
+

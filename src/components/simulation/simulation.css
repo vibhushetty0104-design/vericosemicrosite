@@ -1,0 +1,261 @@
+/* Venous valve simulation. Transform and opacity only; transitions off under reduced motion. */
+.vs-seg {
+  position: relative;
+}
+.vs-seg input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.vs-seg label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--color-mv-outline-strong);
+  border-radius: 9999px;
+  background: var(--color-mv-surface);
+  color: var(--color-mv-forest);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms var(--ease-mv-standard), color 150ms var(--ease-mv-standard);
+}
+.vs-seg label:hover {
+  background: var(--color-mv-pale);
+}
+.vs-seg input:checked + label {
+  background: var(--color-mv-forest);
+  border-color: var(--color-mv-forest);
+  color: #fff;
+}
+.vs-seg input:focus-visible + label {
+  outline: 2px solid var(--color-mv-forest);
+  outline-offset: 2px;
+}
+
+.vs-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--color-mv-outline-strong);
+  border-radius: 9999px;
+  background: var(--color-mv-surface);
+  color: var(--color-mv-forest);
+}
+.vs-step:hover {
+  background: var(--color-mv-pale);
+}
+
+.vs-phases {
+  display: grid;
+  gap: 4px;
+  counter-reset: none;
+}
+.vs-phases button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: var(--color-mv-ink-muted);
+  font-size: 15px;
+  text-align: left;
+}
+.vs-phases button:hover {
+  background: var(--color-mv-pale);
+}
+.vs-phase-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--color-mv-pale);
+  color: var(--color-mv-forest);
+  font-size: 14px;
+  font-weight: 600;
+}
+.vs-phases .is-current button {
+  color: var(--color-mv-forest);
+  font-weight: 600;
+}
+.vs-phases .is-current .vs-phase-n {
+  background: var(--color-mv-forest);
+  color: #fff;
+}
+
+.vs-layout {
+  display: grid;
+  gap: 24px;
+  grid-template-areas: 'intro' 'stage' 'controls';
+}
+.vs-intro {
+  grid-area: intro;
+}
+.vs-controls {
+  grid-area: controls;
+}
+.vs-stage {
+  grid-area: stage;
+}
+@media (min-width: 1024px) {
+  .vs-layout {
+    column-gap: 48px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 'intro stage' 'controls stage';
+    align-items: start;
+  }
+}
+.vs-stage {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.vs-stage--healthy,
+.vs-stage--leaky {
+  grid-template-columns: minmax(0, 360px);
+  justify-content: center;
+}
+.vs-figure {
+  margin: 0;
+  padding: 12px 10px 14px;
+  border-radius: 20px;
+  background: var(--color-mv-ivory);
+}
+@media (min-width: 640px) {
+  .vs-figure {
+    padding: 16px 16px 18px;
+  }
+}
+.vs-figure-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vs-status {
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: var(--color-mv-pale);
+  color: var(--color-mv-forest);
+  font-size: 13px;
+  font-weight: 600;
+}
+.vs-status.is-back {
+  background: var(--color-mv-warning-surface);
+  color: var(--color-mv-warning);
+}
+.vs-caption {
+  margin-top: 8px;
+  min-height: 4.5em;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-mv-ink);
+}
+.vs-svg {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  margin: 8px auto 0;
+  aspect-ratio: 200 / 440;
+}
+
+.vs-lumen {
+  fill: #f6e8e2;
+}
+.vs-wall {
+  fill: none;
+  stroke: var(--color-mv-forest);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.vs-wall-lower {
+  transform-box: view-box;
+  transform-origin: 100px 330px;
+  transition: transform 500ms var(--ease-mv-standard);
+}
+.vs-wall-lower.is-squeezing {
+  transform: scaleX(0.9);
+}
+.vs-muscle {
+  fill: var(--color-mv-pale);
+  stroke: var(--color-mv-sage);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 500ms var(--ease-mv-standard), fill 500ms var(--ease-mv-standard);
+}
+.vs-muscles.is-squeezing .vs-muscle {
+  fill: #cddcd2;
+}
+.vs-muscles.is-squeezing .vs-muscle--l {
+  transform: translateX(6px) scaleX(1.12);
+}
+.vs-muscles.is-squeezing .vs-muscle--r {
+  transform: translateX(-6px) scaleX(1.12);
+}
+.vs-particles circle {
+  fill: var(--color-mv-cta);
+}
+
+.vs-leaflet {
+  fill: none;
+  stroke: var(--color-mv-forest);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  transform-box: view-box;
+  transition: transform 420ms var(--ease-mv-standard);
+}
+.vs-valve.is-open .vs-leaflet--l {
+  transform: rotate(-30deg);
+}
+.vs-valve.is-open .vs-leaflet--r {
+  transform: rotate(30deg);
+}
+.vs-valve.is-gap .vs-leaflet--l {
+  transform: rotate(-9deg);
+}
+.vs-valve.is-gap .vs-leaflet--r {
+  transform: rotate(9deg);
+}
+.vs-valve.is-highlight .vs-leaflet {
+  stroke: var(--color-mv-terracotta);
+}
+.vs-gap-ring {
+  fill: none;
+  stroke: var(--color-mv-terracotta);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
+
+.vs-arrow path {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vs-arrow-up {
+  stroke: var(--color-mv-forest);
+}
+.vs-arrow-down {
+  stroke: var(--color-mv-terracotta);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-leaflet,
+  .vs-muscle,
+  .vs-wall-lower,
+  .vs-seg label {
+    transition: none;
+  }
+}

@@ -1,0 +1,17 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+.vercel/
+screenshots/
+.system_generated/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+
+# Local agent & tooling artifacts
+.claude/
+.agents/

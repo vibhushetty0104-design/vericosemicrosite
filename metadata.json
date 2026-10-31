@@ -1,0 +1,6 @@
+{
+  "name": "ClearPix Meridian Vascular",
+  "description": "Educational guide to varicose veins, symptoms, causes, duplex ultrasound diagnosis, progressive stages, and interactive degree assessment with ClearPix AI vascular guidance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

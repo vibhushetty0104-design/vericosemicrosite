@@ -1,0 +1,45 @@
+====================================================
+Running ClearPix Clinical Parser & Safety Test Suite
+====================================================
+
+Test Group 1: Positive Reflux Detection
+  ✓ PASS: Detects positive SFJ incompetence in positive excerpt
+  ✓ PASS: Detects pathologic reflux duration in positive excerpt
+  ✓ PASS: Detects GSV involvement in positive excerpt
+  ✓ PASS: Does not raise false acute DVT alert on isolated saphenous reflux
+
+Test Group 2: Perforator Consensus Thresholds
+  ✓ PASS: Detects incompetent perforator vein with pathologic duration
+  ✓ PASS: No obsolete 0.35s (350ms) perforator threshold present; adheres to SVS/AVF >=500ms standard
+
+Test Group 3: True Positive Acute DVT Red Flag
+  ✓ PASS: Flags acute DVT urgent safety alert on non-compressible vein
+  ✓ PASS: Provides high-urgency clinical guidance notice
+
+Test Group 4: Negation Handling for Deep Venous System
+  ✓ PASS: Does NOT raise DVT alert when report states "no evidence of deep vein thrombosis"
+  ✓ PASS: Correctly recognizes explicit negation of deep vein thrombus
+  ✓ PASS: Explicitly disclaims diagnostic validation and notes reliance on patient-provided text
+
+Test Group 5: Mixed Superficial Reflux + Negated Deep System
+  ✓ PASS: Identifies superficial SFJ reflux in mixed report
+  ✓ PASS: Identifies GSV involvement in mixed report
+  ✓ PASS: Identifies reflux duration in mixed report
+  ✓ PASS: Recognizes deep system is described as patent and negative for DVT
+  ✓ PASS: Mixed report with negated DVT does NOT trigger false emergency alert
+
+Test Group 6: Incomplete & Ambiguous Inputs
+  ✓ PASS: Detects short/incomplete excerpt (<5 words)
+  ✓ PASS: Correctly marks non-vascular narrative text as ambiguous
+  ✓ PASS: Matches zero vascular terms on non-vascular prose
+
+Test Group 7: AI Assistant Safety Handling
+  ✓ PASS: Refuses prompt injection and prescription requests
+  ✓ PASS: Does not prescribe requested medication
+  ✓ PASS: Routes negated DVT query to Routine Consultation rather than emergency alert
+  ✓ PASS: Routes non-compressible finding to Urgent Medical Attention
+
+====================================================
+Test Results: 23 passed, 0 failed
+====================================================
+

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%" fill="none" style="background:transparent;">
+  <defs>
+    <linearGradient id="vein-healthy-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#145D4F" />
+      <stop offset="50%" stop-color="#0B4036" />
+      <stop offset="100%" stop-color="#05251F" />
+    </linearGradient>
+    <linearGradient id="vein-varicose-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6F8D80" />
+      <stop offset="35%" stop-color="#8DAA9D" />
+      <stop offset="70%" stop-color="#557B6C" />
+      <stop offset="100%" stop-color="#2D4C40" />
+    </linearGradient>
+    <linearGradient id="pool-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#CE5B40" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#CE5B40" stop-opacity="0.7" />
+    </linearGradient>
+  </defs>
+
+  <!-- Left/Right Dividers (Split style for side-by-side comparison) -->
+  <line x1="250" y1="35" x2="250" y2="465" stroke="#8DAA9D" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.5" />
+
+  <!-- LEFT: Normal Competent Vessel -->
+  <g id="healthy-vein-section">
+    <!-- Straight parallel lumen -->
+    <path d="M110,40 L110,460" fill="none" stroke="#E4ECE6" stroke-width="28" stroke-linecap="round" opacity="0.5" />
+    <path d="M110,40 L110,460" fill="none" stroke="url(#vein-healthy-grad)" stroke-width="16" />
+    <!-- Valve Structure 1 (Open / Normal) -->
+    <g stroke="#E4ECE6" stroke-width="2.5" stroke-linecap="round" opacity="0.95">
+      <path d="M103,150 C106,140 109,130 110,120" />
+      <path d="M117,150 C114,140 111,130 110,120" />
+    </g>
+    <!-- Valve Structure 2 (Open / Normal) -->
+    <g stroke="#E4ECE6" stroke-width="2.5" stroke-linecap="round" opacity="0.95">
+      <path d="M103,320 C106,310 109,300 110,290" />
+      <path d="M117,320 C114,310 111,300 110,290" />
+    </g>
+    <!-- Upward Arrows -->
+    <g stroke="#CE5B40" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M110,105 L110,75 M110,75 L106,81 M110,75 L114,81" />
+      <path d="M110,270 L110,240 M110,240 L106,246 M110,240 L114,246" />
+    </g>
+  </g>
+
+  <!-- RIGHT: Dilated & Tortuous Vessel with Backflow/Reflux -->
+  <g id="varicose-vein-section">
+    <!-- S-Shaped, twisted and dilated bulges -->
+    <path d="M370,40 C395,115 325,150 338,225 C348,275 402,310 385,375 C375,415 358,420 370,460" fill="none" stroke="#E4ECE6" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" opacity="0.4" />
+    <path d="M370,40 C395,115 325,150 338,225 C348,275 402,310 385,375 C375,415 358,420 370,460" fill="none" stroke="url(#vein-varicose-grad)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Pooling fluid visual layer inside bottom bulge -->
+    <path d="M336,215 C343,265 390,290 382,360 C378,382 364,402 360,422 L384,428 C390,405 400,382 396,352 C402,285 356,260 348,215 Z" fill="url(#pool-grad)" opacity="0.8" />
+    <!-- Malfunctioning Incompetent Valves (Do Not Meet / Leaking) -->
+    <g stroke="#E4ECE6" stroke-width="2.5" stroke-linecap="round" opacity="0.8">
+      <!-- Top Failed Leaflets -->
+      <path d="M344,142 C344,132 346,124 348,118" />
+      <path d="M362,132 C359,126 357,121 356,117" />
+      <!-- Bottom Failed Leaflets -->
+      <path d="M352,328 C354,322 356,315 359,310" />
+      <path d="M375,324 C372,318 369,314 367,310" />
+    </g>
+    <!-- Retrograde backflow flow vectors (Downward warning red) -->
+    <g stroke="#CE5B40" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M351,100 L354,125 M354,125 L349,121 M354,125 L358,119" />
+      <path d="M362,295 L364,320 M364,320 L359,316 M364,320 L368,314" stroke-width="2.75" />
+      <!-- Lower pooling backflow Swirls -->
+      <path d="M372,390 C364,395 362,408 366,412" stroke-width="1.75" stroke-dasharray="1.5 1.5" />
+      <path d="M358,418 L360,428 M360,428 L355,425 M360,428 L364,424" stroke-width="2" />
+    </g>
+  </g>
+</svg>

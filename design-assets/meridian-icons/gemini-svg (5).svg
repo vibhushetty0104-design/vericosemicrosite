@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Tortuous Ectatic Vein Margin -->
+  <path d="M6.5 3c2 2.5 3.5 4 1.5 7s-1 5.5 1.5 8 1 3 0 3" />
+  <path d="M17.5 3c2 2.5 3.5 4 1.5 7s-1 5.5 1.5 8 1 3 0 3" />
+  <!-- Incompetent Gap & Retrograde Turbulence / Reflux -->
+  <path d="M7.5 10c2.5 0 3.5-1 4-2" />
+  <path d="M16.5 10c-2.5 0-3.5-1-4-2" />
+  <path d="M12 10v6m0 0l-2-2m2 2l2-2" stroke="#CE5B40" />
+</svg>

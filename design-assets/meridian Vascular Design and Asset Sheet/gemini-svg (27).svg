@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="100%" height="100%" fill="none" style="background:transparent;">
+  <defs>
+    <linearGradient id="vein-dvt-back" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0E483D" />
+      <stop offset="40%" stop-color="#0B4036" />
+      <stop offset="85%" stop-color="#072F27" />
+      <stop offset="100%" stop-color="#041E19" />
+    </linearGradient>
+    <radialGradient id="clot-body" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#E2654B" />
+      <stop offset="40%" stop-color="#CE5B40" />
+      <stop offset="80%" stop-color="#9C351F" />
+      <stop offset="100%" stop-color="#541B10" />
+    </radialGradient>
+    <linearGradient id="congested-red" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#CE5B40" stop-opacity="0" />
+      <stop offset="100%" stop-color="#A9472F" stop-opacity="0.8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Natural-Toned Muscular calf backdrop and leg wall bounds -->
+  <path d="M120,40 C140,45 162,55 180,68 C202,85 200,105 198,128 C196,155 178,185 168,225 C158,260 148,320 155,360 C159,380 152,410 142,430 L198,470" fill="none" stroke="#E8E2D5" stroke-width="16" opacity="0.3" />
+
+  <!-- 2.5D longitudinal cutaway deep vein segment -->
+  <path d="M140,25 C140,110 120,165 120,230 C120,305 140,360 140,475 L260,475 C260,360 280,305 280,230 C280,165 260,110 260,25 Z" fill="url(#vein-dvt-back)" stroke="#8DAA9D" stroke-width="4.5" />
+
+  <!-- Lower congestion zone (pooling) below the thrombus -->
+  <path d="M125,240 C125,240 121,305 141,350 C142,352 258,352 259,350 C279,305 275,240 275,240 L277,465 C277,472 272,473 260,473 L140,473 C128,473 123,472 123,465 Z" fill="url(#congested-red)" />
+
+  <!-- Venous Valve leaflets buried inside lower portion -->
+  <g stroke="#E4ECE6" stroke-width="2.5" stroke-linecap="round" opacity="0.6">
+    <path d="M130,225 C155,220 185,205 196,175" />
+    <path d="M270,225 C245,220 215,205 204,175" />
+  </g>
+
+  <!-- INTRALUMINAL OCCLUDING CLOT (2.5D Textured) -->
+  <g id="thrombus" transform="translate(142, 175)">
+    <!-- Base shadow/bound contour -->
+    <path d="M-10,15 C-22,35 -5,55 10,70 C22,82 48,92 70,85 C95,78 112,65 118,35 C122,12 110,-10 90,-18 C70,-26 55,-12 42,-22 C30,-32 10,-22 -2,-18 C-14,-14 -18,0 -10,15 Z" fill="#541B10" opacity="0.3" transform="scale(1.05)" />
+    <!-- Dimensional core -->
+    <path d="M-10,15 C-22,35 -5,55 10,70 C22,82 48,92 70,85 C95,78 112,65 118,35 C122,12 110,-10 90,-18 C70,-26 55,-12 42,-22 C30,-32 10,-22 -2,-18 C-14,-14 -18,0 -10,15 Z" fill="url(#clot-body)" stroke="#A9472F" stroke-width="1.5" />
+    <!-- Fine fibrin / layered mesh fibers -->
+    <path d="M12,18 C2,26 8,34 18,34 C25,34 22,22 12,18 Z" fill="#9C351F" opacity="0.8" />
+    <path d="M42,-2 C36,8 48,12 56,4 C62,-2 52,-10 42,-2 Z" fill="#9C351F" opacity="0.8" />
+    <path d="M72,22 C65,35 78,45 88,35 C95,28 85,15 72,22 Z" fill="#541B10" opacity="0.8" />
+    <path d="M-5,42 C8,45 2,58 14,64" stroke="#CE5B40" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M38,-15 C45,-2 55,2 62,12" stroke="#CE5B40" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Obstruction By-Pass flow vectors (Minimal flow around the edges) -->
+  <g stroke="#CE5B40" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.75">
+    <path d="M246,80 L246,55 M246,55 L242,61 M246,55 L250,61" stroke-width="3" />
+  </g>
+
+  <!-- Axial Cross-Section Inset (Lower Right) -->
+  <g id="axial-cross-section-inset" transform="translate(325, 395)">
+    <circle cx="0" cy="0" r="30" fill="#FDFCF9" stroke="#8DAA9D" stroke-width="2" />
+    <!-- outer vein layer -->
+    <circle cx="0" cy="0" r="22" fill="#0B4036" stroke="#8DAA9D" stroke-width="2.5" />
+    <!-- occluding clot inside the lumen -->
+    <path d="M-12,-2 C-15,12 -5,21 8,14 C15,9 18,-6 8,-14 C2,-18 -8,-14 -12,-2" fill="url(#clot-body)" stroke="#A9472F" stroke-width="1.25" />
+    <!-- fine bypass gap -->
+    <path d="M-15,-15 C-22,-5 -22,5 -15,14" fill="none" stroke="#CE5B40" stroke-width="1.5" stroke-linecap="round" />
+  </g>
+</svg>

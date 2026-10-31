@@ -1,0 +1,500 @@
+/*
+ * Venous valve prototype styles. Scoped with the `vv-` prefix and built on the Meridian
+ * Vascular tokens from src/index.css (@theme --color-mv-*, --font-serif, --font-sans).
+ * Motion: transforms and stroke-dashoffset only; nothing runs unless `.is-animating` is set
+ * (playing, on screen, tab visible, motion allowed).
+ */
+
+.vv {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px 32px;
+  background: var(--color-mv-ivory);
+  color: var(--color-mv-ink);
+  font-family: var(--font-sans);
+}
+@media (min-width: 768px) {
+  .vv {
+    padding: 32px 32px 40px;
+    border: 1px solid var(--color-mv-outline);
+    border-radius: 20px;
+  }
+}
+
+.vv-eyebrow {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: var(--color-mv-pale);
+  color: var(--color-mv-forest);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.vv-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--color-mv-forest);
+}
+@media (min-width: 1024px) {
+  .vv-title {
+    font-size: 36px;
+  }
+}
+.vv-lede {
+  max-width: 36rem;
+  margin: 8px 0 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--color-mv-ink-muted);
+}
+
+/* Page wrapper (prototype only) ------------------------------------------ */
+.vv-page {
+  min-height: 100vh;
+  background: var(--color-mv-ivory);
+  color: var(--color-mv-ink);
+}
+.vv-page-banner {
+  border-bottom: 1px solid var(--color-mv-outline);
+  background: var(--color-mv-warning-surface);
+}
+.vv-page-banner p {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--color-mv-warning);
+}
+.vv-page-banner strong,
+.vv-page-banner a {
+  font-weight: 600;
+}
+.vv-page-banner a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.vv-page-main {
+  padding: 24px 0;
+}
+@media (min-width: 768px) {
+  .vv-page-banner p {
+    padding: 12px 32px;
+  }
+  .vv-page-main {
+    padding: 40px 0;
+  }
+}
+.vv-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Controls ---------------------------------------------------------------- */
+.vv-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+}
+.vv-states {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.vv-legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-mv-ink);
+}
+.vv-segments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.vv-segment {
+  position: relative;
+}
+.vv-radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+.vv-segment-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 52px;
+  padding: 6px 16px;
+  border: 1px solid var(--color-mv-outline-strong);
+  border-radius: 12px;
+  background: var(--color-mv-surface);
+  color: var(--color-mv-forest);
+  cursor: pointer;
+  transition: background-color 150ms var(--ease-mv-standard), color 150ms var(--ease-mv-standard);
+}
+.vv-segment-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.vv-segment-hint {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--color-mv-ink-muted);
+}
+.vv-segment-label:hover {
+  background: var(--color-mv-pale);
+}
+.vv-radio:checked + .vv-segment-label {
+  background: var(--color-mv-forest);
+  border-color: var(--color-mv-forest);
+  color: #fff;
+}
+.vv-radio:checked + .vv-segment-label .vv-segment-hint {
+  color: var(--color-mv-pale);
+}
+.vv-radio:focus-visible + .vv-segment-label {
+  outline: 2px solid var(--color-mv-forest);
+  outline-offset: 2px;
+}
+
+.vv-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid var(--color-mv-forest);
+  border-radius: 9999px;
+  background: var(--color-mv-forest);
+  color: #fff;
+  font: 600 15px/1.2 var(--font-sans);
+  cursor: pointer;
+  transition: background-color 150ms var(--ease-mv-standard);
+}
+.vv-play:hover {
+  background: var(--color-mv-forest-press);
+}
+.vv-play-icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.vv-motion-note {
+  max-width: 22rem;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-mv-ink-muted);
+}
+
+.vv-status {
+  min-height: 1.5em;
+  margin: 16px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-mv-forest);
+}
+
+/* Layout ------------------------------------------------------------------ */
+.vv-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+.vv-card {
+  position: relative;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid var(--color-mv-outline);
+  border-radius: 12px;
+  background: var(--color-mv-surface);
+}
+@media (min-width: 900px) {
+  .vv-grid {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .vv-card--leg {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .vv-card--closeup {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .vv-card--text {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+/* Close-up ---------------------------------------------------------------- */
+.vv-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: var(--color-mv-warning-surface);
+  color: var(--color-mv-warning);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.vv-orient {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-mv-ink-muted);
+}
+.vv-stage {
+  display: flex;
+  justify-content: center;
+}
+.vv-closeup {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  aspect-ratio: 240 / 300;
+}
+.vv-lumen {
+  fill: var(--color-mv-pale);
+}
+.vv-wall,
+.vv-leaflet {
+  transition: transform 400ms var(--ease-mv-standard);
+}
+.vv-wall-line {
+  fill: none;
+  stroke: var(--color-mv-forest);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vv-leaflet {
+  fill: none;
+  stroke: var(--color-mv-forest);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transform-box: view-box;
+}
+.vv-leaflet--left {
+  transform-origin: 80px 205px;
+}
+.vv-leaflet--right {
+  transform-origin: 160px 205px;
+}
+/* Terracotta marks the one structure being discussed (DESIGN.md), not danger */
+.vv-leaflet.is-highlight {
+  stroke: var(--color-mv-terracotta);
+}
+
+.vv-flow path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vv-flow--up path,
+.vv-flow--held path {
+  stroke: var(--color-mv-sage);
+  stroke-width: 3;
+}
+.vv-flow--up path:first-child {
+  stroke: var(--color-mv-forest);
+  stroke-width: 4;
+}
+.vv-flow--down path {
+  stroke: var(--color-mv-terracotta);
+  stroke-width: 3;
+}
+.vv-flow--down path:first-child {
+  stroke-width: 4;
+}
+.vv-flow--up path:not(.vv-arrowhead),
+.vv-flow--down path:not(.vv-arrowhead) {
+  stroke-dasharray: 8 10;
+}
+.vv-flow .vv-arrowhead {
+  stroke-width: 4;
+}
+
+@keyframes vvFlowUp {
+  from {
+    stroke-dashoffset: 36;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes vvFlowDown {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 36;
+  }
+}
+.is-animating .vv-flow--up path:not(.vv-arrowhead) {
+  animation: vvFlowUp 1.2s linear infinite;
+}
+.is-animating .vv-flow--down path:not(.vv-arrowhead) {
+  animation: vvFlowDown 1.6s linear infinite;
+}
+
+/* Text card --------------------------------------------------------------- */
+.vv-h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-mv-forest);
+}
+.vv-body {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.vv-review-note,
+.vv-figcaption {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-mv-ink-muted);
+}
+
+/* Leg schematic ----------------------------------------------------------- */
+.vv-leg {
+  display: block;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  aspect-ratio: 160 / 320;
+  margin: 4px auto 0;
+}
+.vv-leg-outline {
+  fill: var(--color-mv-ivory);
+  stroke: var(--color-mv-outline-strong);
+  stroke-width: 1.5;
+}
+.vv-layer path {
+  fill: none;
+  stroke-linecap: round;
+}
+.vv-layer--deep path {
+  stroke: var(--color-mv-forest);
+  stroke-width: 5;
+}
+.vv-layer--superficial path {
+  stroke: var(--color-mv-sage);
+  stroke-width: 3.5;
+}
+.vv-layer--perforators path {
+  stroke: var(--color-mv-ink-muted);
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
+}
+.vv-valve-marks path {
+  fill: none;
+  stroke: var(--color-mv-ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vv-focus-ring {
+  fill: none;
+  stroke: var(--color-mv-terracotta);
+  stroke-width: 2;
+}
+.vv-focus-dot {
+  fill: var(--color-mv-terracotta);
+}
+
+.vv-layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.vv-layer-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-mv-outline-strong);
+  border-radius: 8px;
+  background: var(--color-mv-surface);
+  color: var(--color-mv-ink-muted);
+  font: 600 14px/1.2 var(--font-sans);
+  cursor: pointer;
+}
+.vv-layer-toggle[aria-pressed='true'] {
+  border-color: var(--color-mv-forest);
+  background: var(--color-mv-pale);
+  color: var(--color-mv-forest);
+}
+.vv-swatch {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+}
+.vv-layer-toggle[data-layer='deep'] .vv-swatch {
+  background: var(--color-mv-forest);
+}
+.vv-layer-toggle[data-layer='superficial'] .vv-swatch {
+  background: var(--color-mv-sage);
+}
+.vv-layer-toggle[data-layer='perforators'] .vv-swatch {
+  background: repeating-linear-gradient(90deg, var(--color-mv-ink-muted) 0 3px, transparent 3px 6px);
+}
+.vv-layer-toggle[aria-pressed='false'] .vv-swatch {
+  opacity: 0.35;
+}
+
+.vv-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-mv-outline);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-mv-ink-muted);
+}
+.vv-footer p {
+  max-width: 44rem;
+  margin: 0 0 8px;
+}
+.vv-footer strong {
+  color: var(--color-mv-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vv-wall,
+  .vv-leaflet,
+  .vv-segment-label,
+  .vv-play {
+    transition: none;
+  }
+  .is-animating .vv-flow path {
+    animation: none;
+  }
+}

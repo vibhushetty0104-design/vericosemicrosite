@@ -1,0 +1,15 @@
+[36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 1906 modules transformed.
+rendering chunks...
+computing gzip size...
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/34e49b3a-cb52-405f-9836-eedc7b82c5f2/scratchpad/build-proto/index.html                              8.49 kB │ gzip:   2.97 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/34e49b3a-cb52-405f-9836-eedc7b82c5f2/scratchpad/build-proto/assets/index-B3kN0ox-.css              85.50 kB │ gzip:  16.13 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/34e49b3a-cb52-405f-9836-eedc7b82c5f2/scratchpad/build-proto/assets/purify.es-BZxk_wWO.js           29.02 kB │ gzip:  11.45 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/34e49b3a-cb52-405f-9836-eedc7b82c5f2/scratchpad/build-proto/assets/index.es-DjLlNYlH.js           151.43 kB │ gzip:  48.91 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/34e49b3a-cb52-405f-9836-eedc7b82c5f2/scratchpad/build-proto/assets/html2canvas-CFHamn46.js        199.45 kB │ gzip:  46.76 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/34e49b3a-cb52-405f-9836-eedc7b82c5f2/scratchpad/build-proto/assets/generatePdfReport-BNIPkH63.js  402.93 kB │ gzip: 131.12 kB
+../AppData/Local/Temp/claude/C--Users-vibhu-varicose-veins-clear-pics/34e49b3a-cb52-405f-9836-eedc7b82c5f2/scratchpad/build-proto/assets/index-ChSYXRl1.js              632.06 kB │ gzip: 173.66 kB
+
+[32m✓ built in 602ms[39m
+exit 0

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0B4036" stroke-width="1.5">
+  <!-- Sheath / Catheter Shaft -->
+  <path d="M4 18l7.5-7.5" stroke-width="2" />
+  <!-- Radial Laser Fiber Optical Emitter -->
+  <circle cx="14" cy="8" r="2.5" stroke="#CE5B40" fill="#CE5B40" />
+  <!-- Radial Photothermal Emission Rays -->
+  <path d="M14 3.5v2M14 10.5v2M9.5 8h2M16.5 8h2M10.5 4.5l1.5 1.5M16 10l1.5 1.5" stroke="#CE5B40" />
+</svg>

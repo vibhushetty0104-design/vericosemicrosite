@@ -1,0 +1,107 @@
+/*
+ * Living background animations for Meridian Vascular
+ * Shared, reusable, performant motion system with page-specific variants.
+ * Uses GPU-accelerated transforms & opacity only; fully pauses off-screen & under reduced motion.
+ */
+
+.living-bg-container {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  user-select: none;
+  z-index: 0;
+}
+
+/* Base breathing rhythm: slow, medical, non-distracting (10-14s loops) */
+@keyframes livingPulseSlow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.02) translateY(-4px);
+  }
+}
+
+@keyframes livingFlowUp {
+  0% {
+    stroke-dashoffset: 240;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes livingDopplerScan {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateX(-40px);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translateX(40px);
+  }
+}
+
+@keyframes livingThermalGlow {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes livingNodeBeacon {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.85;
+  }
+}
+
+.living-pulse-slow {
+  animation: livingPulseSlow 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-play-state: var(--living-play-state, running);
+}
+
+.living-flow-stream {
+  stroke-dasharray: 12 18;
+  animation: livingFlowUp 14s linear infinite;
+  animation-play-state: var(--living-play-state, running);
+}
+
+.living-doppler-beam {
+  animation: livingDopplerScan 9s ease-in-out infinite;
+  animation-play-state: var(--living-play-state, running);
+}
+
+.living-thermal-glow {
+  animation: livingThermalGlow 10s ease-in-out infinite;
+  animation-play-state: var(--living-play-state, running);
+}
+
+.living-node-beacon {
+  animation: livingNodeBeacon 6s ease-in-out infinite;
+  animation-play-state: var(--living-play-state, running);
+}
+
+/* Reduced Motion Override: Instant static rendering, zero CPU animation */
+@media (prefers-reduced-motion: reduce) {
+  .living-pulse-slow,
+  .living-flow-stream,
+  .living-doppler-beam,
+  .living-thermal-glow,
+  .living-node-beacon {
+    animation: none !important;
+    opacity: 0.35 !important;
+    transform: none !important;
+  }
+}
