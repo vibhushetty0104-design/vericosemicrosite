@@ -20,7 +20,10 @@ import {
   Calendar,
   AlertOctagon,
   FileCheck,
-  Plus
+  Plus,
+  Lock,
+  User,
+  Fingerprint
 } from 'lucide-react';
 import { AppView, PatientUser, ExpertReviewSubmission, ReviewAttachment } from '../../types';
 import { trackEvent } from '../../utils/analytics';
@@ -97,9 +100,6 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
   onSubmissionComplete,
   onOpenAssistantWithPrompt,
 }) => {
-  // Step State: 1 to 5 = Questions, 6 = Results & Photo Upload, 7 = Completed Confirmation
-  const [currentStep, setCurrentStep] = useState<number>(1);
-
   // Questionnaire responses
   const [answers, setAnswers] = useState<QuestionnaireData>({
     visibleSymptoms: [],
@@ -115,11 +115,6 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
   const [closeupPhotos, setCloseupPhotos] = useState<ReviewAttachment[]>([]);
   const [clinicalNotes, setClinicalNotes] = useState('');
   const [consentGiven, setConsentGiven] = useState(false);
-
-  // Inline patient details (if not logged in)
-  const [guestName, setGuestName] = useState(currentUser?.name || '');
-  const [guestPhone, setGuestPhone] = useState(currentUser?.phone || '');
-  const [guestCity, setGuestCity] = useState('Bengaluru');
 
   // Submission handling
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -335,6 +330,14 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
       summaryText = 'Early or localized signs such as spider veins or intermittent leg fatigue. Monitoring changes, elevating legs, and staying active are helpful first steps.';
     }
 
+    const answeredCount = [
+      answers.visibleSymptoms.length > 0,
+      answers.physicalSymptoms.length > 0,
+      Boolean(answers.frequency),
+      Boolean(answers.duration),
+      Boolean(answers.dailyImpact),
+    ].filter(Boolean).length;
+
     return {
       score,
       severityCategory,
@@ -342,17 +345,11 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
       summaryText,
       contributingFactors,
       hasUlcer,
+      answeredCount,
     };
   };
 
   const severityData = computeSeverity();
-
-  // Scroll to photo upload
-  const handleScrollToPhotos = () => {
-    if (photoSectionRef.current) {
-      photoSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
 
   // Submit Handler
   const handleSubmitReview = (e: React.FormEvent) => {
@@ -371,11 +368,11 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
       return;
     }
 
-    const patientName = currentUser?.name || guestName.trim() || 'Patient';
-    const patientPhone = currentUser?.phone || guestPhone.trim();
-
-    if (!currentUser && (!patientName || !patientPhone)) {
-      setUploadError('Please provide your full name and phone number so our medical team can reach you with review feedback.');
+    // If unregistered, open the login pop-up window requiring name, phone, and Aadhaar!
+    if (!currentUser) {
+      if (onRequireAuth) {
+        onRequireAuth();
+      }
       return;
     }
 
@@ -387,9 +384,9 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
       const newSubmission: ExpertReviewSubmission = {
         id: 'REV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
         category: 'leg-photos',
-        patientId: currentUser?.id || 'guest_' + Math.random().toString(36).substring(2, 8),
-        patientName,
-        patientPhone: patientPhone || 'Not provided',
+        patientId: currentUser.id,
+        patientName: currentUser.name,
+        patientPhone: currentUser.phone,
         submittedAt: new Date().toLocaleDateString('en-IN', {
           day: 'numeric',
           month: 'short',
@@ -405,8 +402,8 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
           `Physical Symptoms: ${answers.physicalSymptoms.join(', ') || 'None selected'}`,
           `Frequency: ${answers.frequency || 'Not stated'} | Duration: ${answers.duration || 'Not stated'}`,
           `Impact: ${answers.dailyImpact || 'Not stated'}`,
+          currentUser.aadhaarNumber ? `Aadhaar ID: ${currentUser.aadhaarNumber}` : '',
           clinicalNotes.trim() ? `Patient Notes: ${clinicalNotes.trim()}` : '',
-          guestCity ? `Location: ${guestCity}` : '',
         ]
           .filter(Boolean)
           .join('\n'),
@@ -414,7 +411,6 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
       };
 
       setCompletedSubmission(newSubmission);
-      setCurrentStep(7); // View confirmation screen
 
       // Save to localStorage
       try {
@@ -434,9 +430,9 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
   };
 
   // -------------------------------------------------------------------------
-  // RENDER: STEP 7 CONFIRMATION STATE
+  // RENDER: CONFIRMATION STATE (UPON SUCCESSFUL SUBMISSION)
   // -------------------------------------------------------------------------
-  if (currentStep === 7 && completedSubmission) {
+  if (completedSubmission) {
     return (
       <div className="py-12 sm:py-16 md:py-20 bg-[#FAF7F2]">
         <div className="container-page max-w-3xl px-4 sm:px-6">
@@ -529,7 +525,7 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
               <button
                 type="button"
                 onClick={onOpenBooking}
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-mv-cta text-white font-medium text-sm hover:bg-[#b84e36] transition shadow-sm inline-flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-mv-cta text-white font-medium text-sm hover:bg-[#b84e36] transition shadow-sm inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Calendar className="w-4 h-4" />
                 Schedule Clinic Consultation
@@ -537,7 +533,7 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
               <button
                 type="button"
                 onClick={onNavigateHome}
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#FAF7F2] text-mv-forest font-medium text-sm border border-mv-outline hover:bg-mv-pale transition inline-flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#FAF7F2] text-mv-forest font-medium text-sm border border-mv-outline hover:bg-mv-pale transition inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 Return to Homepage
               </button>
@@ -549,7 +545,7 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
   }
 
   // -------------------------------------------------------------------------
-  // RENDER: MAIN ASSESSMENT & UPLOAD FLOW
+  // RENDER: UNIFIED QUESTIONNAIRE + PHOTO UPLOAD ON THE SAME PAGE
   // -------------------------------------------------------------------------
   return (
     <div className="bg-[#FAF7F2] min-h-screen">
@@ -559,7 +555,7 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-mv-forest mb-4">
             <button
               onClick={onNavigateHome}
-              className="hover:underline flex items-center gap-1 text-mv-ink-muted hover:text-mv-forest"
+              className="hover:underline flex items-center gap-1 text-mv-ink-muted hover:text-mv-forest cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Home
             </button>
@@ -591,7 +587,7 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
               </picture>
               <div className="text-left text-xs text-mv-ink-muted">
                 <span className="font-bold text-mv-forest block text-sm">Clinical Triage</span>
-                Non-diagnostic screener &amp; photo portal
+                Questionnaire &amp; Photo Review
               </div>
             </div>
           </div>
@@ -599,49 +595,45 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
       </section>
 
       {/* Main Container */}
-      <div className="container-page max-w-4xl px-4 sm:px-6 py-8 sm:py-12">
-        {/* Step Indicator (Only during Questions 1–5) */}
-        {currentStep <= 5 && (
-          <div className="mb-8 bg-white p-5 rounded-2xl border border-mv-outline/60 shadow-xs">
-            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-mv-ink-muted mb-2">
-              <span>Section 1: Symptom Questionnaire</span>
-              <span className="font-bold text-mv-forest">Step {currentStep} of 5</span>
+      <div className="container-page max-w-4xl px-4 sm:px-6 py-8 sm:py-12 space-y-10">
+
+        {/* ================================================================= */}
+        {/* SECTION 1: SYMPTOM SEVERITY QUESTIONNAIRE                         */}
+        {/* ================================================================= */}
+        <section aria-label="Symptom severity questionnaire" className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-10 shadow-xs space-y-8">
+          <div className="border-b border-mv-outline/40 pb-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-mv-cta">
+                  SECTION 1 &middot; SYMPTOM QUESTIONNAIRE
+                </span>
+                <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
+                  Symptom Severity Assessment
+                </h2>
+              </div>
+              <div className="text-right hidden sm:block">
+                <span className="text-xs font-mono text-mv-ink-muted">
+                  {severityData.answeredCount} of 5 sections answered
+                </span>
+              </div>
             </div>
-            <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-              <div
-                className="bg-mv-forest h-full transition-all duration-300 ease-out"
-                style={{ width: `${(currentStep / 5) * 100}%` }}
-              />
-            </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-mv-ink-muted">
-              <span>
-                {currentStep === 1 && 'Visible leg signs'}
-                {currentStep === 2 && 'Physical sensations & discomfort'}
-                {currentStep === 3 && 'Frequency & pattern'}
-                {currentStep === 4 && 'Duration of symptoms'}
-                {currentStep === 5 && 'Impact on mobility & daily life'}
-              </span>
-              <span className="text-[11px] italic">Card-based self report</span>
-            </div>
+            <p className="mt-2 text-sm text-mv-ink-muted">
+              Select all options that reflect your current leg symptoms. Your selections calculate an indicative symptom severity pattern.
+            </p>
           </div>
-        )}
 
-        {/* ----------------------------------------------------------------- */}
-        {/* QUESTION 1: VISIBLE SYMPTOMS */}
-        {/* ----------------------------------------------------------------- */}
-        {currentStep === 1 && (
-          <div className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-8 shadow-xs">
-            <div className="mb-6">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-mv-cta">Question 1 of 5</span>
-              <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
+          {/* Question 1: Visible Symptoms */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-mv-pale text-mv-forest flex items-center justify-center font-mono text-xs font-bold">1</span>
+              <h3 className="font-serif text-lg font-semibold text-mv-forest">
                 What visible vein or skin changes do you see on your legs?
-              </h2>
-              <p className="mt-2 text-sm text-mv-ink-muted">
-                Select all that apply to either leg. If your legs look normal, choose &ldquo;No visible veins&rdquo;.
-              </p>
+              </h3>
             </div>
-
-            <div className="space-y-3">
+            <p className="text-xs text-mv-ink-muted pl-8">
+              Select all that apply. If your legs look normal, choose &ldquo;No visible veins&rdquo;.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pl-0 sm:pl-8 pt-1">
               {VISIBLE_SYMPTOM_OPTIONS.map((opt) => {
                 const isSelected = answers.visibleSymptoms.includes(opt.label);
                 return (
@@ -649,70 +641,41 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => handleToggleVisible(opt.label)}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all flex items-start gap-3.5 ${
+                    className={`text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
                       isSelected
-                        ? 'border-mv-forest bg-mv-pale/40 ring-1 ring-mv-forest/20 shadow-xs'
-                        : 'border-mv-outline/60 hover:border-mv-forest/40 hover:bg-gray-50/60 bg-white'
+                        ? 'border-mv-forest bg-mv-pale/50 ring-1 ring-mv-forest/20 shadow-2xs'
+                        : 'border-mv-outline/60 hover:border-mv-forest/30 hover:bg-gray-50/60 bg-white'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition ${
+                      className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5 transition ${
                         isSelected ? 'bg-mv-forest border-mv-forest text-white' : 'border-gray-300 bg-white'
                       }`}
                     >
-                      {isSelected && <CheckCircle2 className="w-3.5 h-3.5" />}
+                      {isSelected && <CheckCircle2 className="w-3 h-3" />}
                     </div>
                     <div>
-                      <div className="font-medium text-sm sm:text-base text-mv-forest">{opt.label}</div>
-                      <div className="text-xs text-mv-ink-muted mt-0.5">{opt.note}</div>
+                      <div className="font-medium text-xs sm:text-sm text-mv-forest leading-snug">{opt.label}</div>
+                      <div className="text-[11px] text-mv-ink-muted mt-0.5">{opt.note}</div>
                     </div>
                   </button>
                 );
               })}
             </div>
-
-            {/* Bottom Actions */}
-            <div className="mt-8 pt-5 border-t border-mv-outline/40 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={onNavigateHome}
-                className="px-4 py-2.5 rounded-full text-xs font-mono uppercase tracking-wider text-mv-ink-muted hover:text-mv-forest flex items-center gap-1.5"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
-              </button>
-
-              <button
-                type="button"
-                disabled={answers.visibleSymptoms.length === 0}
-                onClick={() => setCurrentStep(2)}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition ${
-                  answers.visibleSymptoms.length > 0
-                    ? 'bg-mv-forest text-white hover:bg-mv-forest/90 shadow-xs'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                Continue <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
           </div>
-        )}
 
-        {/* ----------------------------------------------------------------- */}
-        {/* QUESTION 2: PHYSICAL SYMPTOMS */}
-        {/* ----------------------------------------------------------------- */}
-        {currentStep === 2 && (
-          <div className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-8 shadow-xs">
-            <div className="mb-6">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-mv-cta">Question 2 of 5</span>
-              <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
+          {/* Question 2: Physical Sensations */}
+          <div className="space-y-3 pt-4 border-t border-mv-outline/30">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-mv-pale text-mv-forest flex items-center justify-center font-mono text-xs font-bold">2</span>
+              <h3 className="font-serif text-lg font-semibold text-mv-forest">
                 What physical sensations or discomfort do you experience in your legs?
-              </h2>
-              <p className="mt-2 text-sm text-mv-ink-muted">
-                Select all sensations that you notice, particularly towards the end of the day or after prolonged standing.
-              </p>
+              </h3>
             </div>
-
-            <div className="space-y-3">
+            <p className="text-xs text-mv-ink-muted pl-8">
+              Select all sensations you notice, particularly towards the end of the day or after prolonged standing.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pl-0 sm:pl-8 pt-1">
               {PHYSICAL_SYMPTOM_OPTIONS.map((opt) => {
                 const isSelected = answers.physicalSymptoms.includes(opt.label);
                 return (
@@ -720,70 +683,38 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => handleTogglePhysical(opt.label)}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all flex items-start gap-3.5 ${
+                    className={`text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
                       isSelected
-                        ? 'border-mv-forest bg-mv-pale/40 ring-1 ring-mv-forest/20 shadow-xs'
-                        : 'border-mv-outline/60 hover:border-mv-forest/40 hover:bg-gray-50/60 bg-white'
+                        ? 'border-mv-forest bg-mv-pale/50 ring-1 ring-mv-forest/20 shadow-2xs'
+                        : 'border-mv-outline/60 hover:border-mv-forest/30 hover:bg-gray-50/60 bg-white'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition ${
+                      className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5 transition ${
                         isSelected ? 'bg-mv-forest border-mv-forest text-white' : 'border-gray-300 bg-white'
                       }`}
                     >
-                      {isSelected && <CheckCircle2 className="w-3.5 h-3.5" />}
+                      {isSelected && <CheckCircle2 className="w-3 h-3" />}
                     </div>
                     <div>
-                      <div className="font-medium text-sm sm:text-base text-mv-forest">{opt.label}</div>
-                      <div className="text-xs text-mv-ink-muted mt-0.5">{opt.note}</div>
+                      <div className="font-medium text-xs sm:text-sm text-mv-forest leading-snug">{opt.label}</div>
+                      <div className="text-[11px] text-mv-ink-muted mt-0.5">{opt.note}</div>
                     </div>
                   </button>
                 );
               })}
             </div>
-
-            {/* Bottom Actions */}
-            <div className="mt-8 pt-5 border-t border-mv-outline/40 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(1)}
-                className="px-4 py-2.5 rounded-full text-xs font-mono uppercase tracking-wider text-mv-ink-muted hover:text-mv-forest flex items-center gap-1.5"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" /> Back
-              </button>
-
-              <button
-                type="button"
-                disabled={answers.physicalSymptoms.length === 0}
-                onClick={() => setCurrentStep(3)}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition ${
-                  answers.physicalSymptoms.length > 0
-                    ? 'bg-mv-forest text-white hover:bg-mv-forest/90 shadow-xs'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                Continue <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
           </div>
-        )}
 
-        {/* ----------------------------------------------------------------- */}
-        {/* QUESTION 3: FREQUENCY */}
-        {/* ----------------------------------------------------------------- */}
-        {currentStep === 3 && (
-          <div className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-8 shadow-xs">
-            <div className="mb-6">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-mv-cta">Question 3 of 5</span>
-              <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
+          {/* Question 3: Frequency */}
+          <div className="space-y-3 pt-4 border-t border-mv-outline/30">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-mv-pale text-mv-forest flex items-center justify-center font-mono text-xs font-bold">3</span>
+              <h3 className="font-serif text-lg font-semibold text-mv-forest">
                 How frequently do these symptoms occur?
-              </h2>
-              <p className="mt-2 text-sm text-mv-ink-muted">
-                Choose the statement that best reflects your typical week.
-              </p>
+              </h3>
             </div>
-
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pl-0 sm:pl-8 pt-1">
               {FREQUENCY_OPTIONS.map((opt) => {
                 const isSelected = answers.frequency === opt.label;
                 return (
@@ -791,70 +722,38 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => setAnswers((prev) => ({ ...prev, frequency: opt.label }))}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all flex items-start gap-3.5 ${
+                    className={`text-left p-3 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
                       isSelected
-                        ? 'border-mv-forest bg-mv-pale/40 ring-1 ring-mv-forest/20 shadow-xs'
-                        : 'border-mv-outline/60 hover:border-mv-forest/40 hover:bg-gray-50/60 bg-white'
+                        ? 'border-mv-forest bg-mv-pale/50 ring-1 ring-mv-forest/20 shadow-2xs'
+                        : 'border-mv-outline/60 hover:border-mv-forest/30 hover:bg-gray-50/60 bg-white'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition ${
+                      className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition ${
                         isSelected ? 'border-mv-forest bg-mv-forest text-white' : 'border-gray-300 bg-white'
                       }`}
                     >
-                      {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <div>
-                      <div className="font-medium text-sm sm:text-base text-mv-forest">{opt.label}</div>
-                      <div className="text-xs text-mv-ink-muted mt-0.5">{opt.note}</div>
+                      <div className="font-medium text-xs sm:text-sm text-mv-forest leading-snug">{opt.label}</div>
+                      <div className="text-[11px] text-mv-ink-muted mt-0.5">{opt.note}</div>
                     </div>
                   </button>
                 );
               })}
             </div>
-
-            {/* Bottom Actions */}
-            <div className="mt-8 pt-5 border-t border-mv-outline/40 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(2)}
-                className="px-4 py-2.5 rounded-full text-xs font-mono uppercase tracking-wider text-mv-ink-muted hover:text-mv-forest flex items-center gap-1.5"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" /> Back
-              </button>
-
-              <button
-                type="button"
-                disabled={!answers.frequency}
-                onClick={() => setCurrentStep(4)}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition ${
-                  answers.frequency
-                    ? 'bg-mv-forest text-white hover:bg-mv-forest/90 shadow-xs'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                Continue <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
           </div>
-        )}
 
-        {/* ----------------------------------------------------------------- */}
-        {/* QUESTION 4: DURATION */}
-        {/* ----------------------------------------------------------------- */}
-        {currentStep === 4 && (
-          <div className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-8 shadow-xs">
-            <div className="mb-6">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-mv-cta">Question 4 of 5</span>
-              <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
+          {/* Question 4: Duration */}
+          <div className="space-y-3 pt-4 border-t border-mv-outline/30">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-mv-pale text-mv-forest flex items-center justify-center font-mono text-xs font-bold">4</span>
+              <h3 className="font-serif text-lg font-semibold text-mv-forest">
                 How long have you noticed these leg symptoms?
-              </h2>
-              <p className="mt-2 text-sm text-mv-ink-muted">
-                Approximate timeline of when veins became visible or discomfort started.
-              </p>
+              </h3>
             </div>
-
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pl-0 sm:pl-8 pt-1">
               {DURATION_OPTIONS.map((opt) => {
                 const isSelected = answers.duration === opt.label;
                 return (
@@ -862,70 +761,38 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => setAnswers((prev) => ({ ...prev, duration: opt.label }))}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all flex items-start gap-3.5 ${
+                    className={`text-left p-3 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
                       isSelected
-                        ? 'border-mv-forest bg-mv-pale/40 ring-1 ring-mv-forest/20 shadow-xs'
-                        : 'border-mv-outline/60 hover:border-mv-forest/40 hover:bg-gray-50/60 bg-white'
+                        ? 'border-mv-forest bg-mv-pale/50 ring-1 ring-mv-forest/20 shadow-2xs'
+                        : 'border-mv-outline/60 hover:border-mv-forest/30 hover:bg-gray-50/60 bg-white'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition ${
+                      className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition ${
                         isSelected ? 'border-mv-forest bg-mv-forest text-white' : 'border-gray-300 bg-white'
                       }`}
                     >
-                      {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <div>
-                      <div className="font-medium text-sm sm:text-base text-mv-forest">{opt.label}</div>
-                      <div className="text-xs text-mv-ink-muted mt-0.5">{opt.note}</div>
+                      <div className="font-medium text-xs sm:text-sm text-mv-forest leading-snug">{opt.label}</div>
+                      <div className="text-[11px] text-mv-ink-muted mt-0.5">{opt.note}</div>
                     </div>
                   </button>
                 );
               })}
             </div>
-
-            {/* Bottom Actions */}
-            <div className="mt-8 pt-5 border-t border-mv-outline/40 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(3)}
-                className="px-4 py-2.5 rounded-full text-xs font-mono uppercase tracking-wider text-mv-ink-muted hover:text-mv-forest flex items-center gap-1.5"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" /> Back
-              </button>
-
-              <button
-                type="button"
-                disabled={!answers.duration}
-                onClick={() => setCurrentStep(5)}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition ${
-                  answers.duration
-                    ? 'bg-mv-forest text-white hover:bg-mv-forest/90 shadow-xs'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                Continue <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
           </div>
-        )}
 
-        {/* ----------------------------------------------------------------- */}
-        {/* QUESTION 5: IMPACT ON DAILY ACTIVITIES */}
-        {/* ----------------------------------------------------------------- */}
-        {currentStep === 5 && (
-          <div className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-8 shadow-xs">
-            <div className="mb-6">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-mv-cta">Question 5 of 5</span>
-              <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
+          {/* Question 5: Daily Impact */}
+          <div className="space-y-3 pt-4 border-t border-mv-outline/30">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-mv-pale text-mv-forest flex items-center justify-center font-mono text-xs font-bold">5</span>
+              <h3 className="font-serif text-lg font-semibold text-mv-forest">
                 How do these symptoms impact your daily routine or work?
-              </h2>
-              <p className="mt-2 text-sm text-mv-ink-muted">
-                Understanding physical impairment helps clinicians prioritize care appropriately.
-              </p>
+              </h3>
             </div>
-
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pl-0 sm:pl-8 pt-1">
               {IMPACT_OPTIONS.map((opt) => {
                 const isSelected = answers.dailyImpact === opt.label;
                 return (
@@ -933,558 +800,479 @@ export const LegAssessmentPage: React.FC<LegAssessmentPageProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => setAnswers((prev) => ({ ...prev, dailyImpact: opt.label }))}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all flex items-start gap-3.5 ${
+                    className={`text-left p-3 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
                       isSelected
-                        ? 'border-mv-forest bg-mv-pale/40 ring-1 ring-mv-forest/20 shadow-xs'
-                        : 'border-mv-outline/60 hover:border-mv-forest/40 hover:bg-gray-50/60 bg-white'
+                        ? 'border-mv-forest bg-mv-pale/50 ring-1 ring-mv-forest/20 shadow-2xs'
+                        : 'border-mv-outline/60 hover:border-mv-forest/30 hover:bg-gray-50/60 bg-white'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition ${
+                      className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition ${
                         isSelected ? 'border-mv-forest bg-mv-forest text-white' : 'border-gray-300 bg-white'
                       }`}
                     >
-                      {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <div>
-                      <div className="font-medium text-sm sm:text-base text-mv-forest">{opt.label}</div>
-                      <div className="text-xs text-mv-ink-muted mt-0.5">{opt.note}</div>
+                      <div className="font-medium text-xs sm:text-sm text-mv-forest leading-snug">{opt.label}</div>
+                      <div className="text-[11px] text-mv-ink-muted mt-0.5">{opt.note}</div>
                     </div>
                   </button>
                 );
               })}
             </div>
+          </div>
 
-            {/* Bottom Actions */}
-            <div className="mt-8 pt-5 border-t border-mv-outline/40 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(4)}
-                className="px-4 py-2.5 rounded-full text-xs font-mono uppercase tracking-wider text-mv-ink-muted hover:text-mv-forest flex items-center gap-1.5"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" /> Back
-              </button>
+          {/* RESULTS SUMMARY CARD (DYNAMICALLY UPDATING RIGHT BELOW QUESTIONS) */}
+          <div className="mt-8 p-5 sm:p-6 rounded-2xl bg-[#F7F5EF] border border-mv-outline/60 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-mv-outline/40 pb-3">
+              <div>
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-mv-ink-muted block">
+                  Indicative Symptom Severity
+                </span>
+                <span className="font-serif text-base sm:text-lg font-bold text-mv-forest">
+                  Assessment Pattern
+                </span>
+              </div>
+              <div className={`px-3.5 py-1.5 rounded-xl border text-xs sm:text-sm font-bold tracking-tight inline-flex items-center gap-2 self-start ${severityData.severityColor}`}>
+                <Activity className="w-4 h-4" />
+                <span>{severityData.severityCategory}</span>
+              </div>
+            </div>
 
-              <button
-                type="button"
-                disabled={!answers.dailyImpact}
-                onClick={() => {
-                  setCurrentStep(6);
-                  window.scrollTo({ top: 180, behavior: 'smooth' });
-                }}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition ${
-                  answers.dailyImpact
-                    ? 'bg-mv-cta text-white hover:bg-[#b84e36] shadow-xs'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                View Results &amp; Upload Photos <ArrowRight className="w-4 h-4" />
-              </button>
+            <p className="text-xs sm:text-sm text-mv-ink-muted leading-relaxed">
+              {severityData.summaryText}
+            </p>
+
+            {severityData.contributingFactors.length > 0 && (
+              <div className="pt-2">
+                <span className="text-[11px] font-mono font-bold uppercase text-mv-forest block mb-2">
+                  Key Contributing Factors from Your Answers:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {severityData.contributingFactors.map((factor, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-mv-outline/50 text-[11px] text-mv-forest font-medium"
+                    >
+                      <CheckCircle2 className="w-3 h-3 text-mv-cta" />
+                      {factor}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Safety Disclaimer */}
+            <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/60 text-[11px] text-amber-950 space-y-1">
+              <div className="flex items-center gap-1.5 font-semibold text-amber-900">
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
+                <span>Clinical Screener Disclaimer:</span>
+              </div>
+              <p>
+                This questionnaire is for educational reflection only. It does not provide a formal medical diagnosis or assign a CEAP stage. An in-person consultation and venous duplex ultrasound scan by a vascular specialist are required to evaluate valve function.
+              </p>
+            </div>
+
+            {/* Red-Flag Notice if Ulcer Selected */}
+            {severityData.hasUlcer && (
+              <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-950 space-y-2">
+                <div className="flex items-center gap-2 font-bold text-rose-900">
+                  <AlertOctagon className="w-4 h-4 text-rose-600" />
+                  <span>Priority Notice: Lower Leg Ulceration Reported</span>
+                </div>
+                <p>
+                  Active skin breakdown or venous ulcers require timely vascular wound care and venous decompression. Please arrange an in-person clinical exam promptly.
+                </p>
+                <div className="pt-1 flex flex-wrap items-center gap-2 text-[11px]">
+                  <span>Emergency signs (sudden severe swelling, breathlessness)?</span>
+                  <a href="tel:112" className="px-2.5 py-1 rounded-full bg-rose-700 text-white font-mono font-bold hover:bg-rose-800 transition">
+                    Call 112
+                  </a>
+                  <a href="tel:108" className="px-2.5 py-1 rounded-full bg-rose-700 text-white font-mono font-bold hover:bg-rose-800 transition">
+                    Ambulance 108
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ================================================================= */}
+        {/* SECTION 2: UPLOAD LEG PHOTOGRAPHS FOR EXPERT REVIEW               */}
+        {/* (POSITIONED RIGHT BELOW THE QUESTIONNAIRE AS REQUESTED)            */}
+        {/* ================================================================= */}
+        <section
+          ref={photoSectionRef}
+          aria-label="Upload leg photographs for expert review"
+          className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-10 shadow-xs space-y-8"
+        >
+          {/* Section Header */}
+          <div className="border-b border-mv-outline/40 pb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mv-pale text-mv-forest text-xs font-mono font-bold uppercase tracking-wider mb-2">
+              <Camera className="w-3.5 h-3.5 text-mv-cta" />
+              <span>SECTION 2 &middot; VISUAL TRIAGE</span>
+            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
+              Upload Leg Photographs for Expert Review
+            </h2>
+            <p className="mt-2 text-sm sm:text-base text-mv-ink-muted leading-relaxed">
+              Share clear photographs of the affected areas to help our clinical team understand your visible symptoms before your consultation.
+            </p>
+          </div>
+
+          {/* Photography Guidance Tips */}
+          <div className="p-5 rounded-2xl bg-[#F7F5EF] border border-mv-outline/50 space-y-3">
+            <h3 className="font-serif text-base font-bold text-mv-forest flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-mv-cta" />
+              Tips for Capturing Clinically Useful Photographs:
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-mv-ink-muted">
+              <div className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
+                <span><strong>Natural daylight:</strong> Capture photos in a bright room without harsh camera flash or heavy shadows.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
+                <span><strong>Standing position:</strong> Stand upright if comfortable, allowing venous pressure to reveal bulging veins.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
+                <span><strong>Full lower leg view:</strong> Capture the leg from knee to ankle to show overall vein distribution.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
+                <span><strong>Close-up shots:</strong> Take additional photos of concentrated vein clusters or skin pigmentation.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
+                <span><strong>No filters or editing:</strong> Avoid filters, skin smoothing, or colour adjustments.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
+                <span><strong>Protect privacy:</strong> Do not include faces, background reflections, or identifying marks.</span>
+              </div>
             </div>
           </div>
-        )}
 
-        {/* ----------------------------------------------------------------- */}
-        {/* STEP 6: ASSESSMENT RESULTS SUMMARY + PHOTO UPLOAD SECTION */}
-        {/* ----------------------------------------------------------------- */}
-        {currentStep === 6 && (
-          <div className="space-y-10">
-            {/* SECTION TWO: RESULTS SUMMARY */}
-            <div className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-10 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-mv-outline/40 pb-6 mb-6">
+          {/* Upload Dropzones */}
+          <div className="space-y-6">
+            {/* Zone 1: Left Leg */}
+            <div className="border border-mv-outline/60 rounded-2xl p-4 sm:p-5 bg-[#FAF7F2]/50">
+              <div className="flex items-center justify-between mb-3">
                 <div>
-                  <div className="text-xs font-mono font-bold uppercase tracking-wider text-mv-forest mb-1">
-                    Section 2 &middot; Indicative Symptom Severity
-                  </div>
-                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
-                    Assessment Summary
-                  </h2>
+                  <h4 className="font-serif text-base font-semibold text-mv-forest">Left Leg Photographs</h4>
+                  <p className="text-xs text-mv-ink-muted">Front, back, or side views of your left leg</p>
                 </div>
-
-                <div className={`px-4 py-2 rounded-2xl border text-sm font-bold tracking-tight inline-flex items-center gap-2 self-start ${severityData.severityColor}`}>
-                  <Activity className="w-4 h-4" />
-                  <span>{severityData.severityCategory}</span>
-                </div>
+                <span className="text-xs font-mono text-mv-ink-muted">{leftLegPhotos.length} uploaded</span>
               </div>
 
-              {/* Contributing Factors & Narrative */}
-              <div className="space-y-4">
-                <p className="text-sm sm:text-base text-mv-ink-muted leading-relaxed">
-                  {severityData.summaryText}
-                </p>
+              <input
+                ref={leftInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                className="hidden"
+                onChange={(e) => handleFileUpload(e.target.files, 'left')}
+              />
 
-                {severityData.contributingFactors.length > 0 && (
-                  <div className="mt-5 p-5 rounded-2xl bg-[#F7F5EF] border border-mv-outline/40">
-                    <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-mv-forest mb-3">
-                      Key Contributing Factors from Your Answers:
-                    </h3>
-                    <ul className="space-y-2 text-xs sm:text-sm text-mv-forest">
-                      {severityData.contributingFactors.map((factor, idx) => (
-                        <li key={idx} className="flex items-start gap-2.5">
-                          <CheckCircle2 className="w-4 h-4 text-mv-cta shrink-0 mt-0.5" />
-                          <span>{factor}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* CRITICAL MEDICAL DISCLAIMER (STRICT SAFETY) */}
-                <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs text-amber-900 space-y-2">
-                  <div className="flex items-center gap-2 font-semibold text-amber-950">
-                    <ShieldCheck className="w-4 h-4 text-amber-700" />
-                    Important Clinical &amp; Safety Disclaimer
-                  </div>
-                  <p>
-                    This is an educational symptom assessment based solely on self-reported inputs. It does not provide a formal medical diagnosis, assign a CEAP clinical stage, or confirm venous reflux. A definitive medical diagnosis and customized treatment plan require a physical clinical examination and a bilateral venous duplex ultrasound scan conducted by a vascular specialist.
-                  </p>
-                </div>
-
-                {/* RED-FLAG ADVISORY (IF ULCER OR EMERGENCY REPORTED) */}
-                {severityData.hasUlcer && (
-                  <div className="p-5 rounded-2xl bg-rose-50 border border-rose-200 text-xs sm:text-sm text-rose-950 space-y-3">
-                    <div className="flex items-center gap-2 font-bold text-rose-900">
-                      <AlertOctagon className="w-5 h-5 text-rose-600" />
-                      Priority Medical Advisory: Lower Leg Skin Breakdown
-                    </div>
-                    <p className="leading-relaxed">
-                      You reported an active skin ulcer or open sore near your ankle or lower leg. Chronic venous ulcers require timely vascular wound care and venous decompression to facilitate healing and prevent bacterial infection. Please arrange an in-person clinical consultation promptly.
-                    </p>
-                    <div className="pt-2 border-t border-rose-200/60 text-xs text-rose-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <span>Emergency signs (sudden severe one-sided swelling, high fever, chest pain, breathlessness)?</span>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <a
-                          href="tel:112"
-                          className="px-3 py-1.5 rounded-full bg-rose-700 text-white font-mono font-bold text-xs hover:bg-rose-800 transition flex items-center gap-1.5"
-                        >
-                          <Phone className="w-3 h-3" /> Dial 112
-                        </a>
-                        <a
-                          href="tel:108"
-                          className="px-3 py-1.5 rounded-full bg-rose-700 text-white font-mono font-bold text-xs hover:bg-rose-800 transition flex items-center gap-1.5"
-                        >
-                          <Phone className="w-3 h-3" /> Ambulance 108
-                        </a>
+              {leftLegPhotos.length === 0 ? (
+                <button
+                  type="button"
+                  onClick={() => leftInputRef.current?.click()}
+                  className="w-full py-6 border-2 border-dashed border-mv-outline/70 rounded-xl hover:border-mv-forest/50 hover:bg-white transition flex flex-col items-center justify-center gap-2 text-mv-ink-muted text-xs sm:text-sm cursor-pointer"
+                >
+                  <Upload className="w-5 h-5 text-mv-forest/60" />
+                  <span>Click to select or drag &amp; drop left leg photos (JPG, PNG, WEBP &middot; Max 15MB)</span>
+                </button>
+              ) : (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {leftLegPhotos.map((photo) => (
+                      <div key={photo.id} className="relative group rounded-xl overflow-hidden border border-mv-outline bg-white aspect-square flex flex-col">
+                        {photo.dataUrl && (
+                          <img src={photo.dataUrl} alt={photo.name} className="w-full h-full object-cover" />
+                        )}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePhoto(photo.id, 'left')}
+                            className="p-1.5 rounded-full bg-white text-rose-600 hover:bg-rose-50 cursor-pointer"
+                            title="Remove photo"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <span className="absolute bottom-1 left-1 right-1 px-1.5 py-0.5 rounded text-[10px] bg-black/60 text-white truncate">
+                          {photo.name}
+                        </span>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                )}
-              </div>
-
-              {/* Actions below Results */}
-              <div className="mt-8 pt-6 border-t border-mv-outline/40 flex flex-col sm:flex-row items-center gap-3">
-                <button
-                  type="button"
-                  onClick={handleScrollToPhotos}
-                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-mv-cta text-white font-medium text-sm hover:bg-[#b84e36] transition shadow-xs flex items-center justify-center gap-2"
-                >
-                  Continue to Expert Review (Upload Photos) <ArrowRight className="w-4 h-4" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={onOpenBooking}
-                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#FAF7F2] text-mv-forest font-medium text-sm border border-mv-outline hover:bg-mv-pale transition flex items-center justify-center gap-2"
-                >
-                  <Calendar className="w-4 h-4" /> Book Clinic Ultrasound
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(1)}
-                  className="w-full sm:w-auto text-xs font-mono uppercase tracking-wider text-mv-ink-muted hover:text-mv-forest px-3 py-2 text-center"
-                >
-                  Edit Answers
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    onClick={() => leftInputRef.current?.click()}
+                    className="text-xs font-mono text-mv-forest hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add more left leg photos
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* ------------------------------------------------------------- */}
-            {/* SECTION THREE: UPLOAD LEG PHOTOGRAPHS */}
-            {/* ------------------------------------------------------------- */}
-            <div
-              ref={photoSectionRef}
-              className="bg-white rounded-3xl border border-mv-outline/70 p-6 sm:p-10 shadow-xs"
-            >
-              <div className="border-b border-mv-outline/40 pb-6 mb-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mv-pale text-mv-forest text-xs font-mono font-bold uppercase tracking-wider mb-2">
-                  <Camera className="w-3.5 h-3.5 text-mv-cta" />
-                  <span>Section 3 &middot; Visual Triage</span>
+            {/* Zone 2: Right Leg */}
+            <div className="border border-mv-outline/60 rounded-2xl p-4 sm:p-5 bg-[#FAF7F2]/50">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-serif text-base font-semibold text-mv-forest">Right Leg Photographs</h4>
+                  <p className="text-xs text-mv-ink-muted">Front, back, or side views of your right leg</p>
                 </div>
-                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-mv-forest">
-                  Upload Leg Photographs for Expert Review
-                </h2>
-                <p className="mt-2 text-sm sm:text-base text-mv-ink-muted leading-relaxed">
-                  Share clear photographs of the affected areas to help our clinical team understand your visible symptoms before your consultation.
-                </p>
+                <span className="text-xs font-mono text-mv-ink-muted">{rightLegPhotos.length} uploaded</span>
               </div>
 
-              {/* Photography Guidance Tips */}
-              <div className="mb-8 p-5 rounded-2xl bg-[#F7F5EF] border border-mv-outline/50 space-y-3">
-                <h3 className="font-serif text-base font-bold text-mv-forest flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-mv-cta" />
-                  Tips for Capturing Clinically Useful Photographs:
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-mv-ink-muted">
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
-                    <span><strong>Natural daylight:</strong> Capture photos in a bright room without harsh camera flash or heavy shadows.</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
-                    <span><strong>Standing position:</strong> Stand upright if comfortable, allowing venous pressure to reveal bulging veins.</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
-                    <span><strong>Full lower leg view:</strong> Capture the leg from knee to ankle to show overall vein distribution.</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
-                    <span><strong>Close-up shots:</strong> Take additional photos of concentrated vein clusters or skin pigmentation.</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
-                    <span><strong>No filters or editing:</strong> Avoid filters, skin smoothing, or colour adjustments.</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-mv-forest mt-2 shrink-0" />
-                    <span><strong>Protect privacy:</strong> Do not include faces, background reflections, or identifying marks.</span>
-                  </div>
-                </div>
-              </div>
+              <input
+                ref={rightInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                className="hidden"
+                onChange={(e) => handleFileUpload(e.target.files, 'right')}
+              />
 
-              {/* Upload Dropzones */}
-              <div className="space-y-6">
-                {/* Zone 1: Left Leg */}
-                <div className="border border-mv-outline/60 rounded-2xl p-4 sm:p-5 bg-[#FAF7F2]/50">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <h4 className="font-serif text-base font-semibold text-mv-forest">Left Leg Photographs</h4>
-                      <p className="text-xs text-mv-ink-muted">Front, back, or side views of your left leg</p>
-                    </div>
-                    <span className="text-xs font-mono text-mv-ink-muted">{leftLegPhotos.length} uploaded</span>
-                  </div>
-
-                  <input
-                    ref={leftInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => handleFileUpload(e.target.files, 'left')}
-                  />
-
-                  {leftLegPhotos.length === 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => leftInputRef.current?.click()}
-                      className="w-full py-6 border-2 border-dashed border-mv-outline/70 rounded-xl hover:border-mv-forest/50 hover:bg-white transition flex flex-col items-center justify-center gap-2 text-mv-ink-muted text-xs sm:text-sm"
-                    >
-                      <Upload className="w-5 h-5 text-mv-forest/60" />
-                      <span>Click to select or drag &amp; drop left leg photos (JPG, PNG, WEBP &middot; Max 15MB)</span>
-                    </button>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {leftLegPhotos.map((photo) => (
-                          <div key={photo.id} className="relative group rounded-xl overflow-hidden border border-mv-outline bg-white aspect-square flex flex-col">
-                            {photo.dataUrl && (
-                              <img src={photo.dataUrl} alt={photo.name} className="w-full h-full object-cover" />
-                            )}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => handleRemovePhoto(photo.id, 'left')}
-                                className="p-1.5 rounded-full bg-white text-rose-600 hover:bg-rose-50"
-                                title="Remove photo"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                            <span className="absolute bottom-1 left-1 right-1 px-1.5 py-0.5 rounded text-[10px] bg-black/60 text-white truncate">
-                              {photo.name}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => leftInputRef.current?.click()}
-                        className="text-xs font-mono text-mv-forest hover:underline flex items-center gap-1"
-                      >
-                        <Plus className="w-3.5 h-3.5" /> Add more left leg photos
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Zone 2: Right Leg */}
-                <div className="border border-mv-outline/60 rounded-2xl p-4 sm:p-5 bg-[#FAF7F2]/50">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <h4 className="font-serif text-base font-semibold text-mv-forest">Right Leg Photographs</h4>
-                      <p className="text-xs text-mv-ink-muted">Front, back, or side views of your right leg</p>
-                    </div>
-                    <span className="text-xs font-mono text-mv-ink-muted">{rightLegPhotos.length} uploaded</span>
-                  </div>
-
-                  <input
-                    ref={rightInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => handleFileUpload(e.target.files, 'right')}
-                  />
-
-                  {rightLegPhotos.length === 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => rightInputRef.current?.click()}
-                      className="w-full py-6 border-2 border-dashed border-mv-outline/70 rounded-xl hover:border-mv-forest/50 hover:bg-white transition flex flex-col items-center justify-center gap-2 text-mv-ink-muted text-xs sm:text-sm"
-                    >
-                      <Upload className="w-5 h-5 text-mv-forest/60" />
-                      <span>Click to select or drag &amp; drop right leg photos (JPG, PNG, WEBP &middot; Max 15MB)</span>
-                    </button>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {rightLegPhotos.map((photo) => (
-                          <div key={photo.id} className="relative group rounded-xl overflow-hidden border border-mv-outline bg-white aspect-square flex flex-col">
-                            {photo.dataUrl && (
-                              <img src={photo.dataUrl} alt={photo.name} className="w-full h-full object-cover" />
-                            )}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => handleRemovePhoto(photo.id, 'right')}
-                                className="p-1.5 rounded-full bg-white text-rose-600 hover:bg-rose-50"
-                                title="Remove photo"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                            <span className="absolute bottom-1 left-1 right-1 px-1.5 py-0.5 rounded text-[10px] bg-black/60 text-white truncate">
-                              {photo.name}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => rightInputRef.current?.click()}
-                        className="text-xs font-mono text-mv-forest hover:underline flex items-center gap-1"
-                      >
-                        <Plus className="w-3.5 h-3.5" /> Add more right leg photos
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Zone 3: Close-Up Photographs */}
-                <div className="border border-mv-outline/60 rounded-2xl p-4 sm:p-5 bg-[#FAF7F2]/50">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <h4 className="font-serif text-base font-semibold text-mv-forest">Additional Close-Up Photographs</h4>
-                      <p className="text-xs text-mv-ink-muted">Close-ups of bulging clusters, ankle discolouration, or sores</p>
-                    </div>
-                    <span className="text-xs font-mono text-mv-ink-muted">{closeupPhotos.length} uploaded</span>
-                  </div>
-
-                  <input
-                    ref={closeupInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => handleFileUpload(e.target.files, 'closeup')}
-                  />
-
-                  {closeupPhotos.length === 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => closeupInputRef.current?.click()}
-                      className="w-full py-6 border-2 border-dashed border-mv-outline/70 rounded-xl hover:border-mv-forest/50 hover:bg-white transition flex flex-col items-center justify-center gap-2 text-mv-ink-muted text-xs sm:text-sm"
-                    >
-                      <Upload className="w-5 h-5 text-mv-forest/60" />
-                      <span>Click to select or drag &amp; drop close-up photos (JPG, PNG, WEBP &middot; Max 15MB)</span>
-                    </button>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {closeupPhotos.map((photo) => (
-                          <div key={photo.id} className="relative group rounded-xl overflow-hidden border border-mv-outline bg-white aspect-square flex flex-col">
-                            {photo.dataUrl && (
-                              <img src={photo.dataUrl} alt={photo.name} className="w-full h-full object-cover" />
-                            )}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => handleRemovePhoto(photo.id, 'closeup')}
-                                className="p-1.5 rounded-full bg-white text-rose-600 hover:bg-rose-50"
-                                title="Remove photo"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                            <span className="absolute bottom-1 left-1 right-1 px-1.5 py-0.5 rounded text-[10px] bg-black/60 text-white truncate">
-                              {photo.name}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => closeupInputRef.current?.click()}
-                        className="text-xs font-mono text-mv-forest hover:underline flex items-center gap-1"
-                      >
-                        <Plus className="w-3.5 h-3.5" /> Add more close-up photos
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Optional Text Field */}
-              <div className="mt-6">
-                <label className="block text-xs font-mono uppercase tracking-wider text-mv-forest mb-2">
-                  Describe the affected area or any specific concerns (Optional)
-                </label>
-                <textarea
-                  value={clinicalNotes}
-                  onChange={(e) => setClinicalNotes(e.target.value)}
-                  placeholder="e.g. Left inner calf aches severely when standing in the evening; discolouration started near ankle 6 months ago..."
-                  rows={3}
-                  className="w-full rounded-2xl border border-mv-outline/70 p-3.5 text-sm text-mv-forest placeholder-mv-ink-muted/50 focus:border-mv-forest focus:ring-1 focus:ring-mv-forest outline-none transition bg-[#FAF7F2]/40"
-                />
-              </div>
-
-              {/* Patient Contact Details (if not already logged in) */}
-              {!currentUser && (
-                <div className="mt-8 p-5 rounded-2xl bg-[#F7F5EF] border border-mv-outline/60">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="font-serif text-base font-semibold text-mv-forest">
-                      Your Contact Details for Clinician Follow-up
-                    </h4>
-                    {onRequireAuth && (
-                      <button
-                        type="button"
-                        onClick={onRequireAuth}
-                        className="text-xs font-mono text-mv-cta hover:underline font-bold"
-                      >
-                        Have an account? Sign In
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                      <label className="block text-[11px] font-mono uppercase text-mv-ink-muted mb-1">
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        value={guestName}
-                        onChange={(e) => setGuestName(e.target.value)}
-                        placeholder="e.g. Rajesh Kumar"
-                        className="w-full rounded-xl border border-mv-outline/70 p-2.5 text-sm text-mv-forest bg-white focus:border-mv-forest outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-mono uppercase text-mv-ink-muted mb-1">
-                        Phone / WhatsApp *
-                      </label>
-                      <input
-                        type="tel"
-                        value={guestPhone}
-                        onChange={(e) => setGuestPhone(e.target.value)}
-                        placeholder="e.g. +91 98765 43210"
-                        className="w-full rounded-xl border border-mv-outline/70 p-2.5 text-sm text-mv-forest bg-white focus:border-mv-forest outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-mono uppercase text-mv-ink-muted mb-1">
-                        City
-                      </label>
-                      <input
-                        type="text"
-                        value={guestCity}
-                        onChange={(e) => setGuestCity(e.target.value)}
-                        placeholder="e.g. Bengaluru"
-                        className="w-full rounded-xl border border-mv-outline/70 p-2.5 text-sm text-mv-forest bg-white focus:border-mv-forest outline-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Error Notice */}
-              {uploadError && (
-                <div className="mt-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900 flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
-                  <span>{uploadError}</span>
-                </div>
-              )}
-
-              {/* ------------------------------------------------------------- */}
-              {/* SECTION FOUR: CONSENT & PRIVACY */}
-              {/* ------------------------------------------------------------- */}
-              <div className="mt-8 pt-6 border-t border-mv-outline/40 space-y-4">
-                <label className="flex items-start gap-3 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={consentGiven}
-                    onChange={(e) => setConsentGiven(e.target.checked)}
-                    className="w-4 h-4 rounded text-mv-forest border-gray-300 focus:ring-mv-forest mt-0.5 shrink-0"
-                  />
-                  <span className="text-xs sm:text-sm text-mv-forest leading-relaxed">
-                    I consent to the secure clinical review of my symptom details and photographs by the Meridian Vascular medical team. I understand this review is for preliminary evaluation and triage, not a definitive diagnosis or emergency service.
-                  </span>
-                </label>
-
-                <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-mv-outline/40 text-xs text-mv-ink-muted flex items-start gap-2.5">
-                  <ShieldCheck className="w-4 h-4 text-mv-forest shrink-0 mt-0.5" />
-                  <p>
-                    <strong>Confidentiality Note:</strong> Your photographs and health information are handled confidentially and stored securely in accordance with healthcare privacy standards. They are only reviewed by authorized clinical staff.
-                  </p>
-                </div>
-              </div>
-
-              {/* ------------------------------------------------------------- */}
-              {/* SECTION FIVE: SUBMISSION ACTION */}
-              {/* ------------------------------------------------------------- */}
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-mv-outline/40">
-                <div className="text-xs text-mv-ink-muted">
-                  <span className="font-semibold text-mv-forest block">Next Steps after Submission:</span>
-                  Triage within 24–48 hours &middot; Review feedback via phone/WhatsApp
-                </div>
-
+              {rightLegPhotos.length === 0 ? (
                 <button
                   type="button"
-                  disabled={isSubmitting}
-                  onClick={handleSubmitReview}
-                  className={`w-full sm:w-auto px-8 py-3.5 rounded-full text-white font-medium text-sm flex items-center justify-center gap-2 shadow-xs transition ${
-                    isSubmitting
-                      ? 'bg-gray-400 cursor-wait'
-                      : 'bg-mv-cta hover:bg-[#b84e36]'
-                  }`}
+                  onClick={() => rightInputRef.current?.click()}
+                  className="w-full py-6 border-2 border-dashed border-mv-outline/70 rounded-xl hover:border-mv-forest/50 hover:bg-white transition flex flex-col items-center justify-center gap-2 text-mv-ink-muted text-xs sm:text-sm cursor-pointer"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Submitting for Review...</span>
-                    </>
-                  ) : (
-                    <>
-                      <FileCheck className="w-4 h-4" />
-                      <span>Submit for Expert Review</span>
-                    </>
-                  )}
+                  <Upload className="w-5 h-5 text-mv-forest/60" />
+                  <span>Click to select or drag &amp; drop right leg photos (JPG, PNG, WEBP &middot; Max 15MB)</span>
                 </button>
+              ) : (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {rightLegPhotos.map((photo) => (
+                      <div key={photo.id} className="relative group rounded-xl overflow-hidden border border-mv-outline bg-white aspect-square flex flex-col">
+                        {photo.dataUrl && (
+                          <img src={photo.dataUrl} alt={photo.name} className="w-full h-full object-cover" />
+                        )}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePhoto(photo.id, 'right')}
+                            className="p-1.5 rounded-full bg-white text-rose-600 hover:bg-rose-50 cursor-pointer"
+                            title="Remove photo"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <span className="absolute bottom-1 left-1 right-1 px-1.5 py-0.5 rounded text-[10px] bg-black/60 text-white truncate">
+                          {photo.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => rightInputRef.current?.click()}
+                    className="text-xs font-mono text-mv-forest hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add more right leg photos
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Zone 3: Close-Up Photographs */}
+            <div className="border border-mv-outline/60 rounded-2xl p-4 sm:p-5 bg-[#FAF7F2]/50">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-serif text-base font-semibold text-mv-forest">Additional Close-Up Photographs</h4>
+                  <p className="text-xs text-mv-ink-muted">Close-ups of bulging clusters, ankle discolouration, or sores</p>
+                </div>
+                <span className="text-xs font-mono text-mv-ink-muted">{closeupPhotos.length} uploaded</span>
               </div>
+
+              <input
+                ref={closeupInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                className="hidden"
+                onChange={(e) => handleFileUpload(e.target.files, 'closeup')}
+              />
+
+              {closeupPhotos.length === 0 ? (
+                <button
+                  type="button"
+                  onClick={() => closeupInputRef.current?.click()}
+                  className="w-full py-6 border-2 border-dashed border-mv-outline/70 rounded-xl hover:border-mv-forest/50 hover:bg-white transition flex flex-col items-center justify-center gap-2 text-mv-ink-muted text-xs sm:text-sm cursor-pointer"
+                >
+                  <Upload className="w-5 h-5 text-mv-forest/60" />
+                  <span>Click to select or drag &amp; drop close-up photos (JPG, PNG, WEBP &middot; Max 15MB)</span>
+                </button>
+              ) : (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {closeupPhotos.map((photo) => (
+                      <div key={photo.id} className="relative group rounded-xl overflow-hidden border border-mv-outline bg-white aspect-square flex flex-col">
+                        {photo.dataUrl && (
+                          <img src={photo.dataUrl} alt={photo.name} className="w-full h-full object-cover" />
+                        )}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePhoto(photo.id, 'closeup')}
+                            className="p-1.5 rounded-full bg-white text-rose-600 hover:bg-rose-50 cursor-pointer"
+                            title="Remove photo"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <span className="absolute bottom-1 left-1 right-1 px-1.5 py-0.5 rounded text-[10px] bg-black/60 text-white truncate">
+                          {photo.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => closeupInputRef.current?.click()}
+                    className="text-xs font-mono text-mv-forest hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add more close-up photos
+                  </button>
+                </div>
+              )}
             </div>
           </div>
-        )}
+
+          {/* Optional Text Field */}
+          <div>
+            <label className="block text-xs font-mono uppercase tracking-wider text-mv-forest mb-2">
+              Describe the affected area or any specific concerns (Optional)
+            </label>
+            <textarea
+              value={clinicalNotes}
+              onChange={(e) => setClinicalNotes(e.target.value)}
+              placeholder="e.g. Left inner calf aches severely when standing in the evening; discolouration started near ankle 6 months ago..."
+              rows={3}
+              className="w-full rounded-2xl border border-mv-outline/70 p-3.5 text-sm text-mv-forest placeholder-mv-ink-muted/50 focus:border-mv-forest focus:ring-1 focus:ring-mv-forest outline-none transition bg-[#FAF7F2]/40"
+            />
+          </div>
+
+          {/* Patient Identification Card (Logged-in vs Unregistered Login Trigger) */}
+          {currentUser ? (
+            <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 text-xs sm:text-sm text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                  <User className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-semibold text-emerald-900 block text-sm">
+                    Verified Patient: {currentUser.name}
+                  </span>
+                  <span className="text-emerald-700 text-xs">
+                    Phone: {currentUser.phone} &middot; Aadhaar: {currentUser.aadhaarNumber || 'Verified via Sandbox'}
+                  </span>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-mono font-bold self-start sm:self-center">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Aadhaar Verified
+              </span>
+            </div>
+          ) : (
+            <div className="p-5 rounded-2xl bg-[#F7F5EF] border border-mv-outline/70">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-mv-forest text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Lock className="w-5 h-5 text-mv-terracotta" />
+                  </div>
+                  <div>
+                    <h4 className="font-serif text-sm sm:text-base font-semibold text-mv-forest">
+                      Patient Identification &amp; Follow-up
+                    </h4>
+                    <p className="text-xs text-mv-ink-muted leading-relaxed">
+                      Our clinical team requires your Name, Phone Number, and Aadhaar Number to link your records securely.
+                    </p>
+                  </div>
+                </div>
+
+                {onRequireAuth && (
+                  <button
+                    type="button"
+                    onClick={onRequireAuth}
+                    className="px-5 py-2.5 rounded-full bg-mv-forest hover:bg-mv-forest/90 text-white text-xs font-semibold flex items-center justify-center gap-2 transition shrink-0 shadow-xs cursor-pointer"
+                  >
+                    <User className="w-3.5 h-3.5 text-mv-terracotta" />
+                    <span>Sign In (Name, Phone &amp; Aadhaar)</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Error Notice */}
+          {uploadError && (
+            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+              <span>{uploadError}</span>
+            </div>
+          )}
+
+          {/* Consent Checkbox */}
+          <div className="space-y-4 pt-4 border-t border-mv-outline/40">
+            <label className="flex items-start gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={consentGiven}
+                onChange={(e) => setConsentGiven(e.target.checked)}
+                className="w-4 h-4 rounded text-mv-forest border-gray-300 focus:ring-mv-forest mt-0.5 shrink-0 cursor-pointer"
+              />
+              <span className="text-xs sm:text-sm text-mv-forest leading-relaxed">
+                I consent to the secure clinical review of my symptom details and photographs by the Meridian Vascular medical team. I understand this review is for preliminary evaluation and triage, not a definitive diagnosis or emergency service.
+              </span>
+            </label>
+
+            <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-mv-outline/40 text-xs text-mv-ink-muted flex items-start gap-2.5">
+              <ShieldCheck className="w-4 h-4 text-mv-forest shrink-0 mt-0.5" />
+              <p>
+                <strong>Confidentiality Note:</strong> Your photographs and health information are handled confidentially and stored securely in accordance with healthcare privacy standards. They are only reviewed by authorized clinical staff.
+              </p>
+            </div>
+          </div>
+
+          {/* Submission Action Button */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-mv-outline/40">
+            <div className="text-xs text-mv-ink-muted">
+              <span className="font-semibold text-mv-forest block">Next Steps after Submission:</span>
+              Triage within 24–48 hours &middot; Review feedback via phone/WhatsApp
+            </div>
+
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={handleSubmitReview}
+              className={`w-full sm:w-auto px-8 py-3.5 rounded-full text-white font-medium text-sm flex items-center justify-center gap-2 shadow-xs transition cursor-pointer ${
+                isSubmitting
+                  ? 'bg-gray-400 cursor-wait'
+                  : 'bg-mv-cta hover:bg-[#b84e36]'
+              }`}
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Submitting for Review...</span>
+                </>
+              ) : (
+                <>
+                  <FileCheck className="w-4 h-4" />
+                  <span>Submit for Expert Review</span>
+                </>
+              )}
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );

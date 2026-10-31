@@ -70,6 +70,7 @@ export interface PatientUser {
   authMethod: 'phone_otp' | 'aadhaar_sandbox';
   registeredAt: string;
   abhaNumber?: string;
+  aadhaarNumber?: string;
 }
 
 export interface ReviewAttachment {

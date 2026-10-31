@@ -14,9 +14,8 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
-  reason = 'An account is required so our clinical team can securely link your medical records to your profile and send you expert review updates.',
+  reason = 'An account is required so our clinical team can securely link your medical records and leg photographs to your profile and send you confidential review updates.',
 }) => {
-  const [authMethod, setAuthMethod] = useState<'phone' | 'aadhaar'>('phone');
   const [step, setStep] = useState<'input' | 'otp'>('input');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -33,10 +32,21 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
 
   useEffect(() => {
     if (step === 'otp' && resendCooldown > 0) {
-      const timer = setTimeout(() => setResendCooldown(c => c - 1), 1000);
+      const timer = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
       return () => clearTimeout(timer);
     }
   }, [step, resendCooldown]);
+
+  // Format Aadhaar as XXXX XXXX XXXX
+  const handleAadhaarChange = (val: string) => {
+    const raw = val.replace(/[^0-9]/g, '').slice(0, 12);
+    let formatted = '';
+    for (let i = 0; i < raw.length; i++) {
+      if (i > 0 && i % 4 === 0) formatted += ' ';
+      formatted += raw[i];
+    }
+    setAadhaarNumber(formatted);
+  };
 
   if (!isOpen) return null;
 
@@ -44,7 +54,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
     e.preventDefault();
     setErrorMsg(null);
 
-    if (!name.trim()) {
+    if (!name.trim() || name.trim().length < 2) {
       setErrorMsg('Please enter your full legal name.');
       return;
     }
@@ -55,12 +65,10 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
       return;
     }
 
-    if (authMethod === 'aadhaar') {
-      const cleanAadhaar = aadhaarNumber.replace(/[^0-9]/g, '');
-      if (cleanAadhaar.length !== 12 && cleanAadhaar.length !== 4) {
-        setErrorMsg('Please enter the last 4 digits (or 12 digits) of your Aadhaar for sandbox verification.');
-        return;
-      }
+    const cleanAadhaar = aadhaarNumber.replace(/[^0-9]/g, '');
+    if (cleanAadhaar.length !== 12) {
+      setErrorMsg('Please enter your valid 12-digit Aadhaar number.');
+      return;
     }
 
     setStep('otp');
@@ -101,18 +109,24 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
     // Realistic secure verification simulation
     setTimeout(() => {
       setIsVerifying(false);
+      const cleanAadhaar = aadhaarNumber.replace(/[^0-9]/g, '');
+      const maskedAadhaar = '•••• •••• ' + cleanAadhaar.slice(-4);
+
       const user: PatientUser = {
         id: 'usr_' + Math.random().toString(36).substring(2, 9),
         name: name.trim(),
         phone: phone.trim(),
+        aadhaarNumber: maskedAadhaar,
         isVerified: true,
-        authMethod: authMethod === 'aadhaar' ? 'aadhaar_sandbox' : 'phone_otp',
+        authMethod: 'aadhaar_sandbox',
         registeredAt: new Date().toISOString(),
       };
 
-      // Store authenticated user session securely in sessionStorage
+      // Store authenticated user session securely in storage
       try {
         sessionStorage.setItem('meridian_patient_session', JSON.stringify(user));
+        sessionStorage.setItem('meridian_patient_user', JSON.stringify(user));
+        localStorage.setItem('meridian_patient_user', JSON.stringify(user));
       } catch {
         // Fallback for sandboxed browser storage
       }
@@ -143,10 +157,10 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
             </div>
             <div>
               <h3 id="auth-modal-title" className="font-serif text-lg font-bold text-mv-forest">
-                {step === 'input' ? 'Patient Identification' : 'Verify Mobile Number'}
+                {step === 'input' ? 'Patient Sign In & Verification' : 'Verify Mobile OTP'}
               </h3>
               <p className="text-xs text-mv-ink-muted">
-                Varicose Veins Patient Portal · Confidential
+                Varicose Veins Patient Portal · Confidential Identification
               </p>
             </div>
           </div>
@@ -173,49 +187,9 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
 
           {step === 'input' ? (
             <form onSubmit={handleSendOtp} className="space-y-4">
-              {/* Verification Method Tabs */}
+              {/* 1. Full Legal Name */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-mv-forest mb-2">
-                  Verification Method
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAuthMethod('phone');
-                      setErrorMsg(null);
-                    }}
-                    className={`py-2.5 px-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-semibold transition-all cursor-pointer ${
-                      authMethod === 'phone'
-                        ? 'bg-mv-pale border-mv-forest text-mv-forest shadow-xs'
-                        : 'bg-mv-ivory border-mv-outline text-mv-ink-muted hover:bg-white'
-                    }`}
-                  >
-                    <Phone className="w-4 h-4 text-mv-cta" />
-                    <span>Mobile OTP (Default)</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAuthMethod('aadhaar');
-                      setErrorMsg(null);
-                    }}
-                    className={`py-2.5 px-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-semibold transition-all cursor-pointer ${
-                      authMethod === 'aadhaar'
-                        ? 'bg-mv-pale border-mv-forest text-mv-forest shadow-xs'
-                        : 'bg-mv-ivory border-mv-outline text-mv-ink-muted hover:bg-white'
-                    }`}
-                  >
-                    <Fingerprint className="w-4 h-4 text-mv-cta" />
-                    <span>Aadhaar / ABHA (Preview)</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Patient Full Name */}
-              <div>
-                <label htmlFor="auth-name" className="block text-xs font-medium text-mv-ink mb-1">
+                <label htmlFor="auth-name" className="block text-xs font-semibold text-mv-forest mb-1">
                   Full Legal Name <span className="text-mv-cta">*</span>
                 </label>
                 <div className="relative">
@@ -232,10 +206,10 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                 </div>
               </div>
 
-              {/* Mobile Phone Number */}
+              {/* 2. Mobile Phone Number */}
               <div>
-                <label htmlFor="auth-phone" className="block text-xs font-medium text-mv-ink mb-1">
-                  Mobile Number (for SMS OTP) <span className="text-mv-cta">*</span>
+                <label htmlFor="auth-phone" className="block text-xs font-semibold text-mv-forest mb-1">
+                  Phone Number (for SMS Verification) <span className="text-mv-cta">*</span>
                 </label>
                 <div className="relative">
                   <Phone className="w-4 h-4 text-mv-ink-muted absolute left-3 top-1/2 -translate-y-1/2" />
@@ -254,32 +228,29 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                 </p>
               </div>
 
-              {/* Aadhaar Compliance Guidance if selected */}
-              {authMethod === 'aadhaar' && (
-                <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-[11.5px] text-amber-950 space-y-2">
-                  <div className="flex items-center gap-1.5 font-semibold text-amber-900">
-                    <ShieldCheck className="w-4 h-4 text-amber-700" />
-                    <span>UIDAI &amp; ABHA Compliance Architecture:</span>
-                  </div>
-                  <p className="leading-relaxed">
-                    Under Indian Digital Personal Data Protection (DPDP) and UIDAI circulars, private healthcare portals connect via authorized KUA/ASA gateways. We do not store complete 12-digit Aadhaar numbers or card copies.
-                  </p>
-                  <div>
-                    <label htmlFor="auth-aadhaar" className="block font-medium text-amber-950 mb-1">
-                      Last 4 Digits of Aadhaar (Sandbox Reference):
-                    </label>
-                    <input
-                      id="auth-aadhaar"
-                      type="text"
-                      maxLength={4}
-                      value={aadhaarNumber}
-                      onChange={(e) => setAadhaarNumber(e.target.value.replace(/[^0-9]/g, ''))}
-                      placeholder="•••• 1234"
-                      className="w-full bg-white border border-amber-300 rounded-xl py-2 px-3 text-xs text-amber-950 font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-                    />
-                  </div>
+              {/* 3. Aadhaar Number */}
+              <div>
+                <label htmlFor="auth-aadhaar" className="block text-xs font-semibold text-mv-forest mb-1">
+                  Aadhaar Number (12 Digits) <span className="text-mv-cta">*</span>
+                </label>
+                <div className="relative">
+                  <Fingerprint className="w-4 h-4 text-mv-ink-muted absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    id="auth-aadhaar"
+                    type="text"
+                    required
+                    maxLength={14}
+                    value={aadhaarNumber}
+                    onChange={(e) => handleAadhaarChange(e.target.value)}
+                    placeholder="e.g. 5432 1098 7654"
+                    className="w-full bg-mv-ivory border border-mv-outline rounded-xl py-2.5 pl-9 pr-3 text-xs font-mono tracking-wider text-mv-ink focus:ring-2 focus:ring-mv-forest/30 focus:border-mv-forest focus:outline-none"
+                  />
                 </div>
-              )}
+                <div className="mt-1.5 flex items-start gap-1.5 text-[11px] text-mv-ink-muted">
+                  <ShieldCheck className="w-3.5 h-3.5 text-mv-forest shrink-0 mt-0.5" />
+                  <span>UIDAI &amp; ABHA Compliant · Sandbox verification under Indian DPDP Act standards.</span>
+                </div>
+              </div>
 
               {errorMsg && (
                 <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
@@ -290,7 +261,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 px-5 bg-mv-forest hover:bg-mv-forest-press text-white font-semibold rounded-full text-xs sm:text-[13px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs tap-tactile"
+                className="w-full py-3.5 px-5 bg-mv-forest hover:bg-mv-forest-press text-white font-semibold rounded-full text-xs sm:text-[13px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs tap-tactile"
               >
                 <span>Continue to OTP Verification</span>
                 <ArrowRight className="w-4 h-4 text-mv-terracotta" />
@@ -347,7 +318,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                 ) : (
                   <>
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Confirm &amp; Proceed to Review</span>
+                    <span>Confirm &amp; Complete Sign In</span>
                   </>
                 )}
               </button>
