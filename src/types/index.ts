@@ -94,4 +94,4 @@ export interface ExpertReviewSubmission {
   assignedDoctorName?: string;
 }
 
-export type AppView = 'home' | 'learn' | 'research' | 'journey' | 'doppler' | 'assessment' | 'treatments' | 'specialists' | 'insurance' | 'ai' | 'dashboard' | 'expert-review';
+export type AppView = 'home' | 'learn' | 'research' | 'journey' | 'doppler' | 'assessment' | 'leg-assessment' | 'treatments' | 'specialists' | 'insurance' | 'ai' | 'dashboard' | 'expert-review';

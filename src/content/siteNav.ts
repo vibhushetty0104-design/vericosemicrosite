@@ -27,6 +27,7 @@ export const NAV_ITEMS: NavItem[] = [
 export const ROUTED_VIEWS: AppView[] = [
   'learn',
   'assessment',
+  'leg-assessment',
   'treatments',
   'expert-review',
   'dashboard',
@@ -241,6 +242,8 @@ export const SECTION_VIEWS: Record<string, AppView> = {
   'treatment-comparison': 'treatments',
   treatment: 'treatments',
   'degree-assessment': 'assessment',
+  'leg-assessment': 'leg-assessment',
+  'leg-severity': 'leg-assessment',
   'media-upload': 'assessment',
   'doctor-visit': 'specialists',
   'insurance-guide': 'insurance',
@@ -287,6 +290,7 @@ export const VIEW_TITLES: Record<string, string> = {
   insurance: 'Insurance & Procedure Support | Meridian Vascular',
   journey: 'Varicose Veins Care Pathway | Meridian Vascular',
   dashboard: 'Patient Dashboard | Meridian Vascular',
+  'leg-assessment': 'Understand Your Leg Symptoms & Expert Review | Meridian Vascular',
   'expert-review': 'Upload Medical Reports for Expert Review | Meridian Vascular',
 };
 

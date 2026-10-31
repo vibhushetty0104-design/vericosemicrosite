@@ -16,6 +16,7 @@ import {
 import { LearnView } from './components/LearnView';
 import { VascularCareJourney } from './components/VascularCareJourney';
 import { DegreeAssessment } from './components/DegreeAssessment';
+import { LegAssessmentPage } from './components/assessment/LegAssessmentPage';
 import { ClinicalMediaSection } from './components/ClinicalMediaSection';
 import { DuplexUltrasoundExplorer } from './components/DuplexUltrasoundExplorer';
 import { DopplerEducationGuide } from './components/DopplerEducationGuide';
@@ -541,6 +542,19 @@ export default function App() {
               onOpenBooking={openGeneralBooking}
             />
           </>
+        )}
+
+        {/* VIEW: Dedicated Leg Severity Assessment & Expert Review Page */}
+        {currentView === 'leg-assessment' && (
+          <LegAssessmentPage
+            onNavigateHome={() => handleNavigateView('home')}
+            onNavigateView={handleNavigateView}
+            onOpenBooking={openGeneralBooking}
+            currentUser={patientUser}
+            onRequireAuth={() => setIsAuthModalOpen(true)}
+            onSubmissionComplete={handleReviewSubmitSuccess}
+            onOpenAssistantWithPrompt={handleOpenAssistantWithContext}
+          />
         )}
 
         {/* VIEW: Specialists & Clinics */}
