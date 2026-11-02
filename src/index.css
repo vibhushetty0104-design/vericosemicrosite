@@ -907,3 +907,68 @@ body {
   }
 }
 
+
+/* ==========================================================================
+   Four Immersive Visual Environments Floating Animations
+   ========================================================================== */
+
+@keyframes envFloat1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.4deg);
+  }
+}
+
+@keyframes envFloat2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-11px) rotate(-0.5deg);
+  }
+}
+
+@keyframes envFloat3 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(0.3deg);
+  }
+}
+
+@keyframes envFloat4 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(-0.6deg);
+  }
+}
+
+.env-float-1 {
+  animation: envFloat1 5.8s ease-in-out infinite;
+}
+
+.env-float-2 {
+  animation: envFloat2 6.6s ease-in-out infinite;
+}
+
+.env-float-3 {
+  animation: envFloat3 5.2s ease-in-out infinite;
+}
+
+.env-float-4 {
+  animation: envFloat4 7.0s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .env-float-1,
+  .env-float-2,
+  .env-float-3,
+  .env-float-4 {
+    animation: none !important;
+  }
+}

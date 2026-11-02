@@ -8,7 +8,7 @@ import { AppView, AssessmentResult, SymptomSeverityLevel, PatientUser, ExpertRev
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import {
-  ExploreCareGrid,
+  VisualEnvironmentsSection,
   CarePathwaySequence,
   TrustAndValueSection,
   CuratedFaqSection,
@@ -623,7 +623,7 @@ export default function App() {
               onNavigateToExpertReview={() => handleNavigateView('expert-review')}
               onOpenBooking={openGeneralBooking}
             />
-            <ExploreCareGrid
+            <VisualEnvironmentsSection
               onNavigateView={handleNavigateView}
               onNavigateSection={(view, section) => {
                 window.location.hash = section;

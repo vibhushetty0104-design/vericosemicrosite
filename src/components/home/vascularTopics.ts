@@ -1,0 +1,225 @@
+import { AppView } from '../../types';
+import { LearnTopicSlug } from '../../content/siteNav';
+import { FloatingAnimationType } from './FloatingIconCard';
+
+export type TopicGroup = 'anatomy' | 'treatments' | 'tools' | 'all';
+
+export interface VisualTopicItem {
+  id: string;
+  group: 'anatomy' | 'treatments' | 'tools';
+  animationType: FloatingAnimationType;
+  iconWebp: string;
+  iconPng: string;
+  title: string;
+  category: string;
+  description: string;
+  actionLabel: string;
+  targetType?: 'view' | 'section' | 'assistant' | 'booking' | 'learn-topic';
+  targetView?: AppView;
+  targetSection?: string;
+  learnSlug?: LearnTopicSlug;
+  badge?: string;
+  clinicalNote?: string;
+}
+
+export const ALL_VASCULAR_TOPICS: VisualTopicItem[] = [
+  // GROUP 1: The Dedicated Educational Topics (Anatomy & Care Guides)
+  {
+    id: 'circulation',
+    group: 'anatomy',
+    animationType: 'anatomy',
+    iconWebp: '/assets/icons2/mv-icon-vein-anatomy.webp',
+    iconPng: '/assets/icons2/mv-icon-vein-anatomy.png',
+    title: 'How Leg Circulation Works',
+    category: 'Venous Anatomy',
+    badge: 'Anatomy guide',
+    description: 'Explore how deep and superficial veins, delicate one-way bicuspid valves, and the calf muscle pump return blood upwards against gravity.',
+    actionLabel: 'Explore circulation',
+    targetType: 'learn-topic',
+    learnSlug: 'leg-circulation',
+    clinicalNote: 'Understanding normal valvular function explains why stretched vein walls allow retrograde blood pooling in dependent limbs.',
+  },
+  {
+    id: 'causes',
+    group: 'anatomy',
+    animationType: 'vein',
+    iconWebp: '/assets/icons2/mv-icon-venous-reflux.webp',
+    iconPng: '/assets/icons2/mv-icon-venous-reflux.png',
+    title: 'Why Varicose Veins Develop',
+    category: 'Causes & Risk Factors',
+    badge: 'Causes & risks',
+    description: 'The roles of genetics (up to 90% risk), prolonged standing jobs in India, and tropical climate load.',
+    actionLabel: 'Understand causes',
+    targetType: 'learn-topic',
+    learnSlug: 'varicose-veins-causes',
+    clinicalNote: 'Prolonged hydrostatic pressure stretches thin vein walls, separating valve leaflets and causing chronic venous reflux.',
+  },
+  {
+    id: 'symptoms',
+    group: 'anatomy',
+    animationType: 'vein',
+    iconWebp: '/assets/icons2/mv-icon-varicose-veins.webp',
+    iconPng: '/assets/icons2/mv-icon-varicose-veins.png',
+    title: 'Symptoms & Care Triggers',
+    category: 'Symptom Recognition',
+    badge: 'Symptom guide',
+    description: 'Recognise heaviness, late-day ankle swelling, throbbing, nocturnal calf cramps, and visible bulging vein cords.',
+    actionLabel: 'Review symptoms',
+    targetType: 'learn-topic',
+    learnSlug: 'symptoms',
+    clinicalNote: 'Early self-recognition helps prevent progressive skin discoloration (hemosiderin) and irreversible dermal fibrosis.',
+  },
+  {
+    id: 'dvt',
+    group: 'anatomy',
+    animationType: 'warning',
+    iconWebp: '/assets/icons2/mv-icon-emergency-warning.webp',
+    iconPng: '/assets/icons2/mv-icon-emergency-warning.png',
+    title: 'Blood Clot (DVT) Warning Signs & Myths',
+    category: 'Emergency Safety',
+    badge: 'Emergency safety',
+    description: 'Critical emergency signs requiring hospital care (Dial 112 / 108 in India) versus routine superficial vein aching.',
+    actionLabel: 'View red flags',
+    targetType: 'learn-topic',
+    learnSlug: 'dvt-warning-signs',
+    clinicalNote: 'Acute deep vein thrombosis is a medical emergency requiring immediate evaluation at a hospital emergency room (Dial 112 / 108 in India).',
+  },
+  {
+    id: 'differential',
+    group: 'anatomy',
+    animationType: 'research',
+    iconWebp: '/assets/icons2/mv-icon-medical-reports.webp',
+    iconPng: '/assets/icons2/mv-icon-medical-reports.png',
+    title: 'Vein Pain or Another Cause?',
+    category: 'Differential Evaluation',
+    badge: 'Differential guide',
+    description: 'Distinguish vein pain from muscle fatigue, sciatica nerve compression, or peripheral arterial disease.',
+    actionLabel: 'Compare pain causes',
+    targetType: 'learn-topic',
+    learnSlug: 'leg-pain',
+    clinicalNote: 'Vascular aching typically improves with elevation and calf pump exercise, whereas neurogenic or arterial claudication follow different symptom patterns.',
+  },
+  {
+    id: 'ceap',
+    group: 'anatomy',
+    animationType: 'specialist',
+    iconWebp: '/assets/icons2/mv-icon-risk-factors.webp',
+    iconPng: '/assets/icons2/mv-icon-risk-factors.png',
+    title: 'CEAP Stages (C0 to C6)',
+    category: 'Clinical Staging',
+    badge: 'Clinical staging',
+    description: 'Follow the clinical progression from C1 spider veins to C3 swelling, C4 skin changes, and C6 ulcers.',
+    actionLabel: 'Explore CEAP stages',
+    targetType: 'learn-topic',
+    learnSlug: 'ceap-stages',
+    clinicalNote: 'The American Venous Forum CEAP tool helps physicians classify clinical severity and determine medical necessity for intervention.',
+  },
+  {
+    id: 'science',
+    group: 'anatomy',
+    animationType: 'research',
+    iconWebp: '/assets/icons2/mv-icon-research-library.webp',
+    iconPng: '/assets/icons2/mv-icon-research-library.png',
+    title: 'Did You Know? Vein Science',
+    category: 'Hemodynamic Evidence',
+    badge: 'Evidence facts',
+    description: 'Evidence-backed metrics on hydrostatic pressure, standing work risks, and therapeutic elevation.',
+    actionLabel: 'Read vein science',
+    targetType: 'learn-topic',
+    learnSlug: 'did-you-know',
+    clinicalNote: 'Grounded in published vascular biomechanics and epidemiological studies of occupational standing.',
+  },
+  {
+    id: 'habits',
+    group: 'anatomy',
+    animationType: 'prevention',
+    iconWebp: '/assets/icons2/mv-icon-prevention.webp',
+    iconPng: '/assets/icons2/mv-icon-prevention.png',
+    title: 'Everyday Habits for Circulation',
+    category: 'Circulation Habits',
+    badge: 'Self-care habits',
+    description: 'Daily non-surgical habits: leg elevation, fitted compression, hydration, and calf pump routines.',
+    actionLabel: 'Learn daily habits',
+    targetType: 'learn-topic',
+    learnSlug: 'circulation-habits',
+    clinicalNote: 'Active walking activates the gastrocnemius muscle pump—the "peripheral heart"—ejecting pooled blood back toward the heart.',
+  },
+  {
+    id: 'curriculum',
+    group: 'anatomy',
+    animationType: 'pathway',
+    iconWebp: '/assets/icons2/mv-icon-educational-guide.webp',
+    iconPng: '/assets/icons2/mv-icon-educational-guide.png',
+    title: 'Vascular Topic Explorer',
+    category: 'Educational Curriculum',
+    badge: 'Curriculum',
+    description: 'Comprehensive interactive curriculum and cross-topic deep-dives for patients and families.',
+    actionLabel: 'Open curriculum',
+    targetType: 'learn-topic',
+    learnSlug: 'topic-explorer',
+    clinicalNote: 'Structured topic navigation aligning clinical guidelines from SVS and the American Venous Forum.',
+  },
+
+  // GROUP 2: Treatments (1)
+  {
+    id: 'treatments',
+    group: 'treatments',
+    animationType: 'treatment',
+    iconWebp: '/assets/icons2/mv-icon-treatment-options.webp',
+    iconPng: '/assets/icons2/mv-icon-treatment-options.png',
+    title: 'Treatment Options & Comparison',
+    category: 'Modern Day-Care',
+    badge: 'Minimally invasive',
+    description: 'Compare EVLA laser, radiofrequency ablation (RFA), medical adhesive glue (VenaSeal), foam sclerotherapy, and post-procedure recovery.',
+    actionLabel: 'Compare options',
+    targetType: 'view',
+    targetView: 'treatments',
+    clinicalNote: 'Modern endovenous treatments require pinhole entry and local anesthesia, eliminating open surgical stripping and prolonged bed rest.',
+  },
+
+  // GROUP 3: Interactive Tools & Expert Review (4)
+  {
+    id: 'assessment',
+    group: 'tools',
+    animationType: 'assessment',
+    iconWebp: '/assets/icons2/mv-icon-feetscan.png',
+    iconPng: '/assets/icons2/mv-icon-feetscan.png',
+    title: 'Leg Severity Assessment & Expert Review',
+    category: 'Personal Assessment',
+    badge: 'PERSONAL ASSESSMENT',
+    description: 'Assess your leg symptoms, understand their severity and securely submit photographs for expert clinical review.',
+    actionLabel: 'Start assessment',
+    targetType: 'view',
+    targetView: 'leg-assessment',
+    clinicalNote: 'Preliminary educational symptom assessment and secure photograph upload for clinician triage; not a formal medical diagnosis.',
+  },
+  {
+    id: 'expert-review',
+    group: 'tools',
+    animationType: 'research',
+    iconWebp: '/assets/icons2/mv-icon-medical-reports.webp',
+    iconPng: '/assets/icons2/mv-icon-medical-reports.png',
+    title: 'Upload Reports for Expert Review',
+    category: 'Specialist Triage',
+    badge: 'Clinician review',
+    description: 'Submit your Doppler ultrasound scans, hospital summaries, or leg photos securely for evaluation by senior vascular surgeons.',
+    actionLabel: 'Request expert review',
+    targetType: 'view',
+    targetView: 'expert-review',
+    clinicalNote: 'Evaluated by experienced human vascular surgeons; not automated AI algorithms.',
+  },
+  {
+    id: 'booking',
+    group: 'tools',
+    animationType: 'appointment',
+    iconWebp: '/assets/icons2/mv-icon-laser-treatment.webp',
+    iconPng: '/assets/icons2/mv-icon-laser-treatment.png',
+    title: 'Consultation Request',
+    category: 'Clinic Booking',
+    badge: 'In-person clinic',
+    description: 'Schedule an in-person vascular duplex ultrasound examination and clinical consultation at our clinic in Bengaluru.',
+    actionLabel: 'Request consultation',
+    targetType: 'booking',
+    clinicalNote: 'Full duplex ultrasound scan and vascular surgeon evaluation.',
+  },
+];
