@@ -1,22 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Sparkles,
   ArrowRight,
   ChevronDown,
-  ChevronUp,
-  Stethoscope,
-  Activity,
-  Layers,
-  FileText,
-  Calendar,
-  Eye,
-  Info,
-  CheckCircle2,
-  Play
+  X,
+  ExternalLink,
 } from 'lucide-react';
 import { AppView } from '../../types';
 import { hrefForView, LearnTopicSlug, hrefForLearnTopic } from '../../content/siteNav';
 import { ALL_VASCULAR_TOPICS, VisualTopicItem } from './vascularTopics';
+import { VascularNetworkSvg } from './livingBackgrounds/VascularNetworkSvg';
+import { HumanFormSvg } from './livingBackgrounds/HumanFormSvg';
+import { CirculationFlowSvg } from './livingBackgrounds/CirculationFlowSvg';
+import { ClinicalKnowledgeSvg } from './livingBackgrounds/ClinicalKnowledgeSvg';
+import { VascularDestinationIcon } from './VascularDestinationIcon';
 
 interface VisualEnvironmentsSectionProps {
   onNavigateView: (view: AppView) => void;
@@ -28,17 +25,16 @@ interface VisualEnvironmentsSectionProps {
 
 export interface VisualEnvironmentConfig {
   id: string;
+  legacyId?: string;
   number: string;
   badge: string;
   title: string;
   tagline: string;
   description: string;
-  bgType: 'photo' | 'video';
-  mediaSrc: string;
-  posterSrc: string;
+  bgType: 'vascular-network' | 'human-form' | 'circulation-flow' | 'clinical-knowledge';
   itemIds: string[];
   desktopLayouts: {
-    // Relative coordinates (%) within the desktop canvas to ensure zero collision
+    // Relative coordinates (%) within the desktop canvas
     left: string;
     top: string;
     align?: 'left' | 'right' | 'center';
@@ -46,80 +42,76 @@ export interface VisualEnvironmentConfig {
 }
 
 export const VISUAL_ENVIRONMENTS: VisualEnvironmentConfig[] = [
-  // ENVIRONMENT 1: Vascular Cath Lab / Diagnostic Environment
+  // ENVIRONMENT 01: VASCULAR NETWORK
   {
-    id: 'env-cath-lab',
+    id: 'env-vascular-network',
+    legacyId: 'env-cath-lab',
     number: '01',
-    badge: 'DIAGNOSTIC CATH LAB & ULTRASOUND SUITE',
-    title: 'Venous Hemodynamics & Diagnostics',
-    tagline: 'Mapping valve mechanics, blood flow velocity and differential pain',
+    badge: 'LIVING VISUAL SYSTEM · VASCULAR NETWORK',
+    title: 'Vascular Network',
+    tagline: 'Delicate branching vessel structures and valvular mechanics',
     description: 'Explore normal valvular architecture, retrograde pooling dynamics, hemodynamic biomechanics, and differential pain evaluation.',
-    bgType: 'photo',
-    mediaSrc: '/assets/photos/clinical-doppler-exam.jpg',
-    posterSrc: '/assets/photos/clinical-doppler-exam.jpg',
+    bgType: 'vascular-network',
     itemIds: ['circulation', 'causes', 'differential', 'science'],
     desktopLayouts: [
-      { left: '46%', top: '8%', align: 'left' },     // Circulation
-      { left: '76%', top: '14%', align: 'right' },   // Causes
-      { left: '42%', top: '56%', align: 'left' },    // Differential
-      { left: '74%', top: '54%', align: 'right' },   // Science
+      { left: '12%', top: '14%', align: 'left' },     // Circulation (top-left: opens BELOW, expands right)
+      { left: '74%', top: '14%', align: 'right' },    // Causes (top-right: opens BELOW, expands left)
+      { left: '14%', top: '56%', align: 'left' },     // Differential (bottom-left: opens ABOVE, expands right)
+      { left: '72%', top: '54%', align: 'right' },    // Science (bottom-right: opens ABOVE, expands left)
     ],
   },
 
-  // ENVIRONMENT 2: Premium Hospital Lobby / Patient Care Environment
+  // ENVIRONMENT 02: HUMAN FORM
   {
-    id: 'env-patient-care',
+    id: 'env-human-form',
+    legacyId: 'env-patient-care',
     number: '02',
-    badge: 'PATIENT CARE LOUNGE & ONBOARDING',
-    title: 'Symptoms, Assessment & Clinical Triage',
-    tagline: 'Recognise symptom triggers, assess severity and initiate specialist care',
-    description: 'From initial awareness of heavy legs to private symptom assessment with photo uploads and direct clinical consultation scheduling.',
-    bgType: 'photo',
-    mediaSrc: '/assets/photos/care-journey-reception.jpg',
-    posterSrc: '/assets/photos/care-journey-reception.jpg',
-    itemIds: ['assessment', 'symptoms', 'booking'],
+    badge: 'LIVING VISUAL SYSTEM · HUMAN FORM',
+    title: 'Human Form',
+    tagline: 'Abstract lower-limb anatomical silhouette and venous pathways',
+    description: 'Recognise symptom triggers, assess severity with photographic review, and understand clinical CEAP disease progression.',
+    bgType: 'human-form',
+    itemIds: ['assessment', 'symptoms', 'ceap'],
     desktopLayouts: [
-      { left: '48%', top: '10%', align: 'left' },    // Assessment (Feetscan)
-      { left: '76%', top: '22%', align: 'right' },   // Symptoms
-      { left: '56%', top: '55%', align: 'center' },  // Booking
+      { left: '14%', top: '16%', align: 'left' },     // Assessment (top-left: opens BELOW, expands right)
+      { left: '74%', top: '16%', align: 'right' },    // Symptoms (top-right: opens BELOW, expands left)
+      { left: '46%', top: '56%', align: 'center' },   // CEAP Progression (bottom-center: opens ABOVE, expands center)
     ],
   },
 
-  // ENVIRONMENT 3: Modern Operation Theatre / Surgical Environment
+  // ENVIRONMENT 03: CIRCULATION FLOW
   {
-    id: 'env-operating-theatre',
+    id: 'env-circulation-flow',
+    legacyId: 'env-operating-theatre',
     number: '03',
-    badge: 'MODERN SURGICAL SUITE & CLOT TRIAGE',
-    title: 'Clinical Staging & Clot Safety Protocols',
-    tagline: 'CEAP disease progression, deep vein thrombosis alerts and specialist report triage',
-    description: 'Understand clinical progression from spider veins to chronic ulcers, distinguish emergency DVT signs, and submit medical records for human specialist evaluation.',
-    bgType: 'photo',
-    mediaSrc: '/assets/photos/treatment-venaseal-glue.jpg',
-    posterSrc: '/assets/photos/treatment-venaseal-glue.jpg',
-    itemIds: ['dvt', 'ceap', 'expert-review'],
+    badge: 'LIVING VISUAL SYSTEM · CIRCULATION FLOW',
+    title: 'Circulation Flow',
+    tagline: 'Organic flowing ribbons, directional movement and therapy mechanics',
+    description: 'Learn the emergency warning signs of deep vein clots, explore modern day-care laser interventions, and adopt daily circulation habits.',
+    bgType: 'circulation-flow',
+    itemIds: ['dvt', 'treatments', 'habits'],
     desktopLayouts: [
-      { left: '46%', top: '12%', align: 'left' },    // DVT Red Flags
-      { left: '77%', top: '18%', align: 'right' },   // CEAP Stages
-      { left: '58%', top: '56%', align: 'center' },  // Expert Review
+      { left: '14%', top: '16%', align: 'left' },     // DVT Red Flags (top-left: opens BELOW, expands right)
+      { left: '74%', top: '16%', align: 'right' },    // Treatments (top-right: opens BELOW, expands left)
+      { left: '46%', top: '56%', align: 'center' },   // Prevention Habits (bottom-center: opens ABOVE, expands center)
     ],
   },
 
-  // ENVIRONMENT 4: Vascular Laser Equipment / EVLA Fibre Environment
+  // ENVIRONMENT 04: CLINICAL KNOWLEDGE
   {
-    id: 'env-laser-suite',
+    id: 'env-clinical-knowledge',
+    legacyId: 'env-laser-suite',
     number: '04',
-    badge: 'PROCEDURE SUITE & ENDOTHERMAL LASER',
-    title: 'Laser Interventions & Prevention Habits',
-    tagline: 'Pinhole endothermal ablation, everyday circulation habits and topic curriculum',
-    description: 'Compare modern day-care laser ablation and medical glue against open surgery, adopt evidence-backed circulation habits, and explore the complete educational curriculum.',
-    bgType: 'video',
-    mediaSrc: '/videos/vein-flowing.mp4',
-    posterSrc: '/assets/photos/treatment-laser-evla.jpg',
-    itemIds: ['treatments', 'habits', 'curriculum'],
+    badge: 'LIVING VISUAL SYSTEM · CLINICAL KNOWLEDGE',
+    title: 'Clinical Knowledge',
+    tagline: 'Interconnected scientific nodes, medical curriculum and specialist evaluation',
+    description: 'Access expert duplex ultrasound scan interpretation, review the complete illustrated curriculum, and schedule a specialist evaluation.',
+    bgType: 'clinical-knowledge',
+    itemIds: ['expert-review', 'curriculum', 'booking'],
     desktopLayouts: [
-      { left: '47%', top: '10%', align: 'left' },    // Treatments
-      { left: '76%', top: '20%', align: 'right' },   // Habits
-      { left: '57%', top: '56%', align: 'center' },  // Curriculum
+      { left: '14%', top: '16%', align: 'left' },     // Expert Review (top-left: opens BELOW, expands right)
+      { left: '74%', top: '16%', align: 'right' },    // Curriculum (top-right: opens BELOW, expands left)
+      { left: '46%', top: '56%', align: 'center' },   // Booking Request (bottom-center: opens ABOVE, expands center)
     ],
   },
 ];
@@ -137,13 +129,46 @@ export const VisualEnvironmentsSection: React.FC<VisualEnvironmentsSectionProps>
   onOpenAssistant,
   onOpenBooking,
 }) => {
-  // Mobile tap-to-expand active card tracker: { [itemId]: boolean }
-  const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
-  // Hovered item on desktop
+  // Mobile active item for bottom sheet
+  const [activeMobileItem, setActiveMobileItem] = useState<VisualTopicItem | null>(null);
+  
+  // Desktop active item (locked open via click) or hovered item
+  const [selectedDesktopItem, setSelectedDesktopItem] = useState<string | null>(null);
   const [hoveredDesktopItem, setHoveredDesktopItem] = useState<string | null>(null);
 
-  const handleItemClick = (item: VisualTopicItem, e?: React.MouseEvent) => {
+  // Close desktop card on Escape key or clicking outside
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedDesktopItem(null);
+        setActiveMobileItem(null);
+      }
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (selectedDesktopItem && sectionRef.current) {
+        const target = e.target as HTMLElement;
+        if (!target.closest('.interactive-icon-anchor') && !target.closest('.popover-information-card')) {
+          setSelectedDesktopItem(null);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [selectedDesktopItem]);
+
+  const handleItemAction = (item: VisualTopicItem, e?: React.MouseEvent) => {
     if (e) e.preventDefault();
+    // Close mobile sheet if open
+    setActiveMobileItem(null);
+    setSelectedDesktopItem(null);
 
     if (item.targetType === 'learn-topic' && item.learnSlug) {
       if (onNavigateTopic) {
@@ -193,35 +218,52 @@ export const VisualEnvironmentsSection: React.FC<VisualEnvironmentsSectionProps>
     }
   };
 
+  // Render the appropriate living SVG background
+  const renderLivingBackground = (bgType: VisualEnvironmentConfig['bgType']) => {
+    switch (bgType) {
+      case 'vascular-network':
+        return <VascularNetworkSvg />;
+      case 'human-form':
+        return <HumanFormSvg />;
+      case 'circulation-flow':
+        return <CirculationFlowSvg />;
+      case 'clinical-knowledge':
+        return <ClinicalKnowledgeSvg />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <section
+      ref={sectionRef}
       id="explore-leg-health"
       aria-labelledby="explore-title"
-      className="bg-[#FAF7F2] pt-12 sm:pt-20 pb-20 sm:pb-32 border-b border-mv-outline/50 scroll-mt-20 overflow-hidden"
+      className="bg-[#F7F5EF] pt-12 sm:pt-20 pb-20 sm:pb-32 border-b border-[#0B4036]/10 scroll-mt-20 overflow-hidden"
     >
       <div className="container-page max-w-[1360px] px-3.5 min-[360px]:px-4 sm:px-8">
         
         {/* Section Global Header */}
         <div className="max-w-3xl mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-mv-pale text-mv-forest text-xs font-mono font-bold tracking-wider uppercase mb-3 border border-mv-outline/70">
-            <Sparkles className="w-3.5 h-3.5 text-mv-terracotta" />
-            <span>Interactive Visual Discovery</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/95 text-[#0B4036] text-xs font-mono font-bold tracking-wider uppercase mb-3 border border-[#0B4036]/15 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-[#CE5B40]" />
+            <span>Living Visual Environment</span>
           </div>
           <h2
             id="explore-title"
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.12] tracking-[-0.015em] text-mv-forest"
+            className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.14] tracking-[-0.015em] text-[#0B4036]"
           >
-            Explore Leg Health in Four Immersive Environments
+            Explore Leg Health Through Living Medical Environments
           </h2>
-          <p className="mt-3.5 text-base sm:text-lg leading-relaxed text-mv-ink-muted">
-            Move through four authentic clinical environments. Thirteen interactive visual markers are suspended across each scene, mapping vein circulation, causes, diagnostics, treatments and patient care.
+          <p className="mt-3.5 text-base sm:text-lg leading-relaxed text-[#4A6058]">
+            An original, scientifically inspired visual canvas created for Meridian Vascular. Thirteen interactive medical destination markers are suspended across four living environments, mapping vessel anatomy, clinical symptoms, circulation flow, and specialist care.
           </p>
         </div>
 
         {/* Environment Quick-Switcher Bar */}
         <div className="mb-10 sm:mb-14 overflow-x-auto pb-2 -mx-3.5 px-3.5 min-[360px]:-mx-4 min-[360px]:px-4 sm:mx-0 sm:px-0 scrollbar-none">
           <div className="flex items-center gap-2.5 min-w-max">
-            <span className="text-xs font-mono uppercase tracking-wider text-mv-ink-muted mr-1 hidden sm:inline-block">
+            <span className="text-xs font-mono uppercase tracking-wider text-[#4A6058] mr-1 hidden sm:inline-block font-semibold">
               Jump to Environment:
             </span>
             {VISUAL_ENVIRONMENTS.map((env) => (
@@ -229,11 +271,11 @@ export const VisualEnvironmentsSection: React.FC<VisualEnvironmentsSectionProps>
                 key={env.id}
                 type="button"
                 onClick={() => scrollToEnv(env.id)}
-                className="px-4 py-2.5 rounded-full text-xs font-semibold bg-white border border-mv-outline/70 text-mv-forest hover:bg-mv-pale hover:border-mv-forest/40 transition-all shadow-2xs flex items-center gap-2 cursor-pointer"
+                className="px-4 py-2.5 rounded-full text-xs font-semibold bg-white border border-[#0B4036]/15 text-[#0B4036] hover:bg-[#FAF9F5] hover:border-[#CE5B40] hover:text-[#CE5B40] transition-all shadow-2xs flex items-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B4036]"
               >
-                <span className="font-mono text-mv-terracotta">{env.number}</span>
-                <span>{env.title.split('&')[0].trim()}</span>
-                <span className="text-[11px] font-mono px-1.5 py-0.5 rounded-full bg-[#FAF7F2] text-mv-ink-muted">
+                <span className="font-mono text-[#CE5B40] font-bold">{env.number}</span>
+                <span>{env.title}</span>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#E4ECE6] text-[#0B4036] font-semibold">
                   {env.itemIds.length}
                 </span>
               </button>
@@ -242,10 +284,10 @@ export const VisualEnvironmentsSection: React.FC<VisualEnvironmentsSectionProps>
         </div>
 
         {/* ================================================================= */}
-        {/* FOUR LARGE CINEMATIC BACKGROUND ENVIRONMENTS                      */}
+        {/* FOUR LIVING VISUAL ENVIRONMENTS                                   */}
         {/* ================================================================= */}
-        <div className="space-y-12 sm:space-y-16 lg:space-y-20">
-          {VISUAL_ENVIRONMENTS.map((env, envIdx) => {
+        <div className="space-y-12 sm:space-y-16 lg:space-y-24">
+          {VISUAL_ENVIRONMENTS.map((env) => {
             const envItems = env.itemIds
               .map((id) => ALL_VASCULAR_TOPICS.find((t) => t.id === id))
               .filter(Boolean) as VisualTopicItem[];
@@ -254,73 +296,74 @@ export const VisualEnvironmentsSection: React.FC<VisualEnvironmentsSectionProps>
               <div
                 key={env.id}
                 id={env.id}
-                className="relative rounded-3xl overflow-hidden border border-white/10 shadow-xl scroll-mt-24 bg-[#07241E]"
+                data-legacy-id={env.legacyId}
+                className="relative rounded-3xl border border-[#0B4036]/15 shadow-sm scroll-mt-24 bg-[#FAF8F3]"
               >
-                {/* --------------------------------------------------------- */}
-                {/* 1. CINEMATIC BACKGROUND LAYER (PHOTO OR VIDEO)            */}
-                {/* --------------------------------------------------------- */}
-                <div className="absolute inset-0 z-0 overflow-hidden">
-                  {env.bgType === 'video' ? (
-                    <video
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      poster={env.posterSrc}
-                      className="w-full h-full object-cover object-center scale-105 transition-transform duration-1000"
-                    >
-                      <source src={env.mediaSrc} type="video/mp4" />
-                      <img src={env.posterSrc} alt={env.title} className="w-full h-full object-cover" />
-                    </video>
-                  ) : (
-                    <img
-                      src={env.mediaSrc}
-                      alt={env.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover object-center scale-105 transition-transform duration-1000"
-                    />
-                  )}
+                {/* Legacy Anchor Shim for backwards compatibility */}
+                {env.legacyId && <span id={env.legacyId} className="sr-only" />}
 
-                  {/* Sophisticated Multi-Stage Dark Forest Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#041612]/95 via-[#072822]/85 to-[#041612]/90 pointer-events-none" />
-                  <div className="absolute inset-0 bg-radial from-transparent via-[#020D0A]/50 to-[#020D0A]/85 pointer-events-none" />
+                {/* --------------------------------------------------------- */}
+                {/* 1. CUSTOM LIVING SVG BACKGROUND LAYER (Clips to Rounded Corners) */}
+                {/* --------------------------------------------------------- */}
+                <div className="absolute inset-0 z-0 rounded-3xl overflow-hidden pointer-events-none">
+                  {renderLivingBackground(env.bgType)}
                 </div>
 
                 {/* --------------------------------------------------------- */}
-                {/* 2. ENVIRONMENT HEADER (Glassmorphism Identity Card)       */}
+                {/* 2. ENVIRONMENT HEADER (Identity Card)                    */}
                 {/* --------------------------------------------------------- */}
-                <div className="relative z-10 p-5 sm:p-8 lg:p-10 pb-4 sm:pb-6">
-                  <div className="max-w-xl bg-black/40 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/15 shadow-lg">
+                <div className="relative z-10 p-5 sm:p-8 lg:p-10 pb-2 sm:pb-4 pointer-events-auto">
+                  <div className="max-w-xl bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-[#0B4036]/12 shadow-xs">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="font-mono text-xs font-bold text-mv-terracotta bg-mv-terracotta/15 px-2.5 py-0.5 rounded-full border border-mv-terracotta/30">
+                      <span className="font-mono text-xs font-bold text-[#CE5B40] bg-[#CE5B40]/10 px-2.5 py-0.5 rounded-full border border-[#CE5B40]/25">
                         ENV {env.number}
                       </span>
-                      <span className="font-mono text-[11px] uppercase tracking-wider text-white/70">
+                      <span className="font-mono text-[11px] uppercase tracking-wider text-[#4A6058] font-bold">
                         {env.badge}
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-white tracking-tight">
+                    <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-[#0B4036] tracking-tight">
                       {env.title}
                     </h3>
-                    <p className="mt-1 font-medium text-xs sm:text-sm text-mv-sage/95">
+                    <p className="mt-1 font-medium text-xs sm:text-sm text-[#CE5B40]">
                       {env.tagline}
                     </p>
-                    <p className="mt-2 text-xs sm:text-[13px] text-white/80 leading-relaxed hidden sm:block">
+                    <p className="mt-2 text-xs sm:text-[13px] text-[#2D3E38]/90 leading-relaxed hidden sm:block">
                       {env.description}
                     </p>
                   </div>
                 </div>
 
                 {/* --------------------------------------------------------- */}
-                {/* 3. DESKTOP INTERACTIVE CANVAS (ORGANIC FLOATING PLACEMENT)*/}
+                {/* 3. DESKTOP INTERACTIVE CANVAS WITH INTELLIGENT POSITIONING*/}
                 {/* Visible on lg screens (>= 1024px)                          */}
                 {/* --------------------------------------------------------- */}
-                <div className="hidden lg:block relative z-10 min-h-[440px] xl:min-h-[480px] p-6 lg:p-8">
+                <div className="hidden lg:block relative z-20 min-h-[540px] xl:min-h-[580px] p-6 lg:p-10">
                   {envItems.map((item, itemIdx) => {
                     const layout = env.desktopLayouts[itemIdx] || { left: `${20 + itemIdx * 25}%`, top: '40%' };
+                    const isSelected = selectedDesktopItem === item.id;
                     const isHovered = hoveredDesktopItem === item.id;
+                    const isCardOpen = isSelected || isHovered;
+                    const anyItemInEnvActive = envItems.some(
+                      (t) => t.id === selectedDesktopItem || t.id === hoveredDesktopItem
+                    );
+                    const isSubdued = anyItemInEnvActive && !isCardOpen;
                     const floatClass = getFloatClass(itemIdx);
+
+                    // Intelligent Directional Positioning to PREVENT CLIPPING:
+                    // If top > 40%, icon is in lower portion: open ABOVE (bottom-full mb-3)
+                    // If top <= 40%, icon is in upper portion: open BELOW (top-full mt-3)
+                    const topPercentNum = parseFloat(layout.top);
+                    const openAbove = topPercentNum > 40;
+
+                    // Horizontal alignment:
+                    let horizontalClass = 'left-1/2 -translate-x-1/2'; // default center
+                    if (layout.align === 'right' || parseFloat(layout.left) > 60) {
+                      horizontalClass = 'right-0';
+                    } else if (layout.align === 'left' || parseFloat(layout.left) < 30) {
+                      horizontalClass = 'left-0';
+                    }
 
                     return (
                       <div
@@ -330,73 +373,137 @@ export const VisualEnvironmentsSection: React.FC<VisualEnvironmentsSectionProps>
                           top: layout.top,
                         }}
                         className={`absolute transition-all duration-300 ${
-                          isHovered ? 'z-40 scale-105' : 'z-20'
+                          isCardOpen
+                            ? 'z-40 scale-105'
+                            : isSubdued
+                            ? 'z-20 opacity-60 filter-[grayscale(15%)] scale-[0.98]'
+                            : 'z-20 opacity-100'
                         }`}
                         onMouseEnter={() => setHoveredDesktopItem(item.id)}
                         onMouseLeave={() => setHoveredDesktopItem(null)}
                       >
                         {/* Interactive Floating Anchor */}
-                        <div className={`relative flex flex-col items-center group cursor-pointer ${floatClass}`}>
-                          {/* 2.5D Illustration Image */}
-                          <div className="relative w-28 h-28 xl:w-32 xl:h-32 flex items-center justify-center filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)] group-hover:drop-shadow-[0_16px_32px_rgba(0,0,0,0.8)] transition-transform duration-300">
-                            <picture>
-                              <source srcSet={item.iconWebp} type="image/webp" />
-                              <img
-                                src={item.iconPng}
-                                alt={item.title}
-                                className="w-full h-full object-contain"
-                              />
-                            </picture>
-                          </div>
+                        <div className={`relative flex flex-col items-center group cursor-pointer interactive-icon-anchor ${floatClass}`}>
+                          {/* Refined Medical Emblem Button */}
+                          <button
+                            type="button"
+                            aria-expanded={isCardOpen}
+                            aria-haspopup="dialog"
+                            aria-label={`Explore ${item.title}`}
+                            onClick={() => {
+                              setSelectedDesktopItem((prev) => (prev === item.id ? null : item.id));
+                            }}
+                            onFocus={() => setHoveredDesktopItem(item.id)}
+                            onBlur={() => setHoveredDesktopItem(null)}
+                            className="relative flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CE5B40] rounded-2xl cursor-pointer"
+                          >
+                            <VascularDestinationIcon
+                              item={item}
+                              size="desktop"
+                              isHovered={isHovered}
+                              isOpen={isSelected}
+                            />
+                          </button>
+
+                          {/* Connecting stem line */}
+                          <div
+                            className={`w-[1.5px] h-2 transition-colors duration-300 ${
+                              isCardOpen ? 'bg-[#CE5B40]' : 'bg-[#8DAA9D]/40'
+                            }`}
+                          />
 
                           {/* Permanent Title Glass Pill */}
                           <button
                             type="button"
-                            onClick={(e) => handleItemClick(item, e)}
-                            className="mt-2 px-3.5 py-1.5 rounded-full bg-[#07241E]/95 border border-white/25 backdrop-blur-md text-white font-medium text-xs xl:text-[13px] shadow-lg hover:border-mv-terracotta hover:bg-[#0B4036] transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer text-left"
+                            onClick={() => {
+                              setSelectedDesktopItem((prev) => (prev === item.id ? null : item.id));
+                            }}
+                            onFocus={() => setHoveredDesktopItem(item.id)}
+                            onBlur={() => setHoveredDesktopItem(null)}
+                            className={`px-3.5 py-1.5 rounded-full border backdrop-blur-md font-semibold text-xs xl:text-[13px] shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CE5B40] ${
+                              isCardOpen
+                                ? 'bg-[#0B4036] text-white border-[#0B4036] shadow-sm'
+                                : 'bg-white/95 border-[#8DAA9D]/30 text-[#0B4036] hover:border-[#CE5B40] hover:text-[#CE5B40]'
+                            }`}
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-mv-terracotta animate-pulse" />
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                isCardOpen ? 'bg-[#CE5B40] scale-125' : 'bg-[#CE5B40]'
+                              }`}
+                            />
                             <span>{item.title}</span>
                           </button>
 
-                          {/* REFINED INFORMATION PANEL (Revealed on Hover) */}
-                          {isHovered && (
+                          {/* ================================================= */}
+                          {/* INTELLIGENT UNCLIPPED INFORMATION PANEL           */}
+                          {/* Opens ABOVE if bottom icon, BELOW if top icon     */}
+                          {/* ================================================= */}
+                          {isCardOpen && (
                             <div
-                              className={`absolute top-full mt-3 w-80 bg-[#061D18]/95 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl text-left text-white animate-in fade-in zoom-in-95 duration-150 ${
-                                layout.align === 'right'
-                                  ? 'right-0'
-                                  : layout.align === 'center'
-                                  ? '-left-20'
-                                  : 'left-0'
+                              role="dialog"
+                              aria-label={item.title}
+                              className={`popover-information-card absolute w-[340px] bg-[#FAF8F3]/98 backdrop-blur-xl border border-[#8DAA9D]/45 rounded-2xl p-5 shadow-[0_20px_40px_-12px_rgba(11,64,54,0.18),0_4px_12px_rgba(11,64,54,0.06)] text-left text-[#0B4036] z-50 animate-in fade-in zoom-in-95 duration-150 ${horizontalClass} ${
+                                openAbove ? 'bottom-full mb-3.5' : 'top-full mt-3.5'
                               }`}
                             >
-                              <div className="flex items-center justify-between text-[11px] font-mono text-mv-terracotta uppercase font-bold tracking-wider mb-1.5">
-                                <span>{item.category}</span>
-                                {item.badge && (
-                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-white/80">
-                                    {item.badge}
-                                  </span>
-                                )}
+                              {/* Directional Indicator Pip */}
+                              <div
+                                className={`absolute w-3 h-3 bg-[#FAF8F3] border-[#8DAA9D]/45 rotate-45 ${
+                                  openAbove
+                                    ? 'top-full -mt-1.5 border-r border-b'
+                                    : 'bottom-full -mb-1.5 border-l border-t'
+                                } ${
+                                  layout.align === 'right' || parseFloat(layout.left) > 60
+                                    ? 'right-8'
+                                    : layout.align === 'left' || parseFloat(layout.left) < 30
+                                    ? 'left-8'
+                                    : 'left-1/2 -translate-x-1/2'
+                                }`}
+                              />
+
+                              <div className="flex items-center justify-between gap-2 mb-2">
+                                <span className="text-[10.5px] font-mono text-[#CE5B40] uppercase font-bold tracking-wider truncate">
+                                  {item.category}
+                                </span>
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                  {item.badge && (
+                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#E4ECE6] text-[#0B4036] font-semibold border border-[#0B4036]/10">
+                                      {item.badge}
+                                    </span>
+                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setSelectedDesktopItem(null);
+                                      setHoveredDesktopItem(null);
+                                    }}
+                                    className="p-1 rounded-full text-[#4A6058] hover:text-[#0B4036] hover:bg-[#E4ECE6] transition cursor-pointer"
+                                    aria-label="Close card"
+                                  >
+                                    <X className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </div>
 
-                              <h4 className="font-serif text-base font-bold text-white mb-1.5">
+                              <h4 className="font-serif text-[17px] font-bold text-[#0B4036] mb-1.5 leading-snug tracking-tight">
                                 {item.title}
                               </h4>
 
-                              <p className="text-xs text-white/85 leading-relaxed mb-2.5">
+                              <p className="text-[13px] text-[#2D3E38] leading-relaxed mb-3">
                                 {item.description}
                               </p>
 
                               {item.clinicalNote && (
-                                <p className="text-[11px] text-mv-sage/90 italic border-l-2 border-mv-terracotta/70 pl-2 mb-3 leading-snug">
+                                <p className="text-[11.5px] text-[#4A6058] italic bg-[#E4ECE6]/40 p-2.5 rounded-xl border-l-2 border-[#CE5B40] mb-3.5 leading-relaxed">
                                   {item.clinicalNote}
                                 </p>
                               )}
 
                               <button
                                 type="button"
-                                onClick={(e) => handleItemClick(item, e)}
-                                className="w-full py-2 px-3.5 rounded-xl bg-mv-cta hover:bg-[#b84e36] text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-sm cursor-pointer"
+                                onClick={(e) => handleItemAction(item, e)}
+                                className="w-full py-2.5 px-4 rounded-xl bg-[#0B4036] hover:bg-[#CE5B40] text-white text-xs font-semibold flex items-center justify-between transition-colors shadow-2xs hover:shadow-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CE5B40]"
                               >
                                 <span>{item.actionLabel}</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -410,115 +517,160 @@ export const VisualEnvironmentsSection: React.FC<VisualEnvironmentsSectionProps>
                 </div>
 
                 {/* --------------------------------------------------------- */}
-                {/* 4. MOBILE & TABLET LAYOUT (RESPONSIVE NON-OVERLAPPING)    */}
-                {/* Visible on screens < 1024px                                */}
+                {/* 4. DEDICATED MOBILE & TABLET LAYOUT (< 1024px)            */}
+                {/* Clean non-overlapping cards with Bottom-Sheet Disclosure  */}
                 {/* --------------------------------------------------------- */}
-                <div className="block lg:hidden relative z-10 p-4 sm:p-6 pt-2">
+                <div className="block lg:hidden relative z-20 p-4 sm:p-6 pt-3">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-                    {envItems.map((item, itemIdx) => {
-                      const isExpanded = expandedMobileItem === item.id;
+                    {envItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="bg-white/95 backdrop-blur-md rounded-2xl border border-[#0B4036]/15 p-4 flex flex-col justify-between text-[#0B4036] transition-all shadow-2xs hover:shadow-sm"
+                      >
+                        <div className="flex items-start gap-3.5">
+                          {/* 2.5D Illustration (Tap opens bottom sheet) */}
+                          <button
+                            type="button"
+                            onClick={() => setActiveMobileItem(item)}
+                            className="w-20 h-20 sm:w-22 sm:h-22 shrink-0 relative flex items-center justify-center cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CE5B40]"
+                            aria-label={`View details for ${item.title}`}
+                          >
+                            <VascularDestinationIcon
+                              item={item}
+                              size="mobile"
+                              className="w-20 h-20 sm:w-22 sm:h-22"
+                            />
+                          </button>
 
-                      return (
-                        <div
-                          key={item.id}
-                          className="bg-black/45 backdrop-blur-md rounded-2xl border border-white/15 p-4 flex flex-col justify-between text-white transition-all shadow-md"
-                        >
-                          <div className="flex items-start gap-3.5">
-                            {/* Illustration */}
-                            <div className="w-16 h-16 shrink-0 relative flex items-center justify-center filter drop-shadow-md">
-                              <picture>
-                                <source srcSet={item.iconWebp} type="image/webp" />
-                                <img
-                                  src={item.iconPng}
-                                  alt={item.title}
-                                  className="w-full h-full object-contain"
-                                />
-                              </picture>
-                            </div>
-
-                            {/* Title & Category */}
-                            <div className="flex-1 min-w-0">
-                              <span className="text-[10px] font-mono uppercase tracking-wider text-mv-terracotta font-bold block truncate">
-                                {item.category}
+                          {/* Title & Category */}
+                          <div className="flex-1 min-w-0">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-[#CE5B40] font-bold block truncate">
+                              {item.category}
+                            </span>
+                            <h4 className="font-serif text-sm sm:text-base font-semibold text-[#0B4036] leading-snug mt-0.5">
+                              {item.title}
+                            </h4>
+                            {item.badge && (
+                              <span className="inline-block text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#E4ECE6] text-[#0B4036] mt-1 font-semibold">
+                                {item.badge}
                               </span>
-                              <h4 className="font-serif text-sm sm:text-base font-semibold text-white leading-snug mt-0.5">
-                                {item.title}
-                              </h4>
-                              {item.badge && (
-                                <span className="inline-block text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/10 text-white/80 mt-1">
-                                  {item.badge}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Expanded Content or Toggle */}
-                          <div className="mt-3 pt-3 border-t border-white/10">
-                            {isExpanded ? (
-                              <div className="space-y-2.5 text-xs text-white/85">
-                                <p className="leading-relaxed">{item.description}</p>
-                                {item.clinicalNote && (
-                                  <p className="text-[11px] text-mv-sage/90 italic border-l border-mv-terracotta pl-2">
-                                    {item.clinicalNote}
-                                  </p>
-                                )}
-                                <div className="flex items-center gap-2 pt-1">
-                                  <button
-                                    type="button"
-                                    onClick={(e) => handleItemClick(item, e)}
-                                    className="flex-1 py-2 px-3 rounded-xl bg-mv-cta text-white font-semibold text-xs flex items-center justify-center gap-1.5"
-                                  >
-                                    <span>{item.actionLabel}</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => setExpandedMobileItem(null)}
-                                    className="p-2 rounded-xl bg-white/10 text-white text-xs"
-                                    aria-label="Collapse info"
-                                  >
-                                    <ChevronUp className="w-4 h-4" />
-                                  </button>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="flex items-center justify-between gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => setExpandedMobileItem(item.id)}
-                                  className="text-xs font-medium text-mv-sage/90 hover:text-white flex items-center gap-1"
-                                >
-                                  <span>View details</span>
-                                  <ChevronDown className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={(e) => handleItemClick(item, e)}
-                                  className="py-1.5 px-3 rounded-lg bg-white/15 hover:bg-mv-cta text-white font-semibold text-xs flex items-center gap-1 transition"
-                                >
-                                  <span>{item.actionLabel}</span>
-                                  <ArrowRight className="w-3 h-3" />
-                                </button>
-                              </div>
                             )}
                           </div>
                         </div>
-                      );
-                    })}
+
+                        {/* Direct Action & Bottom-Sheet Trigger */}
+                        <div className="mt-3.5 pt-3 border-t border-[#0B4036]/10 flex items-center justify-between gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setActiveMobileItem(item)}
+                            className="text-xs font-semibold text-[#4A6058] hover:text-[#0B4036] py-1.5 flex items-center gap-1 cursor-pointer min-h-[44px]"
+                          >
+                            <span>Learn more</span>
+                            <ChevronDown className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={(e) => handleItemAction(item, e)}
+                            className="py-2 px-3.5 rounded-xl bg-[#FAF8F3] hover:bg-[#CE5B40] hover:text-white border border-[#0B4036]/18 text-[#0B4036] font-semibold text-xs flex items-center gap-1.5 transition shadow-2xs cursor-pointer min-h-[44px]"
+                          >
+                            <span>{item.actionLabel}</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Environment Footer Tag */}
-                <div className="relative z-10 px-5 sm:px-8 py-3 bg-black/50 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-white/60">
-                  <span>ENVIRONMENT {env.number} &middot; {env.itemIds.length} VISUAL DESTINATIONS</span>
-                  <span className="hidden sm:inline">MERIDIAN VASCULAR CLINICAL DIRECTORY</span>
-                </div>
               </div>
             );
           })}
         </div>
 
       </div>
+
+      {/* =================================================================== */}
+      {/* MOBILE BOTTOM SHEET MODAL (Guaranteed Unclipped Full Information)    */}
+      {/* =================================================================== */}
+      {activeMobileItem && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="mobile-sheet-title"
+          className="fixed inset-0 z-50 flex items-end justify-center lg:hidden"
+        >
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+            onClick={() => setActiveMobileItem(null)}
+          />
+
+          {/* Bottom Sheet Container */}
+          <div className="relative z-10 w-full max-w-lg bg-[#FAF8F3] rounded-t-3xl border-t-2 border-[#0B4036]/20 p-5 sm:p-6 shadow-2xl max-h-[85vh] overflow-y-auto animate-in slide-in-from-bottom duration-250">
+            {/* Sheet Handle */}
+            <div className="w-12 h-1.5 bg-[#8DAA9D]/40 rounded-full mx-auto mb-4" />
+
+            {/* Header with Category and Close Button */}
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <span className="text-[11px] font-mono text-[#CE5B40] uppercase font-bold tracking-wider">
+                {activeMobileItem.category}
+              </span>
+              <button
+                type="button"
+                onClick={() => setActiveMobileItem(null)}
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-[#E4ECE6] text-[#0B4036] hover:bg-[#CE5B40] hover:text-white transition cursor-pointer"
+                aria-label="Close details"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Icon + Title */}
+            <div className="flex items-center gap-4 mb-3.5">
+              <div className="w-20 h-20 sm:w-22 sm:h-22 shrink-0 relative flex items-center justify-center">
+                <VascularDestinationIcon
+                  item={activeMobileItem}
+                  size="mobile"
+                  className="w-20 h-20 sm:w-22 sm:h-22"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 id="mobile-sheet-title" className="font-serif text-lg sm:text-xl font-bold text-[#0B4036] leading-snug">
+                  {activeMobileItem.title}
+                </h3>
+                {activeMobileItem.badge && (
+                  <span className="inline-block text-[10.5px] font-mono px-2.5 py-0.5 rounded-full bg-[#E4ECE6] text-[#0B4036] font-semibold mt-1">
+                    {activeMobileItem.badge}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Clinical Description */}
+            <p className="text-[13.5px] text-[#2D3E38] leading-relaxed mb-3.5">
+              {activeMobileItem.description}
+            </p>
+
+            {/* Clinical Guideline Note */}
+            {activeMobileItem.clinicalNote && (
+              <div className="p-3 rounded-xl bg-white/80 border-l-3 border-[#CE5B40] mb-5 text-xs text-[#4A6058] italic leading-relaxed">
+                {activeMobileItem.clinicalNote}
+              </div>
+            )}
+
+            {/* Action CTA Button (Large touch target >= 48px) */}
+            <button
+              type="button"
+              onClick={(e) => handleItemAction(activeMobileItem, e)}
+              className="w-full py-3.5 px-5 rounded-2xl bg-[#CE5B40] hover:bg-[#b84e36] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition cursor-pointer min-h-[48px]"
+            >
+              <span>{activeMobileItem.actionLabel}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

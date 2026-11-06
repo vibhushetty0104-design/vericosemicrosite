@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Calendar, ChevronRight, X, User } from 'lucide-react';
+import { Calendar, ChevronRight, X, User, Stethoscope } from 'lucide-react';
 import { AppView, PatientUser } from '../types';
 import { NAV_ITEMS, hrefForView } from '../content/siteNav';
 import { GUIDE_LABELS, GuideIcon } from '../content/guideLabels';
@@ -102,6 +102,22 @@ export const MenuSheet: React.FC<MenuSheetProps> = ({
               {user ? 'My Records' : 'Sign In'}
             </button>
           </div>
+
+          {/* Doctor Portal Quick Access */}
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              onNavigateView('doctor-portal');
+            }}
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[#FAF8F5] border border-[#8DAA9D]/30 text-xs font-semibold text-[#0B4036] hover:bg-[#E4ECE6] transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              <Stethoscope className="w-4 h-4 text-[#0B4036]" />
+              <span>Doctor Portal & Clinical Workstation</span>
+            </span>
+            <span className="text-[11px] font-bold text-[#CE5B40]">Access →</span>
+          </button>
 
           <nav aria-label="Main">
             <ul className="grid grid-cols-2 gap-2">

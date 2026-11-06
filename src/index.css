@@ -914,54 +914,54 @@ body {
 
 @keyframes envFloat1 {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px);
   }
   50% {
-    transform: translateY(-8px) rotate(0.4deg);
+    transform: translateY(-5px);
   }
 }
 
 @keyframes envFloat2 {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px);
   }
   50% {
-    transform: translateY(-11px) rotate(-0.5deg);
+    transform: translateY(-6px);
   }
 }
 
 @keyframes envFloat3 {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px);
   }
   50% {
-    transform: translateY(-7px) rotate(0.3deg);
+    transform: translateY(-4px);
   }
 }
 
 @keyframes envFloat4 {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px) rotate(-0.6deg);
+    transform: translateY(-5px);
   }
 }
 
 .env-float-1 {
-  animation: envFloat1 5.8s ease-in-out infinite;
+  animation: envFloat1 8.2s ease-in-out infinite;
 }
 
 .env-float-2 {
-  animation: envFloat2 6.6s ease-in-out infinite;
+  animation: envFloat2 9.4s ease-in-out infinite 1.2s;
 }
 
 .env-float-3 {
-  animation: envFloat3 5.2s ease-in-out infinite;
+  animation: envFloat3 7.8s ease-in-out infinite 2.1s;
 }
 
 .env-float-4 {
-  animation: envFloat4 7.0s ease-in-out infinite;
+  animation: envFloat4 8.8s ease-in-out infinite 3.0s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -972,3 +972,92 @@ body {
     animation: none !important;
   }
 }
+
+/* ==========================================================================
+   Custom Living Visual System Keyframes & Pulses
+   Warm Ivory (#F7F5EF), Forest Green (#0B4036), Sage (#8DAA9D), Terracotta (#CE5B40)
+   ========================================================================== */
+
+@keyframes svgPathPulse {
+  0% {
+    stroke-dashoffset: 480;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes svgBgBreathe {
+  0%, 100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 0.90;
+  }
+}
+
+.svg-bg-breathe {
+  animation: svgBgBreathe 9s ease-in-out infinite;
+}
+
+.svg-path-pulse-slow {
+  animation: svgPathPulse 13s linear infinite;
+}
+
+.svg-path-pulse-medium {
+  animation: svgPathPulse 10s linear infinite;
+}
+
+.svg-path-pulse-fast {
+  animation: svgPathPulse 7s linear infinite;
+}
+
+.svg-node-ripple {
+  animation: svgNodeRipple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+}
+
+.svg-node-ripple-delayed {
+  animation: svgNodeRipple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite 1.6s;
+}
+
+.svg-particle-1 {
+  animation: svgParticleDrift1 6.5s ease-in-out infinite;
+}
+
+.svg-particle-2 {
+  animation: svgParticleDrift2 8.5s ease-in-out infinite;
+}
+
+.svg-ribbon-shimmer {
+  animation: svgRibbonShimmer 6s ease-in-out infinite;
+}
+
+@keyframes scanlineMove {
+  0% {
+    top: 10%;
+    opacity: 0.2;
+  }
+  50% {
+    top: 85%;
+    opacity: 0.9;
+  }
+  100% {
+    top: 10%;
+    opacity: 0.2;
+  }
+}
+
+.animate-scanline {
+  animation: scanlineMove 2.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svg-path-pulse-slow,
+  .svg-path-pulse-medium,
+  .svg-path-pulse-fast,
+  .svg-bg-breathe,
+  .animate-scanline {
+    animation: none !important;
+  }
+}
+

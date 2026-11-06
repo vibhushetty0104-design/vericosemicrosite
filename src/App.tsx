@@ -50,6 +50,7 @@ import { ResearchView } from './components/research/ResearchView';
 import { getArticle } from './content/research/articles';
 import { InsuranceEducation } from './components/InsuranceEducation';
 import { PageHero } from './components/scene/PageHero';
+import { DoctorPortalRoot } from './components/doctor/DoctorPortalRoot';
 
 /** Resolves the URL hash to a view and, for in-page anchors, the section to scroll to. */
 function parseHash(raw: string): {
@@ -349,6 +350,11 @@ export default function App() {
       ))}
     </nav>
   );
+
+  // VIEW: Authorised Doctor Portal & Clinical Workstation
+  if (currentView === 'doctor-portal') {
+    return <DoctorPortalRoot onNavigateHome={() => handleNavigateView('home')} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#1A2421] flex flex-col font-sans selection:bg-[#0A3B32] selection:text-white">

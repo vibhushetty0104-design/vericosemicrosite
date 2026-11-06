@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AppView, PatientUser } from '../types';
-import { Menu, User, ShieldCheck } from 'lucide-react';
+import { Menu, User, ShieldCheck, Stethoscope } from 'lucide-react';
 import { GUIDE_LABELS, GuideIcon } from '../content/guideLabels';
 import { NAV_ITEMS, hrefForView } from '../content/siteNav';
 import { MenuSheet } from './MenuSheet';
@@ -121,6 +121,16 @@ export const Header: React.FC<HeaderProps> = ({
             className="mv-btn bg-[#A9472F] hover:bg-[#8F3B26] text-white hidden whitespace-nowrap px-4.5 py-2 rounded-lg text-xs font-semibold xl:inline-flex transition-all shadow-sm"
           >
             Book Consultation
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onNavigateView('doctor-portal')}
+            className="mv-btn mv-btn-quiet hidden whitespace-nowrap xl:inline-flex min-h-[40px] px-3 text-[13px] text-[#0B4036] hover:bg-mv-pale/80 items-center gap-1.5"
+            title="Clinician Access · Doctor Portal"
+          >
+            <Stethoscope className="h-4 w-4 text-[#0B4036]" />
+            <span>Doctor Portal</span>
           </button>
 
           <button

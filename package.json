@@ -11,6 +11,7 @@
     "start": "tsx server.ts",
     "lint": "tsc --noEmit",
     "test:clinical": "tsx tests/clinicalReportParser.test.ts",
+    "test:doctor": "tsx tests/doctorPortal.test.ts",
     "test:safety": "tsx tests/phase0Safety.test.ts",
     "test:vercel": "tsx tests/vercelCompatibility.test.ts"
   },

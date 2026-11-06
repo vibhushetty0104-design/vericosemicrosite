@@ -36,6 +36,7 @@ export const ROUTED_VIEWS: AppView[] = [
   'specialists',
   'insurance',
   'research',
+  'doctor-portal',
 ];
 
 /** The 9 dedicated educational topics converted into independent pages */
@@ -251,6 +252,11 @@ export const SECTION_VIEWS: Record<string, AppView> = {
   'expert-review': 'expert-review',
   'medical-reports': 'expert-review',
   'report-upload': 'expert-review',
+  'doctor-portal': 'doctor-portal',
+  'doctor-login': 'doctor-portal',
+  doctor: 'doctor-portal',
+  clinician: 'doctor-portal',
+  'doctor-dashboard': 'doctor-portal',
   faq: 'home',
   'urgent-help': 'home',
   'explore-leg-health': 'home',
@@ -292,6 +298,7 @@ export const VIEW_TITLES: Record<string, string> = {
   dashboard: 'Patient Dashboard | Meridian Vascular',
   'leg-assessment': 'Understand Your Leg Symptoms & Expert Review | Meridian Vascular',
   'expert-review': 'Upload Medical Reports for Expert Review | Meridian Vascular',
+  'doctor-portal': 'Doctor Clinical Portal & Workstation | Meridian Vascular',
 };
 
 export function hrefForView(view: AppView): string {
